@@ -4,3 +4,12 @@
 *.jar
 *.war
 *.ear
+
+# Project Files #
+*.metadata
+*.settings
+*.classpath
+*.project
+copy-cellcloud.cmd
+cell
+nucleus
