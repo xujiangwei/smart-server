@@ -6,56 +6,73 @@ package smart.util.component;
  * @author Jiangwei Xu
  *
  */
-public class AbstractLifeCycle implements LifeCycle {
+public abstract class AbstractLifeCycle implements LifeCycle {
 
 	public static final String STARTING = "STARTING";
+	public static final String STARTED = "STARTED";
+	public static final String RUNNING = "RUNNING";
+	public static final String STOPPING = "STOPPING";
+	public static final String STOPPED = "STOPPED";
+	public static final String FAILED = "FAILED";
+
+	protected String state = STOPPED;
 
 	public AbstractLifeCycle() {
 	}
 
 	@Override
 	public void start() throws Exception {
+		this.state = STARTING;
+
 		doStart();
+
+		this.state = STARTED;
 	}
 
 	@Override
 	public void stop() throws Exception {
+		this.state = STOPPING;
+
 		doStop();
+
+		this.state = STOPPED;
 	}
 
 	@Override
 	public boolean isStarted() {
-		return false;
+		return (this.state.equals(STARTED));
 	}
 
 	@Override
 	public boolean isStarting() {
-		return false;
+		return (this.state.equals(STARTING));
 	}
 
 	@Override
 	public boolean isStopped() {
-		return false;
+		return (this.state.equals(STOPPED));
 	}
 
 	@Override
 	public boolean isStopping() {
-		return false;
+		return (this.state.equals(STOPPING));
 	}
 
 	@Override
 	public boolean isRunning() {
-		return false;
+		return (this.state.equals(RUNNING));
 	}
 
 	@Override
 	public boolean isFailed() {
-		return false;
+		return (this.state.equals(FAILED));
 	}
 
-	protected void doStart() throws Exception {
+	public String getState() {
+		return this.state;
 	}
 
-	protected void doStop() throws Exception {
-	}
+	protected abstract void doStart() throws Exception;
+
+	protected abstract void doStop() throws Exception;
 }
