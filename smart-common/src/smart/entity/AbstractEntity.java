@@ -27,12 +27,12 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	}
 
 	@Override
-	public void addEntity(Entity entity) {
+	public void addChild(Entity entity) {
 		this.children.put(entity.getId(), entity);
 	}
 
 	@Override
-	public void removeEntity(Entity entity) {
+	public void removeChild(Entity entity) {
 		this.children.remove(entity);
 	}
 }

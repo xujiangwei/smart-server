@@ -17,11 +17,11 @@ public interface Entity {
 	 * 添加子实体。
 	 * @param entity
 	 */
-	public void addEntity(Entity entity);
+	public void addChild(Entity entity);
 
 	/**
 	 * 删除子实体。
 	 * @param entity
 	 */
-	public void removeEntity(Entity entity);
+	public void removeChild(Entity entity);
 }
