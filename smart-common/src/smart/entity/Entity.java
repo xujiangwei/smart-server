@@ -1,11 +1,13 @@
 package smart.entity;
 
+import java.io.Serializable;
+
 /**
  * 模型实体。
  * 
  * @author Jiangwei Xu
  */
-public interface Entity {
+public interface Entity extends Serializable {
 
 	/**
 	 * 返回 ID 。
@@ -24,4 +26,10 @@ public interface Entity {
 	 * @param entity
 	 */
 	public void removeChild(Entity entity);
+
+	/**
+	 * 返回子实体。
+	 * @return
+	 */
+	public Entity getChild(String id);
 }

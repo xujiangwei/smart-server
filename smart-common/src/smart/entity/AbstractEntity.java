@@ -11,6 +11,8 @@ import net.cellcloud.extras.memory.MemoryArea;
  */
 public abstract class AbstractEntity extends MemoryArea implements Entity {
 
+	private static final long serialVersionUID = 1638959794358520994L;
+
 	private String id;
 	/// 子节点映射，Key：Entity ID
 	private ConcurrentHashMap<String, Entity> children;
@@ -34,5 +36,10 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	@Override
 	public void removeChild(Entity entity) {
 		this.children.remove(entity);
+	}
+
+	@Override
+	public Entity getChild(String id) {
+		return this.children.get(id);
 	}
 }
