@@ -19,6 +19,7 @@ public final class Main {
 			e.printStackTrace();
 		}
 
+		CreateEntity.main(args);
 		Cell.main(new String[]{"start"});
 	}
 }
