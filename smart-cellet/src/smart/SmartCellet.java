@@ -1,19 +1,360 @@
 package smart;
 
+import net.cellcloud.common.LogLevel;
+import net.cellcloud.common.Logger;
 import net.cellcloud.core.Cellet;
 import net.cellcloud.core.CelletFeature;
+import net.cellcloud.talk.Primitive;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.talk.dialect.Dialect;
+
+import org.eclipse.jetty.client.HttpClient;
+
+import smart.action.LoginListener;
+import smart.action.TestServerListener;
+import cn.com.dhcc.mast.Root;
+import cn.com.dhcc.mast.action.Action;
+import cn.com.dhcc.mast.action.ActionDispatcher;
+import cn.com.dhcc.mast.core.SystemCategory;
 
 public class SmartCellet extends Cellet {
 
+	private static SmartCellet instance;
+	
+	private String apiHost = "http://127.0.0.1:8080";
+	
+	private HttpClient httpClient;
+
 	public SmartCellet() {
 		super(new CelletFeature("SmartITOM", new Version()));
+		SmartCellet.instance = this;
+		this.httpClient = new HttpClient();
+	}
+
+	public synchronized static SmartCellet getInstance() {
+		return SmartCellet.instance;
+	}
+
+	/**
+	 */
+	public String getAPIHost() {
+		return this.apiHost;
 	}
 
 	@Override
 	public void activate() {
+		// 启动引擎
+		Root.getInstance().startup(SystemCategory.MONITORING_SYSTEM, this);
+
+		// 配置 Http 客户端
+		this.configHttpClient();
+
+		// 初始化监听器
+		this.initListeners();
 	}
 
 	@Override
 	public void deactivate() {
+		try {
+			this.httpClient.stop();
+		} catch (Exception e) {
+			Logger.log(this.getClass(), e, LogLevel.WARNING);
+		}
+
+		// 关闭引擎
+		Root.getInstance().shutdown();
+	}
+
+	@Override
+	public void dialogue(String tag, Primitive primitive) {
+		if (primitive.isDialectal()) {
+			Dialect dialect = primitive.getDialect();
+			if (dialect.getName().equals(ActionDialect.DIALECT_NAME)) {
+				ActionDispatcher.getInstance().dispatch(
+						SystemCategory.MONITORING_SYSTEM,
+						(ActionDialect) dialect);
+			}
+		}
+	}
+
+	@Override
+	public void contacted(String tag) {
+	}
+
+	@Override
+	public void quitted(String tag) {
+	}
+
+	@Override
+	public void suspended(String tag) {
+	}
+
+	@Override
+	public void resumed(String tag) {
+	}
+
+	/**
+	 * 配置 HTTP 客户端。
+	 */
+	private void configHttpClient() {
+
+		this.httpClient.setFollowRedirects(false);
+		try {
+			this.httpClient.start();
+		} catch (Exception e) {
+			Logger.log(this.getClass(), e, LogLevel.ERROR);
+		}
+	}
+
+	/**
+	 * 初始化所有监听器。
+	 */
+	private void initListeners() {
+		ActionDispatcher dispatcher = ActionDispatcher.getInstance();
+		
+		// 测试服务器连接
+		TestServerListener testServer = new TestServerListener(this);
+		testServer.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.TESTSERVER, testServer);
+
+		// 登录
+		LoginListener login = new LoginListener(this);
+		login.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.LOGIN, login);
+		
+//		// 获取首页关注
+//		AttentionListener attention = new AttentionListener(this);
+//		attention.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ATTENTIONLIST, attention);
+//		
+//		// 获取关注列表
+//		AttentionListListener attentionList = new AttentionListListener(this);
+//		attentionList.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ATTENTIONLIST, attentionList);
+//		
+//		// 取消关注
+//		CancelAttentionListener cancelAttention = new CancelAttentionListener(this);
+//		cancelAttention.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.CANCELATTENTION, cancelAttention);
+//		
+//		AttentionListListener al = new AttentionListListener(this);
+//		al.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.CANCELATTENTION, al);
+//		
+//		// 删除关注
+//		DeleteAttentionListener deleteAttention = new DeleteAttentionListener(this);
+//		deleteAttention.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.DELETEATTENTION, deleteAttention);
+//		
+//		AttentionListListener al1 = new AttentionListListener(this);
+//		al1.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.DELETEATTENTION, al1);
+//		
+//		// 添加关注
+//		AddAttentionListener addAttention = new AddAttentionListener(this);
+//		addAttention.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ADDATTENTION, addAttention);
+//		
+//		AttentionListListener al2 = new AttentionListListener(this);
+//		al2.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ADDATTENTION, al2);
+//
+//		// 获取消息
+//		MessagesListener messagesListener = new MessagesListener(this);
+//		messagesListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGES, messagesListener);
+//		
+//		//获取消息详细
+//		MessageDetailListener messageDetailListener=new MessageDetailListener(this);
+//		messageDetailListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGEDETAIL, messageDetailListener);
+//		
+//		//删除消息
+//		MessageDealDeleteListener messageDealDeleteListener =new MessageDealDeleteListener(this);
+//		messageDealDeleteListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGEDEALDELETE, messageDealDeleteListener);
+//		
+//		//转移消息
+//		MessageDealMoveListener messageDealMoveListener =new MessageDealMoveListener(this);
+//		messageDealMoveListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGEDEALMOVE, messageDealMoveListener);
+//		
+//		//标记消息
+//		MessageDealMarkListener messageDealMarkListener=new MessageDealMarkListener(this);;
+//		messageDealMarkListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGEDEALMARK, messageDealMarkListener);
+//		
+//		// 获取联系人
+//		MessageContactsListener messageContactsListener= new MessageContactsListener(this);
+//		messageContactsListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGECONTACTS, messageContactsListener);
+//		
+//		// 发送消息
+//		MessageSendListener messageSendListener = new MessageSendListener(this);
+//		messageSendListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGESEND, messageSendListener);
+//	
+//		// 消息置顶
+//		MessageTopInfoListener messageTopInfoListener = new MessageTopInfoListener(
+//				this);
+//		messageTopInfoListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGETOPINFO, messageTopInfoListener);
+//		
+//		//添加消息标签
+//		MessageTagAddListener messageTagAddListener=new MessageTagAddListener(this);
+//		messageTagAddListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGETAGADD, messageTagAddListener);
+//		
+//		//删除消息标签
+//		MessageTagDeleteListener messageTagDeleteListener=new MessageTagDeleteListener(this);
+//		messageTagDeleteListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGETAGDELETE, messageTagDeleteListener);
+//		
+//		//修改消息标签
+//		MessageTagModifyListener messageTagModifyListener=new MessageTagModifyListener(this);
+//		messageTagModifyListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGETAGMODIFY, messageTagModifyListener);
+//		
+//		//设置消息标签为显示或隐藏状态
+//		MessageTagDisplayListener messageTagDisplayListener=new MessageTagDisplayListener(this);
+//		messageTagDisplayListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGETAGDISPLAY, messageTagDisplayListener);
+//		
+//		// 获取所有自定义标签
+//		MessageCustomTagListener messageCustomTagListener = new MessageCustomTagListener(
+//				this);
+//		messageCustomTagListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGECUSTOMTAGS, messageCustomTagListener);
+//
+//		// 上传附件
+//		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(this);
+//		messageFileUploadListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MESSAGEFILEUPLOAD, messageFileUploadListener);
+//		
+//		//获取主机设备
+//		MoHostsListener moHostsListener=new MoHostsListener(this);
+//		moHostsListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOS, moHostsListener);
+//
+//		//获取交换机设备
+//		MoSwitchsListener moSwitchsListener=new MoSwitchsListener(this);
+//		moSwitchsListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOS, moSwitchsListener);
+//		
+//		//获取路由器设备
+//		MoRouterListener moRouterListener=new MoRouterListener(this);
+//		moRouterListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOS, moRouterListener);
+//		
+//		//获取设备基本信息
+//		MoBasicListener moBasicListener=new MoBasicListener(this);
+//		moBasicListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MODETAIL, moBasicListener);
+//		
+//		//获取设备性能信息
+//		MoPerformanceListener moPerformanceListener=new MoPerformanceListener(this);
+//		moPerformanceListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MODETAIL, moPerformanceListener);
+//
+//		//获取设备健康状态
+//		MoHealthStatusListener moHealthStatusListener=new MoHealthStatusListener(this);
+//		moHealthStatusListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MODETAIL, moHealthStatusListener);
+//		
+//		// 删除设备
+//		MoDeleteListener moDeleteListener = new MoDeleteListener(this);
+//		moDeleteListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MODELETE, moDeleteListener);
+//
+//		// 获取设备告警
+//		MoAlarmListener moAlarmListener = new MoAlarmListener(this);
+//		moAlarmListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOALARMS, moAlarmListener);
+//
+//		// 改变设备监控状态
+//		MoChangeMonitorStatusListener moChangeMonitorStatusListener = new MoChangeMonitorStatusListener(
+//				this);
+//		moChangeMonitorStatusListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOCHANGEMONITORSTATUS,
+//				moChangeMonitorStatusListener);
+//
+//		// 发送快照
+//		MoSendSnapshotListener moSendSnapshotListener = new MoSendSnapshotListener(
+//				this);
+//		moSendSnapshotListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOSENDSNAPSHOT, moSendSnapshotListener);
+//
+//		// 获取设备拓扑
+//		MoTopoListener moTopoListener = new MoTopoListener(this);
+//		moTopoListener.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.MOTOPOS, moTopoListener);
+//		// 注销
+//		LogoutListener logout = new LogoutListener(this);
+//		logout.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.LOGOUT, logout);
+//
+//		// 当前时间
+//		CurrentTimeListener currentTime = new CurrentTimeListener(this);
+//		currentTime.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.CURRENTTIME, currentTime);
+//
+//		// 获取告警基本信息
+//		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
+//		alarmDetail.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, alarmDetail);
+//		
+//		// 告警操作
+//		AlarmDealListener alarmDeal = new AlarmDealListener(this);
+//		alarmDeal.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDEAL, alarmDeal);
+//
+//		AlarmDetailListener basicInfo = new AlarmDetailListener(this);
+//		basicInfo.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDEAL, basicInfo);
+//
+//		// 告警转发
+//		AlarmForwardListener alarmForward = new AlarmForwardListener(this);
+//		alarmForward.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMFORWARD, alarmForward);
+//
+//		// 添加告警处理信息
+//		DealInfoListener dealInfo = new DealInfoListener(this);
+//		dealInfo.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.DEALINFO, dealInfo);
+//
+//		// 获取告警列表
+//		AlarmListListener alarmList = new AlarmListListener(this);
+//		alarmList.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMLIST, alarmList);
+//		
+//		//获取告警处理信息
+//		AlarmOpInfoListener alarmOpInfo = new AlarmOpInfoListener(this);
+//		alarmOpInfo.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, alarmOpInfo);
+//		
+//		//获取告警维护经验
+//		AlarmExperienceListener alarmExperience = new AlarmExperienceListener(this);
+//		alarmExperience.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
+//		
+//		//获取告警影响范围
+//		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
+//		alarmCoverage.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
+//		
+//		//获取告警生命周期
+//		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
+//		lifeCycle.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
+//		
+//		//获取压制的告警
+//		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
+//		suppressed.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
+//		
+//		//获取告警分布
+//		AlarmDistributionListener distribution = new AlarmDistributionListener(this);
+//		distribution.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, distribution);
 	}
 }
