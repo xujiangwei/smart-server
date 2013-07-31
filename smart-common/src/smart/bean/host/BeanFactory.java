@@ -1,4 +1,4 @@
-package smart.bean;
+package smart.bean.host;
 
 /**
  * Bean 工厂。

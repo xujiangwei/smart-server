@@ -1,4 +1,6 @@
-package smart.bean;
+package smart.bean.host;
+
+import java.util.List;
 
 import smart.entity.AbstractEntity;
 
@@ -20,7 +22,9 @@ public class CPU extends AbstractEntity {
 	private double idle;
 	private double cpuLoad;
 	private double usage;
+	private List<CPUUsage> cpuUsage;
 	
+
 	public CPU(String id) {
 		super(id);
 	}
@@ -90,6 +94,14 @@ public class CPU extends AbstractEntity {
 	}
 	public void setUsage(double usage) {
 		this.usage = usage;
+	}
+
+	public List<CPUUsage> getCpuUsage() {
+		return cpuUsage;
+	}
+
+	public void setCpuUsage(List<CPUUsage> cpuUsage) {
+		this.cpuUsage = cpuUsage;
 	}
 	
 }
