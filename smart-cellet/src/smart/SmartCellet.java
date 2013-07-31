@@ -12,6 +12,24 @@ import org.eclipse.jetty.client.HttpClient;
 
 import smart.action.LoginListener;
 import smart.action.TestServerListener;
+import smart.action.alarm.AlarmCoverageListener;
+import smart.action.alarm.AlarmDealListener;
+import smart.action.alarm.AlarmDetailListener;
+import smart.action.alarm.AlarmDistributionListener;
+import smart.action.alarm.AlarmExperienceListener;
+import smart.action.alarm.AlarmForwardListener;
+import smart.action.alarm.AlarmLifeCycleListener;
+import smart.action.alarm.AlarmListListener;
+import smart.action.alarm.AlarmOpInfoListener;
+import smart.action.alarm.DealInfoListener;
+import smart.action.alarm.SuppressedAlarmListener;
+import smart.action.attention.AddAttentionListener;
+import smart.action.attention.AttentionListListener;
+import smart.action.attention.AttentionListener;
+import smart.action.attention.CancelAttentionListener;
+import smart.action.attention.DeleteAttentionListener;
+import smart.action.logout.LogoutListener;
+import smart.action.time.CurrentTimeListener;
 import cn.com.dhcc.mast.Root;
 import cn.com.dhcc.mast.action.Action;
 import cn.com.dhcc.mast.action.ActionDispatcher;
@@ -122,43 +140,43 @@ public class SmartCellet extends Cellet {
 		login.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.LOGIN, login);
 		
-//		// 获取首页关注
-//		AttentionListener attention = new AttentionListener(this);
-//		attention.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ATTENTIONLIST, attention);
-//		
-//		// 获取关注列表
-//		AttentionListListener attentionList = new AttentionListListener(this);
-//		attentionList.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ATTENTIONLIST, attentionList);
-//		
-//		// 取消关注
-//		CancelAttentionListener cancelAttention = new CancelAttentionListener(this);
-//		cancelAttention.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.CANCELATTENTION, cancelAttention);
-//		
-//		AttentionListListener al = new AttentionListListener(this);
-//		al.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.CANCELATTENTION, al);
-//		
-//		// 删除关注
-//		DeleteAttentionListener deleteAttention = new DeleteAttentionListener(this);
-//		deleteAttention.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.DELETEATTENTION, deleteAttention);
-//		
-//		AttentionListListener al1 = new AttentionListListener(this);
-//		al1.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.DELETEATTENTION, al1);
-//		
-//		// 添加关注
-//		AddAttentionListener addAttention = new AddAttentionListener(this);
-//		addAttention.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ADDATTENTION, addAttention);
-//		
-//		AttentionListListener al2 = new AttentionListListener(this);
-//		al2.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ADDATTENTION, al2);
-//
+		// 获取首页关注
+		AttentionListener attention = new AttentionListener(this);
+		attention.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ATTENTION, attention);
+		
+		// 获取关注列表
+		AttentionListListener attentionList = new AttentionListListener(this);
+		attentionList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ATTENTIONLIST, attentionList);
+		
+		// 取消关注
+		CancelAttentionListener cancelAttention = new CancelAttentionListener(this);
+		cancelAttention.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CANCELATTENTION, cancelAttention);
+		
+		AttentionListListener al = new AttentionListListener(this);
+		al.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CANCELATTENTION, al);
+		
+		// 删除关注
+		DeleteAttentionListener deleteAttention = new DeleteAttentionListener(this);
+		deleteAttention.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DELETEATTENTION, deleteAttention);
+		
+		AttentionListListener al1 = new AttentionListListener(this);
+		al1.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DELETEATTENTION, al1);
+		
+		// 添加关注
+		AddAttentionListener addAttention = new AddAttentionListener(this);
+		addAttention.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ADDATTENTION, addAttention);
+		
+		AttentionListListener al2 = new AttentionListListener(this);
+		al2.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ADDATTENTION, al2);
+
 //		// 获取消息
 //		MessagesListener messagesListener = new MessagesListener(this);
 //		messagesListener.setHttpClient(this.httpClient);
@@ -288,73 +306,73 @@ public class SmartCellet extends Cellet {
 //		MoTopoListener moTopoListener = new MoTopoListener(this);
 //		moTopoListener.setHttpClient(this.httpClient);
 //		dispatcher.addListener(Action.MOTOPOS, moTopoListener);
-//		// 注销
-//		LogoutListener logout = new LogoutListener(this);
-//		logout.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.LOGOUT, logout);
-//
-//		// 当前时间
-//		CurrentTimeListener currentTime = new CurrentTimeListener(this);
-//		currentTime.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.CURRENTTIME, currentTime);
-//
-//		// 获取告警基本信息
-//		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
-//		alarmDetail.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, alarmDetail);
-//		
-//		// 告警操作
-//		AlarmDealListener alarmDeal = new AlarmDealListener(this);
-//		alarmDeal.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDEAL, alarmDeal);
-//
-//		AlarmDetailListener basicInfo = new AlarmDetailListener(this);
-//		basicInfo.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDEAL, basicInfo);
-//
-//		// 告警转发
-//		AlarmForwardListener alarmForward = new AlarmForwardListener(this);
-//		alarmForward.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMFORWARD, alarmForward);
-//
-//		// 添加告警处理信息
-//		DealInfoListener dealInfo = new DealInfoListener(this);
-//		dealInfo.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.DEALINFO, dealInfo);
-//
-//		// 获取告警列表
-//		AlarmListListener alarmList = new AlarmListListener(this);
-//		alarmList.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMLIST, alarmList);
-//		
-//		//获取告警处理信息
-//		AlarmOpInfoListener alarmOpInfo = new AlarmOpInfoListener(this);
-//		alarmOpInfo.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, alarmOpInfo);
-//		
-//		//获取告警维护经验
-//		AlarmExperienceListener alarmExperience = new AlarmExperienceListener(this);
-//		alarmExperience.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
-//		
-//		//获取告警影响范围
-//		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
-//		alarmCoverage.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
-//		
-//		//获取告警生命周期
-//		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
-//		lifeCycle.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
-//		
-//		//获取压制的告警
-//		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
-//		suppressed.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
-//		
-//		//获取告警分布
-//		AlarmDistributionListener distribution = new AlarmDistributionListener(this);
-//		distribution.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.ALARMDETAIL, distribution);
+		// 注销
+		LogoutListener logout = new LogoutListener(this);
+		logout.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.LOGOUT, logout);
+
+		// 当前时间
+		CurrentTimeListener currentTime = new CurrentTimeListener(this);
+		currentTime.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CURRENTTIME, currentTime);
+
+		// 获取告警基本信息
+		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
+		alarmDetail.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, alarmDetail);
+		
+		// 告警操作
+		AlarmDealListener alarmDeal = new AlarmDealListener(this);
+		alarmDeal.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDEAL, alarmDeal);
+
+		AlarmDetailListener basicInfo = new AlarmDetailListener(this);
+		basicInfo.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDEAL, basicInfo);
+
+		// 告警转发
+		AlarmForwardListener alarmForward = new AlarmForwardListener(this);
+		alarmForward.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMFORWARD, alarmForward);
+
+		// 添加告警处理信息
+		DealInfoListener dealInfo = new DealInfoListener(this);
+		dealInfo.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DEALINFO, dealInfo);
+
+		// 获取告警列表
+		AlarmListListener alarmList = new AlarmListListener(this);
+		alarmList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMLIST, alarmList);
+		
+		//获取告警处理信息
+		AlarmOpInfoListener alarmOpInfo = new AlarmOpInfoListener(this);
+		alarmOpInfo.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, alarmOpInfo);
+		
+		//获取告警维护经验
+		AlarmExperienceListener alarmExperience = new AlarmExperienceListener(this);
+		alarmExperience.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
+		
+		//获取告警影响范围
+		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
+		alarmCoverage.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
+		
+		//获取告警生命周期
+		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
+		lifeCycle.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
+		
+		//获取压制的告警
+		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
+		suppressed.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
+		
+		//获取告警分布
+		AlarmDistributionListener distribution = new AlarmDistributionListener(this);
+		distribution.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMDETAIL, distribution);
 	}
 }
