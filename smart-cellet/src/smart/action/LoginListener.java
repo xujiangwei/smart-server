@@ -15,16 +15,17 @@ import net.cellcloud.util.StringProperty;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import smart.monitoring.api.API;
-
+import smart.api.API;
+import smart.api.RequestContentCapsule;
+import smart.auth.User;
+import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
-import cn.com.dhcc.mast.core.User;
-import cn.com.dhcc.mast.core.UserManager;
 
 /**
  * 登录监听器。
@@ -73,12 +74,17 @@ public final class LoginListener extends AbstractListener {
 		int port = talkTracker.getEndpoint().getCoordinate().getAddress()
 				.getPort();
 
-		UserManager um = new UserManager();
 		Properties params = new Properties();
 
 		// 填写数据内容
-		request.param("username", username);
-		request.param("password", password);
+		DeferredContentProvider dcp = new DeferredContentProvider();
+		
+		RequestContentCapsule capsule = new RequestContentCapsule();
+		capsule.append("username", username);
+		capsule.append("password", password);
+		dcp.offer(capsule.toBuffer());
+		dcp.close();
+		request.content(dcp);
 
 		// 发送请求
 		ContentResponse response = null;
@@ -105,16 +111,22 @@ public final class LoginListener extends AbstractListener {
 					jo = new JSONObject(content);
 					String token = "";
 					if (!"".equals(jo.get("loginInfo"))) {
-						Long id = jo.getJSONObject("loginInfo").getLong(
+						String id = jo.getJSONObject("loginInfo").getString(
 								"user_id");
 						token = jo.getJSONObject("loginInfo")
 								.getString("token");
-						if (!um.isExist(username, password, ip)) {
+						if (!UserManager.getInstance().isExist(username, password, ip)) {
 
 							// 将登录成功后的返回对象保存到用户管理器
-							User user = new User(username, password, id, token,
-									ip, port);
-							um.userCreated(user);
+							User user = new User(id);
+							user.setName(username);
+							user.setPwd(password);
+							user.setToken(token);
+							user.setIp(ip);
+							user.setPort(port);
+//							User user = new User(username, password, id, token,
+//									ip, port);
+							UserManager.getInstance().userCreated(user);
 
 						}
 					}

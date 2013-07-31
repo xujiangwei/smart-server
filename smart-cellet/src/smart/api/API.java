@@ -1,10 +1,4 @@
-/*
--------------------------------------------------------------------------------
-This source file is part of DHC Monitoring System.
--------------------------------------------------------------------------------
- */
-
-package smart.monitoring.api;
+package smart.api;
 
 public final class API {
 
