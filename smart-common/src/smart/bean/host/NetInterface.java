@@ -1,8 +1,6 @@
-package smart.bean;
+package smart.bean.host;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import smart.entity.AbstractEntity;
 
@@ -12,18 +10,14 @@ import smart.entity.AbstractEntity;
 public class NetInterface extends AbstractEntity {
 
 	private static final long serialVersionUID = 1103861007917321020L;
-	
-	private List<Map<String, NetInterface>> list = new ArrayList<Map<String, NetInterface>>(10);
+
 	private String name;
 	private String type;
 	private String desip;
 	private String ip;
 	private String mac;
-	private float flow;
-	private float throughput;
-	private long collectTime;
-	private String status;
-	
+	private List<NetInterfaceStatus> netInterfaceStatus;
+
 	public NetInterface(String id) {
 		super(id);
 	}
@@ -31,20 +25,17 @@ public class NetInterface extends AbstractEntity {
 	public String getName() {
 		return name;
 	}
+
 	public void setName(String name) {
 		this.name = name;
 	}
+
 	public String getType() {
 		return type;
 	}
+
 	public void setType(String type) {
 		this.type = type;
-	}
-	public String getStatus() {
-		return status;
-	}
-	public void setStatus(String status) {
-		this.status = status;
 	}
 
 	public String getDesip() {
@@ -71,35 +62,13 @@ public class NetInterface extends AbstractEntity {
 		this.mac = mac;
 	}
 
-	public float getFlow() {
-		return flow;
+	public List<NetInterfaceStatus> getNetInterfaceStatus() {
+		return netInterfaceStatus;
 	}
 
-	public void setFlow(float flow) {
-		this.flow = flow;
+	public void setNetInterfaceStatus(
+			List<NetInterfaceStatus> netInterfaceStatus) {
+		this.netInterfaceStatus = netInterfaceStatus;
 	}
 
-	public float getThroughput() {
-		return throughput;
-	}
-
-	public void setThroughput(float throughput) {
-		this.throughput = throughput;
-	}
-
-	public long getCollectTime() {
-		return collectTime;
-	}
-
-	public void setCollectTime(long collectTime) {
-		this.collectTime = collectTime;
-	}
-
-	public List<Map<String, NetInterface>> getList() {
-		return list;
-	}
-
-	public void setList(List<Map<String, NetInterface>> list) {
-		this.list = list;
-	}
 }
