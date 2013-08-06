@@ -29,6 +29,31 @@ import smart.action.attention.AttentionListener;
 import smart.action.attention.CancelAttentionListener;
 import smart.action.attention.DeleteAttentionListener;
 import smart.action.logout.LogoutListener;
+import smart.action.message.MessageContactsListener;
+import smart.action.message.MessageCustomTagListener;
+import smart.action.message.MessageDealDeleteListener;
+import smart.action.message.MessageDealMarkListener;
+import smart.action.message.MessageDealMoveListener;
+import smart.action.message.MessageDetailListener;
+import smart.action.message.MessageFileUploadListener;
+import smart.action.message.MessageSendListener;
+import smart.action.message.MessageTagAddListener;
+import smart.action.message.MessageTagDeleteListener;
+import smart.action.message.MessageTagDisplayListener;
+import smart.action.message.MessageTagModifyListener;
+import smart.action.message.MessageTopInfoListener;
+import smart.action.message.MessagesListener;
+import smart.action.resource.MoAlarmListener;
+import smart.action.resource.MoBasicListener;
+import smart.action.resource.MoChangeMonitorStatusListener;
+import smart.action.resource.MoDeleteListener;
+import smart.action.resource.MoHealthStatusListener;
+import smart.action.resource.MoHostsListener;
+import smart.action.resource.MoPerformanceListener;
+import smart.action.resource.MoRouterListener;
+import smart.action.resource.MoSendSnapshotListener;
+import smart.action.resource.MoSwitchsListener;
+import smart.action.resource.MoTopoListener;
 import smart.action.time.CurrentTimeListener;
 import cn.com.dhcc.mast.Root;
 import cn.com.dhcc.mast.action.Action;
@@ -177,135 +202,136 @@ public class SmartCellet extends Cellet {
 		al2.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ADDATTENTION, al2);
 
-//		// 获取消息
-//		MessagesListener messagesListener = new MessagesListener(this);
-//		messagesListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGES, messagesListener);
-//		
-//		//获取消息详细
-//		MessageDetailListener messageDetailListener=new MessageDetailListener(this);
-//		messageDetailListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGEDETAIL, messageDetailListener);
-//		
-//		//删除消息
-//		MessageDealDeleteListener messageDealDeleteListener =new MessageDealDeleteListener(this);
-//		messageDealDeleteListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGEDEALDELETE, messageDealDeleteListener);
-//		
-//		//转移消息
-//		MessageDealMoveListener messageDealMoveListener =new MessageDealMoveListener(this);
-//		messageDealMoveListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGEDEALMOVE, messageDealMoveListener);
-//		
-//		//标记消息
-//		MessageDealMarkListener messageDealMarkListener=new MessageDealMarkListener(this);;
-//		messageDealMarkListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGEDEALMARK, messageDealMarkListener);
-//		
-//		// 获取联系人
-//		MessageContactsListener messageContactsListener= new MessageContactsListener(this);
-//		messageContactsListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGECONTACTS, messageContactsListener);
-//		
-//		// 发送消息
-//		MessageSendListener messageSendListener = new MessageSendListener(this);
-//		messageSendListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGESEND, messageSendListener);
-//	
-//		// 消息置顶
-//		MessageTopInfoListener messageTopInfoListener = new MessageTopInfoListener(
-//				this);
-//		messageTopInfoListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGETOPINFO, messageTopInfoListener);
-//		
-//		//添加消息标签
-//		MessageTagAddListener messageTagAddListener=new MessageTagAddListener(this);
-//		messageTagAddListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGETAGADD, messageTagAddListener);
-//		
-//		//删除消息标签
-//		MessageTagDeleteListener messageTagDeleteListener=new MessageTagDeleteListener(this);
-//		messageTagDeleteListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGETAGDELETE, messageTagDeleteListener);
-//		
-//		//修改消息标签
-//		MessageTagModifyListener messageTagModifyListener=new MessageTagModifyListener(this);
-//		messageTagModifyListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGETAGMODIFY, messageTagModifyListener);
-//		
-//		//设置消息标签为显示或隐藏状态
-//		MessageTagDisplayListener messageTagDisplayListener=new MessageTagDisplayListener(this);
-//		messageTagDisplayListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGETAGDISPLAY, messageTagDisplayListener);
-//		
-//		// 获取所有自定义标签
-//		MessageCustomTagListener messageCustomTagListener = new MessageCustomTagListener(
-//				this);
-//		messageCustomTagListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGECUSTOMTAGS, messageCustomTagListener);
-//
-//		// 上传附件
-//		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(this);
-//		messageFileUploadListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MESSAGEFILEUPLOAD, messageFileUploadListener);
-//		
-//		//获取主机设备
-//		MoHostsListener moHostsListener=new MoHostsListener(this);
-//		moHostsListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOS, moHostsListener);
-//
-//		//获取交换机设备
-//		MoSwitchsListener moSwitchsListener=new MoSwitchsListener(this);
-//		moSwitchsListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOS, moSwitchsListener);
-//		
-//		//获取路由器设备
-//		MoRouterListener moRouterListener=new MoRouterListener(this);
-//		moRouterListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOS, moRouterListener);
-//		
-//		//获取设备基本信息
-//		MoBasicListener moBasicListener=new MoBasicListener(this);
-//		moBasicListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MODETAIL, moBasicListener);
-//		
-//		//获取设备性能信息
-//		MoPerformanceListener moPerformanceListener=new MoPerformanceListener(this);
-//		moPerformanceListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MODETAIL, moPerformanceListener);
-//
-//		//获取设备健康状态
-//		MoHealthStatusListener moHealthStatusListener=new MoHealthStatusListener(this);
-//		moHealthStatusListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MODETAIL, moHealthStatusListener);
-//		
-//		// 删除设备
-//		MoDeleteListener moDeleteListener = new MoDeleteListener(this);
-//		moDeleteListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MODELETE, moDeleteListener);
-//
-//		// 获取设备告警
-//		MoAlarmListener moAlarmListener = new MoAlarmListener(this);
-//		moAlarmListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOALARMS, moAlarmListener);
-//
-//		// 改变设备监控状态
-//		MoChangeMonitorStatusListener moChangeMonitorStatusListener = new MoChangeMonitorStatusListener(
-//				this);
-//		moChangeMonitorStatusListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOCHANGEMONITORSTATUS,
-//				moChangeMonitorStatusListener);
-//
-//		// 发送快照
-//		MoSendSnapshotListener moSendSnapshotListener = new MoSendSnapshotListener(
-//				this);
-//		moSendSnapshotListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOSENDSNAPSHOT, moSendSnapshotListener);
-//
-//		// 获取设备拓扑
-//		MoTopoListener moTopoListener = new MoTopoListener(this);
-//		moTopoListener.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.MOTOPOS, moTopoListener);
+		// 获取消息
+		MessagesListener messagesListener = new MessagesListener(this);
+		messagesListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGES, messagesListener);
+		
+		//获取消息详细
+		MessageDetailListener messageDetailListener=new MessageDetailListener(this);
+		messageDetailListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGEDETAIL, messageDetailListener);
+		
+		//删除消息
+		MessageDealDeleteListener messageDealDeleteListener =new MessageDealDeleteListener(this);
+		messageDealDeleteListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGEDEALDELETE, messageDealDeleteListener);
+		
+		//转移消息
+		MessageDealMoveListener messageDealMoveListener =new MessageDealMoveListener(this);
+		messageDealMoveListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGEDEALMOVE, messageDealMoveListener);
+		
+		//标记消息
+		MessageDealMarkListener messageDealMarkListener=new MessageDealMarkListener(this);;
+		messageDealMarkListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGEDEALMARK, messageDealMarkListener);
+		
+		// 获取联系人
+		MessageContactsListener messageContactsListener= new MessageContactsListener(this);
+		messageContactsListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGECONTACTS, messageContactsListener);
+		
+		// 发送消息
+		MessageSendListener messageSendListener = new MessageSendListener(this);
+		messageSendListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGESEND, messageSendListener);
+	
+		// 消息置顶
+		MessageTopInfoListener messageTopInfoListener = new MessageTopInfoListener(
+				this);
+		messageTopInfoListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGETOPINFO, messageTopInfoListener);
+		
+		//添加消息标签
+		MessageTagAddListener messageTagAddListener=new MessageTagAddListener(this);
+		messageTagAddListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGETAGADD, messageTagAddListener);
+		
+		//删除消息标签
+		MessageTagDeleteListener messageTagDeleteListener=new MessageTagDeleteListener(this);
+		messageTagDeleteListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGETAGDELETE, messageTagDeleteListener);
+		
+		//修改消息标签
+		MessageTagModifyListener messageTagModifyListener=new MessageTagModifyListener(this);
+		messageTagModifyListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGETAGMODIFY, messageTagModifyListener);
+		
+		//设置消息标签为显示或隐藏状态
+		MessageTagDisplayListener messageTagDisplayListener=new MessageTagDisplayListener(this);
+		messageTagDisplayListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGETAGDISPLAY, messageTagDisplayListener);
+		
+		// 获取所有自定义标签
+		MessageCustomTagListener messageCustomTagListener = new MessageCustomTagListener(
+				this);
+		messageCustomTagListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGECUSTOMTAGS, messageCustomTagListener);
+
+		// 上传附件
+		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(this);
+		messageFileUploadListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MESSAGEFILEUPLOAD, messageFileUploadListener);
+		
+		//获取主机设备
+		MoHostsListener moHostsListener=new MoHostsListener(this);
+		moHostsListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOS, moHostsListener);
+
+		//获取交换机设备
+		MoSwitchsListener moSwitchsListener=new MoSwitchsListener(this);
+		moSwitchsListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOS, moSwitchsListener);
+		
+		//获取路由器设备
+		MoRouterListener moRouterListener=new MoRouterListener(this);
+		moRouterListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOS, moRouterListener);
+		
+		//获取设备基本信息
+		MoBasicListener moBasicListener=new MoBasicListener(this);
+		moBasicListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MODETAIL, moBasicListener);
+		
+		//获取设备性能信息
+		MoPerformanceListener moPerformanceListener=new MoPerformanceListener(this);
+		moPerformanceListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MODETAIL, moPerformanceListener);
+
+		//获取设备健康状态
+		MoHealthStatusListener moHealthStatusListener=new MoHealthStatusListener(this);
+		moHealthStatusListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MODETAIL, moHealthStatusListener);
+		
+		// 删除设备
+		MoDeleteListener moDeleteListener = new MoDeleteListener(this);
+		moDeleteListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MODELETE, moDeleteListener);
+
+		// 获取设备告警
+		MoAlarmListener moAlarmListener = new MoAlarmListener(this);
+		moAlarmListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOALARMS, moAlarmListener);
+
+		// 改变设备监控状态
+		MoChangeMonitorStatusListener moChangeMonitorStatusListener = new MoChangeMonitorStatusListener(
+				this);
+		moChangeMonitorStatusListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOCHANGEMONITORSTATUS,
+				moChangeMonitorStatusListener);
+
+		// 发送快照
+		MoSendSnapshotListener moSendSnapshotListener = new MoSendSnapshotListener(
+				this);
+		moSendSnapshotListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOSENDSNAPSHOT, moSendSnapshotListener);
+
+		// 获取设备拓扑
+		MoTopoListener moTopoListener = new MoTopoListener(this);
+		moTopoListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.MOTOPOS, moTopoListener);
+		
 		// 注销
 		LogoutListener logout = new LogoutListener(this);
 		logout.setHttpClient(this.httpClient);
