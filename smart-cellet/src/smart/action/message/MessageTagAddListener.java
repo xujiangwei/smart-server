@@ -23,6 +23,10 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
+/**
+ * 添加信息标签监听
+ *
+ */
 public class MessageTagAddListener extends AbstractListener {
 
 	public MessageTagAddListener(Cellet cellet) {
@@ -87,12 +91,13 @@ public class MessageTagAddListener extends AbstractListener {
 				String wcontent = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(wcontent);
-					System.out.println("messageAddTag<  " + data);
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				
 				// 响应动作，即想客户端发送ACctionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGETAGADD, params);

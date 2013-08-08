@@ -26,8 +26,6 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 添加联系人监听器
  * 
- * @author Administrator
- * 
  */
 public final class MessageContactsListener extends AbstractListener {
 
@@ -92,16 +90,18 @@ public final class MessageContactsListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (bytes != null) {
+				
 				// 获取从服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("contact__" + data);
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪标识符
 				this.response(Action.MESSAGECONTACTS, params);

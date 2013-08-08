@@ -23,6 +23,10 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
+/**
+ * 信息详细内容监听器
+ *
+ */
 public class MessageDetailListener extends AbstractListener {
 
 	public MessageDetailListener(Cellet cellet) {
@@ -87,12 +91,13 @@ public class MessageDetailListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("messageDetail<---" + data);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGEDETAIL, params);

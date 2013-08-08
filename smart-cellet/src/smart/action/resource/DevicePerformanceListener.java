@@ -23,12 +23,13 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-/*
- * 获取设备告警监听器
+/**
+ * 设备性能监听
+ *
  */
-public final class MoAlarmListener extends AbstractListener {
+public class DevicePerformanceListener extends AbstractListener {
 
-	public MoAlarmListener(Cellet cellet) {
+	public DevicePerformanceListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -38,11 +39,11 @@ public final class MoAlarmListener extends AbstractListener {
 		// 使用同步的方式进行请求
 		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
-		// 因此，这里可以用同步方式请求 HTTP API
+		// 因此，这里可以用同步方式请求 HTTP API 。
 
-		// url
+		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MOALARMS);
+				.append(API.DEVICEPERFORMANCE);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -52,12 +53,11 @@ public final class MoAlarmListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		long moId = 0;
-
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getLong("moId");
-		} catch (JSONException jsone) {
-			jsone.printStackTrace();
+		} catch (JSONException e1) {
+			e1.printStackTrace();
 		}
 
 		// 填写数据内容
@@ -87,26 +87,28 @@ public final class MoAlarmListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从web服务器上返回的数据
+				
+				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("moAlarm<---" + data);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-
-				// 响应动作，即向客户端发送ActionDialect
-				// 参数tracker 是一次动作的追踪标识符
-				this.response(Action.MOALARMS, params);
+				
+				// 响应动作，即想客户端发送ActionDialect
+				// 参数tracker 是一次动作的追踪表示。
+				this.response(Action.DEVICEPERFORMANCE, params);
 			} else {
-				this.reportHTTPError(Action.MOALARMS);
+				this.reportHTTPError(Action.DEVICEPERFORMANCE);
 			}
 			break;
 		default:
-			Logger.w(MoAlarmListener.class, "返回响应码" + response.getStatus());
+			Logger.w(DevicePerformanceListener.class,
+					"返回响应码" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -118,9 +120,10 @@ public final class MoAlarmListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MOALARMS, params);
+			this.response(Action.DEVICEPERFORMANCE, params);
 			break;
 		}
+
 	}
 
 }

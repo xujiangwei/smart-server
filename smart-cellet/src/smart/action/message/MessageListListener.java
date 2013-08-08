@@ -1,4 +1,4 @@
-package smart.action.resource;
+package smart.action.message;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
@@ -23,9 +23,13 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-public class MoHostsListener extends AbstractListener {
+/**
+ * 获取信息列表监听
+ *
+ */
+public final class MessageListListener extends AbstractListener {
 
-	public MoHostsListener(Cellet cellet) {
+	public MessageListListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -33,16 +37,15 @@ public class MoHostsListener extends AbstractListener {
 	public void onAction(ActionDialect action) {
 
 		// 使用同步的方式进行请求
-		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
-		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
-		// 因此，这里可以用同步的方式请求HTTP API
+		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
+		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
+		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MOHOSTS);
-
-		// 创建请求
+				.append(API.MESSAGELIST);
 		Request request = this.getHttpClient().newRequest(url.toString());
+
 		request.method(HttpMethod.GET);
 		url = null;
 
@@ -50,13 +53,16 @@ public class MoHostsListener extends AbstractListener {
 		JSONObject json = null;
 		int pageSize = 0;
 		int currentIndex = 0;
+		int tagId = 0;
 		String orderBy = null;
 		String condition = null;
-
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
+			System.out.println("data  " + json);
+			Logger.i(this.getClass(), json.toString());
 			pageSize = json.getInt("pageSize");
 			currentIndex = json.getInt("currentIndex");
+			tagId = json.getInt("tagId");
 			orderBy = json.getString("orderBy");
 			condition = json.getString("condition");
 		} catch (JSONException e1) {
@@ -69,6 +75,7 @@ public class MoHostsListener extends AbstractListener {
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("pageSize", pageSize);
 		capsule.append("currentIndex", currentIndex);
+		capsule.append("tagId", tagId);
 		capsule.append("orderBy", orderBy);
 		capsule.append("condition", condition);
 		dcp.offer(capsule.toBuffer());
@@ -93,25 +100,26 @@ public class MoHostsListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从Web服务器返回的数据
+				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("moHost<---" + data);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				// 响应动作，即向客户端发送ActionDialect
-				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.MOHOSTS, params);
+				
+				// 响应动作，即想客户端发送ActionDialect
+				// 参数tracker 是一次动作的追踪表示。
+				this.response(Action.MESSAGELIST, params);
 			} else {
-				this.reportHTTPError(Action.MOHOSTS);
+				this.reportHTTPError(Action.MESSAGELIST);
 			}
 			break;
 		default:
-			Logger.w(MoHostsListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(MessageListListener.class, "返回响应码" + response.getContent());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -121,12 +129,10 @@ public class MoHostsListener extends AbstractListener {
 
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
-
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MOHOSTS, params);
+			this.response(Action.MESSAGELIST, params);
 			break;
 		}
-
 	}
 
 }

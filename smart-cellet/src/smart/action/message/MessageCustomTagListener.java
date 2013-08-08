@@ -19,6 +19,10 @@ import smart.action.AbstractListener;
 import smart.api.API;
 import cn.com.dhcc.mast.action.Action;
 
+/**
+ * 用户定制标签
+ *
+ */
 public class MessageCustomTagListener extends AbstractListener {
 
 	public MessageCustomTagListener(Cellet cellet) {
@@ -58,7 +62,6 @@ public class MessageCustomTagListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("customTag<---" + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

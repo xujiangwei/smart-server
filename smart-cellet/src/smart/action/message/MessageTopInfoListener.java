@@ -23,6 +23,10 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
+/**
+ * 消息置顶监听
+ *
+ */
 public final class MessageTopInfoListener extends AbstractListener {
 
 	public MessageTopInfoListener(Cellet cellet) {
@@ -86,16 +90,18 @@ public final class MessageTopInfoListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
+				
 				// 获取从web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("messageTopInfo<  " + data);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
+				
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识
 				this.response(Action.MESSAGETOPINFO, params);

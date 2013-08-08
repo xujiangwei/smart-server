@@ -1,4 +1,4 @@
-package smart.action.message;
+package smart.action.resource;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
@@ -23,44 +23,38 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-public final class MessagesListener extends AbstractListener {
+/**
+ * 删除设备监听器
+ */
+public final class DeleteDeviceListener extends AbstractListener {
 
-	public MessagesListener(Cellet cellet) {
+	public DeleteDeviceListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
 
-		// 使用同步的方式进行请求
-		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
-		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
-		// 因此，这里可以用同步方式请求 HTTP API 。
+		// 使用同步的方法进行请求
+		// 注意：onAction方法是由Cell Cloud 的action dialect进行回调的
+		// 该方法独享一个线程，可以在这里进行阻塞式调用
+		// 因此，在这里可以用同步的方式请求HTTP API
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGES);
-		Request request = this.getHttpClient().newRequest(url.toString());
+				.append(API.DELETEDEVICE);
 
-		request.method(HttpMethod.GET);
+		// 创建请求
+		Request request = this.getHttpClient().newRequest(url.toString());
+		request.method(HttpMethod.POST);
 		url = null;
 
 		// 获取参数
 		JSONObject json = null;
-		int pageSize = 0;
-		int currentIndex = 0;
-		int tagId = 0;
-		String orderBy = null;
-		String condition = null;
+		String moId = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("data  " + json);
-			Logger.i(this.getClass(), json.toString());
-			pageSize = json.getInt("pageSize");
-			currentIndex = json.getInt("currentIndex");
-			tagId = json.getInt("tagId");
-			orderBy = json.getString("orderBy");
-			condition = json.getString("condition");
+			moId = json.getString("moId");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -69,11 +63,7 @@ public final class MessagesListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("pageSize", pageSize);
-		capsule.append("currentIndex", currentIndex);
-		capsule.append("tagId", tagId);
-		capsule.append("orderBy", orderBy);
-		capsule.append("condition", condition);
+		capsule.append("moId", moId);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -96,25 +86,26 @@ public final class MessagesListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从Web服务器上返回的数据
+				// 获取从web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("messages<---" + data);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				// 响应动作，即想客户端发送ActionDialect
-				// 参数tracker 是一次动作的追踪表示。
-				this.response(Action.MESSAGES, params);
+
+				// 响应动作，即向客户端发送ActionDialect
+				// 参数tracker 是一次动作的追踪标识
+				this.response(Action.DEVICEDELETE, params);
 			} else {
-				this.reportHTTPError(Action.MESSAGES);
+				this.reportHTTPError(Action.DEVICEDELETE);
 			}
 			break;
 		default:
-			Logger.w(MessagesListener.class, "返回响应码" + response.getContent());
+			Logger.w(DeleteDeviceListener.class, "返回响应码：" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -124,8 +115,9 @@ public final class MessagesListener extends AbstractListener {
 
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
+
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MESSAGES, params);
+			this.response(Action.DEVICEDELETE, params);
 			break;
 		}
 	}

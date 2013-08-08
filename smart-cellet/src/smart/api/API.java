@@ -29,13 +29,13 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-	public final static String MESSAGES = "/monitoring-system/messages/requestMessages";
+	public final static String MESSAGELIST = "/monitoring-system/messages/requestMessages";
 	public final static String MESSAGEDETAIL = "/monitoring-system/messageDetail/requestMessageDetail";
 	public final static String MESSAGECONTACTS = "/monitoring-system/contacts/requestMessageContacts";
 	public final static String MESSAGESEND = "/monitoring-system/messageSend/messageSend";
-	public final static String MESSAGEDEALDELETE = "/monitoring-system/messageDeal2/messageDealDelete";
-	public final static String MESSAGEDEALMOVE = "/monitoring-system/messageDeal3/messageDealMove";
-	public final static String MESSAGEDEALMARK = "/monitoring-system/messageDeal4/messageDealMark";
+	public final static String MESSAGEDELETE = "/monitoring-system/messageDeal2/messageDealDelete";
+	public final static String MESSAGEMOVE = "/monitoring-system/messageDeal3/messageDealMove";
+	public final static String MESSAGEMARK = "/monitoring-system/messageDeal4/messageDealMark";
 	public final static String MESSAGETOPINFO = "/monitoring-system/messageTopInfo/messageTopInfo";
 	public final static String MESSAGETAGADD = "/monitoring-system/messageTag1/messageTagAdd";
 	public final static String MESSAGETAGDELETE = "/monitoring-system/messageTag2/messageTagDelete";
@@ -46,20 +46,20 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
-	public final static String MOHOSTS = "/monitoring-system/moHosts/requestMoHosts";
-	public final static String MOSWITCHS = "/monitoring-system/moSwitchs/requestMoSwitchs";
-	public final static String MOROUTERS = "/monitoring-system/moRouters/requestMoRouters";
+	public final static String HOST = "/monitoring-system/moHosts/requestMoHosts";
+	public final static String SWITCH = "/monitoring-system/moSwitchs/requestMoSwitchs";
+	public final static String ROUTER = "/monitoring-system/moRouters/requestMoRouters";
 
-	public final static String MOBASIC = "/monitoring-system/basic/requestMoBasic";
-	public final static String MOPERFORMANCE = "/monitoring-system/performance/requestPerformance";
-	public final static String MOHEALTHSTATUS = "/monitoring-system/health/requestMoHealthStatus";
+	public final static String DEVICEBASIC = "/monitoring-system/basic/requestMoBasic";
+	public final static String DEVICEPERFORMANCE = "/monitoring-system/performance/requestPerformance";
+	public final static String DEVICEHEALTHSTATUS = "/monitoring-system/health/requestMoHealthStatus";
 
-	public final static String MOINFO = "/monitoring-system/moInfo/requestMoInfo";
-	public final static String MODELETE = "/monitoring-system/moDel/moDelete";
-	public final static String MOALARMS = "/monitoring-system/moAlarms/requestMoAlarms";
-	public final static String MOCHANGEMONITORSTATUS = "/monitoring-system/monitorStatus/moChangeMonitorStatus";
-	public final static String MOSENDSNAPSHOT = "/monitoring-system/snapshot/moSendSnapshot";
-	public final static String MOTOPOS = "/monitoring-system/moTopos/requestMoTopos";
+	public final static String DEVICEINFO = "/monitoring-system/moInfo/requestMoInfo";
+	public final static String DELETEDEVICE = "/monitoring-system/moDel/moDelete";
+	public final static String DEVICEALARM = "/monitoring-system/moAlarms/requestMoAlarms";
+	public final static String DEVICEMONITORSTATE = "/monitoring-system/monitorStatus/moChangeMonitorStatus";
+	public final static String SENDSNAPSHOT = "/monitoring-system/snapshot/moSendSnapshot";
+	public final static String DEVICETOPO = "/monitoring-system/moTopos/requestMoTopos";
 
 
 	private API() {

@@ -1,4 +1,4 @@
-package smart.action.resource;
+package smart.action.message;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
@@ -23,60 +23,54 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-public class MoSwitchsListener extends AbstractListener {
+/**
+ * 消息标记监听
+ *
+ */
+public class MessageMarkListener extends AbstractListener {
 
-	public MoSwitchsListener(Cellet cellet) {
+	public MessageMarkListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
-
-		// 使用同步的方式进行请求
-		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
-		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
-		// 因此，这里可以用同步的方式请求HTTP API
+		// 使用同步的方法进行请求
+		// 因为onAction 是由cell cloud 的 action dialect进行回调的
+		// 该方法独享一个线程，因此可以在次线程里进行阻塞式调用
+		// 因此，可以用同步的方式请求HTTP API
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MOSWITCHS);
-
-		// 创建请求
+				.append(API.MESSAGEMARK);
 		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.GET);
+		request.method(HttpMethod.POST);
 		url = null;
 
 		// 获取参数
 		JSONObject json = null;
-		int pageSize = 0;
-		int currentIndex = 0;
-		String orderBy = null;
-		String condition = null;
-
+		long messageId = 0;
+		int markId = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			pageSize = json.getInt("pageSize");
-			currentIndex = json.getInt("currentIndex");
-			orderBy = json.getString("orderBy");
-			condition = json.getString("condition");
-		} catch (JSONException e1) {
-			e1.printStackTrace();
+			messageId = json.getLong("messageId");
+			markId = json.getInt("markId");
+		} catch (JSONException jsone) {
+			jsone.printStackTrace();
 		}
 
 		// 填写数据内容
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("pageSize", pageSize);
-		capsule.append("currentIndex", currentIndex);
-		capsule.append("orderBy", orderBy);
-		capsule.append("condition", condition);
+		capsule.append("messageId", messageId);
+		capsule.append("markId", markId);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
 
-		// 发送请求
 		ContentResponse response = null;
+
 		try {
 			response = request.send();
 		} catch (InterruptedException e1) {
@@ -92,28 +86,30 @@ public class MoSwitchsListener extends AbstractListener {
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
-			if (null != bytes) {
-				// 获取从Web服务器返回的数据
+			if (bytes != null) {
+				// 获取从web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("moSwitchs<---" + data);
+					System.out.println("dealMark" + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
-				} catch (JSONException e) {
-					e.printStackTrace();
+				} catch (JSONException jsone) {
+					jsone.printStackTrace();
 				}
+
 				// 响应动作，即向客户端发送ActionDialect
-				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.MOSWITCHS, params);
+				// 参数tracker是一次动作的追踪标识
+				this.response(Action.MESSAGEMARK, params);
 			} else {
-				this.reportHTTPError(Action.MOSWITCHS);
+				this.reportHTTPError(Action.MESSAGEMARK);
 			}
 			break;
 		default:
-			Logger.w(MoSwitchsListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(MessageMarkListener.class,
+					"返回响应码：" + request.getContent());
+			data = new JSONObject();
 			try {
-				data = new JSONObject();
 				data.put("status", 900);
 			} catch (JSONException e) {
 				e.printStackTrace();
@@ -121,12 +117,9 @@ public class MoSwitchsListener extends AbstractListener {
 
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
-
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MOSWITCHS, params);
+			this.response(Action.MESSAGEMARK, params);
 			break;
 		}
-
 	}
-
 }

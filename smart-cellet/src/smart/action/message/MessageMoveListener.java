@@ -23,9 +23,13 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-public class MessageDealMoveListener extends AbstractListener {
+/**
+ * 消息移动监听
+ *
+ */
+public class MessageMoveListener extends AbstractListener {
 
-	public MessageDealMoveListener(Cellet cellet) {
+	public MessageMoveListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -39,7 +43,7 @@ public class MessageDealMoveListener extends AbstractListener {
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGEDEALMOVE);
+				.append(API.MESSAGEMOVE);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -99,13 +103,13 @@ public class MessageDealMoveListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识
-				this.response(Action.MESSAGEDEALMOVE, params);
+				this.response(Action.MESSAGEMOVE, params);
 			} else {
-				this.reportHTTPError(Action.MESSAGEDEALMOVE);
+				this.reportHTTPError(Action.MESSAGEMOVE);
 			}
 			break;
 		default:
-			Logger.w(MessageDealMoveListener.class,
+			Logger.w(MessageMoveListener.class,
 					"返回响应码：" + response.getStatus());
 			data = new JSONObject();
 			try {
@@ -117,7 +121,7 @@ public class MessageDealMoveListener extends AbstractListener {
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MESSAGEDEALMOVE, params);
+			this.response(Action.MESSAGEMOVE, params);
 			break;
 		}
 	}
