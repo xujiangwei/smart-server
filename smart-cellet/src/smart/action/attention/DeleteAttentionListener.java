@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 删除关注监听器
  */
-public class DeleteAttentionListener extends AbstractListener {
+public final class DeleteAttentionListener extends AbstractListener {
 
 	public DeleteAttentionListener(Cellet cellet) {
 		super(cellet);
