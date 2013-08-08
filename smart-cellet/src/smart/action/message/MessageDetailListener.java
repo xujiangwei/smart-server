@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 信息详细内容监听器
  *
  */
-public class MessageDetailListener extends AbstractListener {
+public final class MessageDetailListener extends AbstractListener {
 
 	public MessageDetailListener(Cellet cellet) {
 		super(cellet);

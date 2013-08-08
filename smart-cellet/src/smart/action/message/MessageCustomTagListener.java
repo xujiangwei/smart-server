@@ -23,7 +23,7 @@ import cn.com.dhcc.mast.action.Action;
  * 用户定制标签
  *
  */
-public class MessageCustomTagListener extends AbstractListener {
+public final class MessageCustomTagListener extends AbstractListener {
 
 	public MessageCustomTagListener(Cellet cellet) {
 		super(cellet);

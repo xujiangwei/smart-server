@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 消息移动监听
  *
  */
-public class MessageMoveListener extends AbstractListener {
+public final class MessageMoveListener extends AbstractListener {
 
 	public MessageMoveListener(Cellet cellet) {
 		super(cellet);

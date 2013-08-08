@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 路由监听器
  *
  */
-public class RouterListener extends AbstractListener {
+public final class RouterListener extends AbstractListener {
 
 	public RouterListener(Cellet cellet) {
 		super(cellet);

@@ -29,7 +29,7 @@ import cn.com.dhcc.mast.action.Action;
  * 设备拓扑监听
  *
  */
-public class DeviceTopoListener extends AbstractListener {
+public final class DeviceTopoListener extends AbstractListener {
 
 	public DeviceTopoListener(Cellet cellet) {
 		super(cellet);

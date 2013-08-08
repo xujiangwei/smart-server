@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 修改标签监听
  *
  */
-public class MessageTagModifyListener extends AbstractListener {
+public final class MessageTagModifyListener extends AbstractListener {
 
 	public MessageTagModifyListener(Cellet cellet) {
 		super(cellet);

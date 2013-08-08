@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 删除消息标签监听
  *
  */
-public class MessageTagDeleteListener extends AbstractListener {
+public final class MessageTagDeleteListener extends AbstractListener {
 
 	public MessageTagDeleteListener(Cellet cellet) {
 		super(cellet);

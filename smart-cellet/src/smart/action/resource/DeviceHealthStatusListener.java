@@ -23,7 +23,7 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
-public class DeviceHealthStatusListener extends AbstractListener {
+public final class DeviceHealthStatusListener extends AbstractListener {
 
 	public DeviceHealthStatusListener(Cellet cellet) {
 		super(cellet);

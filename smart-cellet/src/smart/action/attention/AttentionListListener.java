@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 获取关注列表监听
  */
-public class AttentionListListener extends AbstractListener {
+public final class AttentionListListener extends AbstractListener {
 
 	public AttentionListListener(Cellet cellet) {
 		super(cellet);

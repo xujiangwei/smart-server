@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 设备性能监听
  *
  */
-public class DevicePerformanceListener extends AbstractListener {
+public final class DevicePerformanceListener extends AbstractListener {
 
 	public DevicePerformanceListener(Cellet cellet) {
 		super(cellet);

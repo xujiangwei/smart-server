@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 主机监听器
  *
  */
-public class HostListener extends AbstractListener {
+public final class HostListener extends AbstractListener {
 
 	public HostListener(Cellet cellet) {
 		super(cellet);

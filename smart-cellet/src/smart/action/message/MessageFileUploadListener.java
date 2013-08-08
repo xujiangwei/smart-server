@@ -29,7 +29,7 @@ import cn.com.dhcc.mast.action.Action;
  * 文件上传监听
  *
  */
-public class MessageFileUploadListener extends AbstractListener {
+public final class MessageFileUploadListener extends AbstractListener {
 
 	public MessageFileUploadListener(Cellet cellet) {
 		super(cellet);

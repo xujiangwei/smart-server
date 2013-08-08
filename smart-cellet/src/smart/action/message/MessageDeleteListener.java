@@ -28,7 +28,7 @@ import cn.com.dhcc.mast.action.Action;
  * 删除消息监听
  *
  */
-public class MessageDeleteListener extends AbstractListener {
+public final class MessageDeleteListener extends AbstractListener {
 
 	public MessageDeleteListener(Cellet cellet) {
 		super(cellet);

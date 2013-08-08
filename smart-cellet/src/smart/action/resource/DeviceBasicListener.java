@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 设备基本信息监听
  *
  */
-public class DeviceBasicListener extends AbstractListener {
+public final class DeviceBasicListener extends AbstractListener {
 
 	public DeviceBasicListener(Cellet cellet) {
 		super(cellet);
