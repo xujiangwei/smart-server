@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 查看告警维护经验
  */
-public class AlarmExperienceListener extends AbstractListener {
+public final class AlarmExperienceListener extends AbstractListener {
 
 	public AlarmExperienceListener(Cellet cellet) {
 		super(cellet);

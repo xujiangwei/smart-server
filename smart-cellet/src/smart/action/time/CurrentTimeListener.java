@@ -35,6 +35,7 @@ public final class CurrentTimeListener extends AbstractListener {
 		JSONObject json = new JSONObject();
 		try {
 			json.put("currentTime", time);
+			json.put("status", 300);
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
