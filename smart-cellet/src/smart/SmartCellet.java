@@ -11,7 +11,6 @@ import net.cellcloud.talk.dialect.Dialect;
 import org.eclipse.jetty.client.HttpClient;
 
 import smart.action.LoginListener;
-import smart.action.TestServerListener;
 import smart.action.alarm.AlarmCoverageListener;
 import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
@@ -129,11 +128,6 @@ public class SmartCellet extends Cellet {
 	 */
 	private void initListeners() {
 		ActionDispatcher dispatcher = ActionDispatcher.getInstance();
-		
-		// 测试服务器连接
-		TestServerListener testServer = new TestServerListener(this);
-		testServer.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.TESTSERVER, testServer);
 
 		// 登录
 		LoginListener login = new LoginListener(this);
