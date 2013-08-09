@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 查看告警处理意见监听
  */
-public class AlarmOpInfoListener extends AbstractListener {
+public final class AlarmOpInfoListener extends AbstractListener {
 
 	public AlarmOpInfoListener(Cellet cellet) {
 		super(cellet);

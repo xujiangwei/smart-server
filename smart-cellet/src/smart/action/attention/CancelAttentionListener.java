@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 取消关注监听器
  */
-public class CancelAttentionListener extends AbstractListener {
+public final class CancelAttentionListener extends AbstractListener {
 
 	public CancelAttentionListener(Cellet cellet) {
 		super(cellet);
