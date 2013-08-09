@@ -27,7 +27,7 @@ import cn.com.dhcc.mast.action.Action;
  * 
  * 查看告警影响范围
  */
-public class AlarmCoverageListener extends AbstractListener {
+public final class AlarmCoverageListener extends AbstractListener {
 
 	public AlarmCoverageListener(Cellet cellet) {
 		super(cellet);

@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 查看压制的告警监听器
  */
-public class SuppressedAlarmListener extends AbstractListener {
+public final class SuppressedAlarmListener extends AbstractListener {
 
 	public SuppressedAlarmListener(Cellet cellet) {
 		super(cellet);

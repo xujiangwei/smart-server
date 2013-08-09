@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 查看告警生命周期监听
  */
-public class AlarmLifeCycleListener extends AbstractListener {
+public final class AlarmLifeCycleListener extends AbstractListener {
 
 	public AlarmLifeCycleListener(Cellet cellet) {
 		super(cellet);

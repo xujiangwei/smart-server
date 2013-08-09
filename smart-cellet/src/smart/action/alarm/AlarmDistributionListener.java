@@ -26,7 +26,7 @@ import cn.com.dhcc.mast.action.Action;
 /**
  * 查看告警分布监听器
  */
-public class AlarmDistributionListener extends AbstractListener {
+public final class AlarmDistributionListener extends AbstractListener {
 
 	public AlarmDistributionListener(Cellet cellet) {
 		super(cellet);
