@@ -23,7 +23,7 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public Host createHost(String id) {
+	public Host createHost(long id) {
 		return new Host(id);
 	}
 }

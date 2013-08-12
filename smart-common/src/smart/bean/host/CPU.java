@@ -30,7 +30,7 @@ public class CPU extends AbstractEntity {
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
-	public CPU(String id) {
+	public CPU(long id) {
 		super(id);
 		this.percQueue = new LinkedList<CPUPerc>();
 	}

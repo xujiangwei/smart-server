@@ -13,36 +13,38 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 
 	private static final long serialVersionUID = 1638959794358520994L;
 
-	private String id;
+	private long id;
 	/// 子节点映射，Key：Entity ID
-	private ConcurrentHashMap<String, Entity> children;
+	private ConcurrentHashMap<Long, Entity> children;
 	/// 父节点
 	private Entity parent;
 
-	public AbstractEntity(String id) {
+	public AbstractEntity(long id) {
 		super();
 		this.id = id;
-		this.children = new ConcurrentHashMap<String, Entity>();
+		this.children = new ConcurrentHashMap<Long, Entity>();
 		this.parent = null;
 	}
 
 	@Override
-	public String getId() {
+	public long getId() {
 		return this.id;
 	}
 
 	@Override
 	public void addChild(Entity entity) {
+		entity.setParent(this);
 		this.children.put(entity.getId(), entity);
 	}
 
 	@Override
 	public void removeChild(Entity entity) {
+		entity.setParent(null);
 		this.children.remove(entity);
 	}
 
 	@Override
-	public Entity getChild(String id) {
+	public Entity getChild(long id) {
 		return this.children.get(id);
 	}
 
@@ -51,10 +53,7 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 		return this.parent;
 	}
 
-	/**
-	 * 设置父对象。
-	 * @param parent
-	 */
+	@Override
 	public void setParent(Entity parent) {
 		this.parent = parent;
 	}

@@ -15,7 +15,7 @@ public class Memory extends AbstractEntity {
 	private long crateTime;
 	private List<MemoryUsage> memoryUsage;
 
-	public Memory(String id) {
+	public Memory(long id) {
 		super(id);
 	}
 

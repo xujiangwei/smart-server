@@ -13,7 +13,7 @@ public interface Entity extends Serializable {
 	 * 返回 ID 。
 	 * @return
 	 */
-	public String getId();
+	public long getId();
 
 	/**
 	 * 添加子实体。
@@ -31,10 +31,16 @@ public interface Entity extends Serializable {
 	 * 返回子实体。
 	 * @return
 	 */
-	public Entity getChild(String id);
+	public Entity getChild(long id);
 
 	/**
 	 * 返回父实体。
 	 */
 	public Entity getParent();
+
+	/**
+	 * 设置父实体。
+	 * @param parent
+	 */
+	public void setParent(Entity parent);
 }
