@@ -16,11 +16,14 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	private String id;
 	/// 子节点映射，Key：Entity ID
 	private ConcurrentHashMap<String, Entity> children;
+	/// 父节点
+	private Entity parent;
 
 	public AbstractEntity(String id) {
 		super();
 		this.id = id;
 		this.children = new ConcurrentHashMap<String, Entity>();
+		this.parent = null;
 	}
 
 	@Override
@@ -41,5 +44,18 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	@Override
 	public Entity getChild(String id) {
 		return this.children.get(id);
+	}
+
+	@Override
+	public Entity getParent() {
+		return this.parent;
+	}
+
+	/**
+	 * 设置父对象。
+	 * @param parent
+	 */
+	public void setParent(Entity parent) {
+		this.parent = parent;
 	}
 }

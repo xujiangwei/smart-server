@@ -32,4 +32,9 @@ public interface Entity extends Serializable {
 	 * @return
 	 */
 	public Entity getChild(String id);
+
+	/**
+	 * 返回父实体。
+	 */
+	public Entity getParent();
 }
