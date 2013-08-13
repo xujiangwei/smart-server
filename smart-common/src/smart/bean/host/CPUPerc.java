@@ -52,6 +52,7 @@ public final class CPUPerc implements Serializable {
 	 * @return
 	 */
 	public double getCombined() {
-		return this.combined;
+		this.combined = user + sys + nice + wait;
+		return combined;
 	}
 }

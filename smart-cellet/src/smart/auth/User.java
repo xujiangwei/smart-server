@@ -18,7 +18,7 @@ public class User extends AbstractEntity {
 	private String ip;
 	private int port;
 	
-	public User(String id) {
+	public User(long id) {
 		super(id);
 	}
 	

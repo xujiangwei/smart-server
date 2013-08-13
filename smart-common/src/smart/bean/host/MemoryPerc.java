@@ -1,21 +1,30 @@
 package smart.bean.host;
 
-public class MemoryUsage {
-	private int id;
+import java.io.Serializable;
+
+/**
+ * Memory 利用率百分比。
+ */
+public class MemoryPerc implements Serializable {
+	
+	private static final long serialVersionUID = 320344498893843397L;
+	
+	// 内存数据采集时间
+	private long timestamp;
+	
 	private int physicsUsed;
 	private int physicsFree;
 	private int swapTotal;
 	private int swapUsed;
 	private int swapFree;
-	private double memLoad;
-	private long collectTime;
+	private double combined;
 
-	public int getId() {
-		return id;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public int getPhysicsUsed() {
@@ -58,20 +67,9 @@ public class MemoryUsage {
 		this.swapFree = swapFree;
 	}
 
-	public double getMemLoad() {
-		return memLoad;
-	}
-
-	public void setMemLoad(double memLoad) {
-		this.memLoad = memLoad;
-	}
-
-	public long getCollectTime() {
-		return collectTime;
-	}
-
-	public void setCollectTime(long collectTime) {
-		this.collectTime = collectTime;
+	public double getCombined() {
+		this.combined = (physicsUsed+swapUsed)/(physicsUsed+physicsFree+swapTotal);
+		return combined;
 	}
 
 }

@@ -111,7 +111,7 @@ public final class LoginListener extends AbstractListener {
 					jo = new JSONObject(content);
 					String token = "";
 					if (!"".equals(jo.get("loginInfo"))) {
-						String id = jo.getJSONObject("loginInfo").getString(
+						long id = jo.getJSONObject("loginInfo").getLong(
 								"user_id");
 						token = jo.getJSONObject("loginInfo")
 								.getString("token");
@@ -124,8 +124,6 @@ public final class LoginListener extends AbstractListener {
 							user.setToken(token);
 							user.setIp(ip);
 							user.setPort(port);
-//							User user = new User(username, password, id, token,
-//									ip, port);
 							UserManager.getInstance().userCreated(user);
 
 						}

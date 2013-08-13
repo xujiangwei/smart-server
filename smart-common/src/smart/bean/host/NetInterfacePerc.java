@@ -1,18 +1,30 @@
 package smart.bean.host;
 
-public class NetInterfaceStatus {
-	private int id;
+import java.io.Serializable;
+
+/**
+ * 网络接口使用信息。
+ */
+public class NetInterfacePerc implements Serializable {
+	
+	private static final long serialVersionUID = 4162739398121108684L;
+
+	// 数据采集时间
+	private long timestamp;
+	
+	// 网络接口流量
 	private float flow;
+	// 网络接口吞吐量
 	private float throughput;
-	private long collectTime;
+	// 接口状态
 	private String status;
 
-	public int getId() {
-		return id;
+	public long getTimestamp() {
+		return timestamp;
 	}
 
-	public void setId(int id) {
-		this.id = id;
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
 	}
 
 	public String getStatus() {
@@ -39,11 +51,4 @@ public class NetInterfaceStatus {
 		this.throughput = throughput;
 	}
 
-	public long getCollectTime() {
-		return collectTime;
-	}
-
-	public void setCollectTime(long collectTime) {
-		this.collectTime = collectTime;
-	}
 }
