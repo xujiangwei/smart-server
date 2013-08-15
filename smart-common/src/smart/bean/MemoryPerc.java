@@ -18,53 +18,33 @@ public class MemoryPerc implements Serializable {
 	private int swapUsed;
 	private int swapFree;
 	private double combined;
-
-	public long getTimestamp() {
-		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
+	
+	public MemoryPerc(long timestamp){
 		this.timestamp = timestamp;
 	}
 
-	public int getPhysicsUsed() {
-		return physicsUsed;
+	public long getTimestamp() {
+		return this.timestamp;
 	}
 
-	public void setPhysicsUsed(int physicsUsed) {
-		this.physicsUsed = physicsUsed;
+	public int getPhysicsUsed() {
+		return this.physicsUsed;
 	}
 
 	public int getPhysicsFree() {
-		return physicsFree;
-	}
-
-	public void setPhysicsFree(int physicsFree) {
-		this.physicsFree = physicsFree;
+		return this.physicsFree;
 	}
 
 	public int getSwapTotal() {
-		return swapTotal;
-	}
-
-	public void setSwapTotal(int swapTotal) {
-		this.swapTotal = swapTotal;
+		return this.swapTotal;
 	}
 
 	public int getSwapUsed() {
-		return swapUsed;
-	}
-
-	public void setSwapUsed(int swapUsed) {
-		this.swapUsed = swapUsed;
+		return this.swapUsed;
 	}
 
 	public int getSwapFree() {
-		return swapFree;
-	}
-
-	public void setSwapFree(int swapFree) {
-		this.swapFree = swapFree;
+		return this.swapFree;
 	}
 
 	public double getCombined() {

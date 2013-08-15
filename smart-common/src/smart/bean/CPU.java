@@ -59,7 +59,7 @@ public class CPU extends AbstractEntity {
 	public long getCacheSize() {
 		return this.cacheSize;
 	}
-	public void getCacheSize(long cacheSize) {
+	public void setCacheSize(long cacheSize) {
 		this.cacheSize = cacheSize;
 	}
 
