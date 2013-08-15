@@ -1,4 +1,4 @@
-package smart.bean.host;
+package smart.bean;
 
 import smart.entity.AbstractEntity;
 

@@ -1,4 +1,4 @@
-package smart.bean.host;
+package smart.bean;
 
 import java.io.Serializable;
 

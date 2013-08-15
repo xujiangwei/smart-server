@@ -1,4 +1,4 @@
-package smart.bean.host;
+package smart.bean;
 
 import java.util.ArrayList;
 import java.util.LinkedList;

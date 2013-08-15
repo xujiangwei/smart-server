@@ -1,6 +1,5 @@
 package smart.bean;
 
-import smart.bean.host.Host;
 
 /**
  * Bean 工厂。
