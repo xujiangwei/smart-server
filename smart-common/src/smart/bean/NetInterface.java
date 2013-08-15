@@ -1,6 +1,7 @@
 package smart.bean;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -31,6 +32,7 @@ public class NetInterface extends AbstractEntity {
 
 	public NetInterface(long id) {
 		super(id);
+		this.percQueue = new LinkedList<NetInterfacePerc>();
 	}
 
 	public String getName() {
@@ -90,7 +92,7 @@ public class NetInterface extends AbstractEntity {
 	}
 
 	/**
-	 * 返回网络接口使用列表。
+	 * 返回网络接口数据列表。
 	 * @return
 	 */
 	public List<NetInterfacePerc> getPercs() {

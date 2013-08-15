@@ -19,36 +19,24 @@ public class NetInterfacePerc implements Serializable {
 	// 接口状态
 	private String status;
 
+	public NetInterfacePerc(long timestamp){
+		this.timestamp = timestamp;
+	}
+	
 	public long getTimestamp() {
 		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public String getStatus() {
 		return status;
 	}
 
-	public void setStatus(String status) {
-		this.status = status;
-	}
-
 	public float getFlow() {
 		return flow;
 	}
 
-	public void setFlow(float flow) {
-		this.flow = flow;
-	}
-
 	public float getThroughput() {
 		return throughput;
-	}
-
-	public void setThroughput(float throughput) {
-		this.throughput = throughput;
 	}
 
 }

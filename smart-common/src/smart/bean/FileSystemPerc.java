@@ -16,23 +16,20 @@ public class FileSystemPerc implements Serializable {
 	private double free;
 	private double usage;
 	
-	public long getTimestamp() {
-		return timestamp;
-	}
-	public void setTimestamp(long timestamp) {
+	public FileSystemPerc(long timestamp){
 		this.timestamp = timestamp;
 	}
+	
+	public long getTimestamp() {
+		return this.timestamp;
+	}
+	
 	public double getUsed() {
-		return used;
+		return this.used;
 	}
-	public void setUsed(double used) {
-		this.used = used;
-	}
+	
 	public double getFree() {
-		return free;
-	}
-	public void setFree(double free) {
-		this.free = free;
+		return this.free;
 	}
 	
 	public double getUsage() {

@@ -1,6 +1,7 @@
 package smart.bean;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -27,6 +28,7 @@ public class Progress extends AbstractEntity {
 
 	public Progress(long id) {
 		super(id);
+		this.percQueue = new LinkedList<ProgressPerc>();
 	}
 
 	public String getName() {
@@ -70,7 +72,7 @@ public class Progress extends AbstractEntity {
 	}
 
 	/**
-	 * 返回进程使用列表。
+	 * 返回进程数据列表。
 	 * @return
 	 */
 	public List<ProgressPerc> getPercs() {

@@ -1,6 +1,7 @@
 package smart.bean;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 import java.util.Queue;
 
@@ -23,6 +24,7 @@ public class Memory extends AbstractEntity {
 
 	public Memory(long id) {
 		super(id);
+		this.percQueue = new LinkedList<MemoryPerc>();
 	}
 
 	public int getPhysicsTotal() {
