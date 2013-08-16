@@ -17,28 +17,20 @@ public class ProgressPerc implements Serializable {
 	// 内存占用大小
 	private int memUsed;
 	
+	public ProgressPerc(long timestamp){
+		this.timestamp = timestamp;
+	}
+	
 	public long getTimestamp() {
 		return timestamp;
-	}
-
-	public void setTimestamp(long timestamp) {
-		this.timestamp = timestamp;
 	}
 
 	public int getCpuUsed() {
 		return cpuUsed;
 	}
 
-	public void setCpuUsed(int cpuUsed) {
-		this.cpuUsed = cpuUsed;
-	}
-
 	public int getMemUsed() {
 		return memUsed;
-	}
-
-	public void setMemUsed(int memUsed) {
-		this.memUsed = memUsed;
 	}
 
 }
