@@ -19,17 +19,17 @@ public class Router extends AbstractEntity {
 	// / 健康度队列
 	private Queue<HealthDegree> healthQueue;
 	// / 流量统计
-	private Queue<Flow> flowQueue;
+	private Queue<TrafficDetection> flowQueue;
 	// / 数据包统计队列
-	private Queue<DataPacket> dataPacketQueue;
+	private Queue<DataPacketDetection> dataPacketQueue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public Router(long id) {
 		super(id);
 		this.healthQueue = new LinkedList<HealthDegree>();
-		this.flowQueue = new LinkedList<Flow>();
-		this.dataPacketQueue = new LinkedList<DataPacket>();
+		this.flowQueue = new LinkedList<TrafficDetection>();
+		this.dataPacketQueue = new LinkedList<DataPacketDetection>();
 	}
 
 	public String getName() {
@@ -76,7 +76,7 @@ public class Router extends AbstractEntity {
 	 * 
 	 * @param
 	 */
-	public void addFlowPrec(Flow flow) {
+	public void addFlowPrec(TrafficDetection flow) {
 		synchronized (this.flowQueue) {
 			this.flowQueue.add(flow);
 		}
@@ -93,8 +93,8 @@ public class Router extends AbstractEntity {
 	 * 
 	 * @return
 	 */
-	public List<Flow> getFlowPercs() {
-		ArrayList<Flow> ret = new ArrayList<Flow>(this.flowQueue.size());
+	public List<TrafficDetection> getFlowPercs() {
+		ArrayList<TrafficDetection> ret = new ArrayList<TrafficDetection>(this.flowQueue.size());
 		synchronized (this.flowQueue) {
 			ret.addAll(this.flowQueue);
 		}
@@ -106,7 +106,7 @@ public class Router extends AbstractEntity {
 	 * 
 	 * @param
 	 */
-	public void addDataPacketPrec(DataPacket packet) {
+	public void addDataPacketPrec(DataPacketDetection packet) {
 		synchronized (this.dataPacketQueue) {
 			this.dataPacketQueue.add(packet);
 		}
@@ -123,8 +123,8 @@ public class Router extends AbstractEntity {
 	 * 
 	 * @return
 	 */
-	public List<DataPacket> getDataPacketPercs() {
-		ArrayList<DataPacket> ret = new ArrayList<DataPacket>(
+	public List<DataPacketDetection> getDataPacketPercs() {
+		ArrayList<DataPacketDetection> ret = new ArrayList<DataPacketDetection>(
 				this.dataPacketQueue.size());
 		synchronized (this.dataPacketQueue) {
 			ret.addAll(this.dataPacketQueue);
