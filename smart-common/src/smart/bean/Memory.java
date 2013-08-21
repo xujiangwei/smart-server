@@ -17,14 +17,14 @@ public class Memory extends AbstractEntity {
 	// 物理内存总大小
 	private int physicsTotal;
 	
-	/// Memory利用率（百分比）
-	private Queue<MemoryPerc> percQueue;
+	/// Memory监测队列
+	private Queue<MemoryDetection> memQueue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public Memory(long id) {
 		super(id);
-		this.percQueue = new LinkedList<MemoryPerc>();
+		this.memQueue = new LinkedList<MemoryDetection>();
 	}
 
 	public int getPhysicsTotal() {
@@ -36,29 +36,29 @@ public class Memory extends AbstractEntity {
 	}
 
 	/**
-	 * 添加 Memory利用百分比数据。
+	 * 添加 Memory监测数据。
 	 * @param perc
 	 */
-	public void addPrec(MemoryPerc perc) {
-		synchronized (this.percQueue) {
-			this.percQueue.add(perc);
+	public void addPrec(MemoryDetection perc) {
+		synchronized (this.memQueue) {
+			this.memQueue.add(perc);
 		}
 
-		if (this.percQueue.size() > this.maxPercs) {
-			synchronized (this.percQueue) {
-				this.percQueue.poll();
+		if (this.memQueue.size() > this.maxPercs) {
+			synchronized (this.memQueue) {
+				this.memQueue.poll();
 			}
 		}
 	}
 
 	/**
-	 * 返回利用率百分比列表。
+	 * 返回内存监测列表。
 	 * @return
 	 */
-	public List<MemoryPerc> getPercs() {
-		ArrayList<MemoryPerc> ret = new ArrayList<MemoryPerc>(this.percQueue.size());
-		synchronized (this.percQueue) {
-			ret.addAll(this.percQueue);
+	public List<MemoryDetection> getPercs() {
+		ArrayList<MemoryDetection> ret = new ArrayList<MemoryDetection>(this.memQueue.size());
+		synchronized (this.memQueue) {
+			ret.addAll(this.memQueue);
 		}
 		return ret;
 	}
