@@ -21,9 +21,9 @@ public class Switch extends AbstractEntity {
 	/// Ping延迟队列
 	private Queue<PingDelay> pingQueue;
 	/// 流量统计
-	private Queue<Flow> flowQueue;
+	private Queue<TrafficDetection> flowQueue;
 	/// 数据包统计队列
-	private Queue<DataPacket> dataPacketQueue;
+	private Queue<DataPacketDetection> dataPacketQueue;
 	/// 路由表队列
 	private Queue<RouteTable> tableQueue;
 	// 最大记录数
@@ -33,8 +33,8 @@ public class Switch extends AbstractEntity {
 		super(id);
 		this.healthQueue = new LinkedList<HealthDegree>();
 		this.pingQueue = new LinkedList<PingDelay>();
-		this.flowQueue = new LinkedList<Flow>();
-		this.dataPacketQueue = new LinkedList<DataPacket>();
+		this.flowQueue = new LinkedList<TrafficDetection>();
+		this.dataPacketQueue = new LinkedList<DataPacketDetection>();
 		this.tableQueue = new LinkedList<RouteTable>();
 	}
 
@@ -106,7 +106,7 @@ public class Switch extends AbstractEntity {
 	 * 添加 flow流量数据。
 	 * @param 
 	 */
-	public void addFlowPrec(Flow flow) {
+	public void addFlowPrec(TrafficDetection flow) {
 		synchronized (this.flowQueue) {
 			this.flowQueue.add(flow);
 		}
@@ -122,8 +122,8 @@ public class Switch extends AbstractEntity {
 	 * 返回flow流量数据列表。
 	 * @return
 	 */
-	public List<Flow> getFlowPercs() {
-		ArrayList<Flow> ret = new ArrayList<Flow>(this.flowQueue.size());
+	public List<TrafficDetection> getFlowPercs() {
+		ArrayList<TrafficDetection> ret = new ArrayList<TrafficDetection>(this.flowQueue.size());
 		synchronized (this.flowQueue) {
 			ret.addAll(this.flowQueue);
 		}
@@ -134,7 +134,7 @@ public class Switch extends AbstractEntity {
 	 * 添加数据包数据。
 	 * @param 
 	 */
-	public void addDataPacketPrec(DataPacket packet) {
+	public void addDataPacketPrec(DataPacketDetection packet) {
 		synchronized (this.dataPacketQueue) {
 			this.dataPacketQueue.add(packet);
 		}
@@ -150,8 +150,8 @@ public class Switch extends AbstractEntity {
 	 * 返回数据包数据列表。
 	 * @return
 	 */
-	public List<DataPacket> getDataPacketPercs() {
-		ArrayList<DataPacket> ret = new ArrayList<DataPacket>(this.dataPacketQueue.size());
+	public List<DataPacketDetection> getDataPacketPercs() {
+		ArrayList<DataPacketDetection> ret = new ArrayList<DataPacketDetection>(this.dataPacketQueue.size());
 		synchronized (this.dataPacketQueue) {
 			ret.addAll(this.dataPacketQueue);
 		}
