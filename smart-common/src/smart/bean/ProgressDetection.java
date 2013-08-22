@@ -14,14 +14,22 @@ public class ProgressDetection implements Serializable {
 	
 	// 当前总进程数
 	private int total;
-	// 进程名
-	private String name;
-	// 进程用户名
-	private String username;
 	// cpu占用数
 	private int cpuUsed;
 	// 内存占用大小
 	private int memUsed;
+	// 闲置状态的进程数
+	private long idle;
+	// 运行态的进程数
+	private long running;
+	// 睡眠态的进程数
+	private long sleeping;
+	// stop状态
+	private long stopped;
+	// 线程总数
+	private long threads;
+	// zombie状态
+	private long zombie;
 	
 	public ProgressDetection(long timestamp){
 		this.timestamp = timestamp;
@@ -31,16 +39,32 @@ public class ProgressDetection implements Serializable {
 		return this.timestamp;
 	}
 
+	public long getIdle() {
+		return this.idle;
+	}
+
+	public long getRunning() {
+		return this.running;
+	}
+
+	public long getSleeping() {
+		return this.sleeping;
+	}
+
+	public long getStopped() {
+		return this.stopped;
+	}
+
+	public long getThreads() {
+		return this.threads;
+	}
+
+	public long getZombie() {
+		return this.zombie;
+	}
+
 	public int getTotal() {
 		return this.total;
-	}
-
-	public String getName() {
-		return this.name;
-	}
-
-	public String getUsername() {
-		return this.username;
 	}
 
 	public int getCpuUsed() {
