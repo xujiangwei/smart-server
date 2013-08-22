@@ -12,18 +12,19 @@ public class FileSystemDetection implements Serializable {
 	// 数据采集时间
 	private long timestamp;
 	
-	// 文件系统名
-	private String name;
-	// 文件系统大小
-	private float size;
-	// 文件系统类型
-	private String type;
 	// 已用大小
-	private double used;
+	private long used;
 	// 剩余大小
-	private double free;
-	// 文件系统利用率
-	private double usage;
+	private long free;
+	private double diskQueue;
+	private long diskReadBytes;
+	private long diskReads;
+	private double diskServiceTime;
+	private long diskWriteBytes;
+	private long diskWrites;
+	private long files;
+	private long freeFiles;
+	private double usePercent;
 	
 	public FileSystemDetection(long timestamp){
 		this.timestamp = timestamp;
@@ -31,18 +32,6 @@ public class FileSystemDetection implements Serializable {
 	
 	public long getTimestamp() {
 		return this.timestamp;
-	}
-	
-	public String getName() {
-		return name;
-	}
-
-	public float getSize() {
-		return size;
-	}
-
-	public String getType() {
-		return type;
 	}
 
 	public double getUsed() {
@@ -53,9 +42,41 @@ public class FileSystemDetection implements Serializable {
 		return this.free;
 	}
 	
-	public double getUsage() {
-		this.usage = used/(used+free);
-		return usage;
+	public double getDiskQueue() {
+		return this.diskQueue;
+	}
+
+	public long getDiskReadBytes() {
+		return this.diskReadBytes;
+	}
+
+	public long getDiskReads() {
+		return this.diskReads;
+	}
+
+	public double getDiskServiceTime() {
+		return this.diskServiceTime;
+	}
+
+	public long getDiskWriteBytes() {
+		return this.diskWriteBytes;
+	}
+
+	public long getDiskWrites() {
+		return this.diskWrites;
+	}
+
+	public long getFiles() {
+		return this.files;
+	}
+
+	public long getFreeFiles() {
+		return this.freeFiles;
+	}
+
+	public double getUsePercent() {
+		this.usePercent = used/(used+free);
+		return usePercent;
 	}
 
 }

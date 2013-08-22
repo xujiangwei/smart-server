@@ -14,34 +14,47 @@ public class Memory extends AbstractEntity {
 
 	private static final long serialVersionUID = 2383064429098508774L;
 
+	// 总的系统内存
+	private long total;
 	// 物理内存总大小
-	private int physicsTotal;
+	private long physicsTotal;
 	
 	/// Memory监测队列
 	private Queue<MemoryDetection> memQueue;
+	/// Swap监测队列
+	private Queue<SwapDetection> swapQueue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public Memory(long id) {
 		super(id);
 		this.memQueue = new LinkedList<MemoryDetection>();
+		this.swapQueue= new LinkedList<SwapDetection>();
 	}
 
-	public int getPhysicsTotal() {
+	public long getTotal() {
+		return total;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
+	}
+
+	public long getPhysicsTotal() {
 		return physicsTotal;
 	}
 
-	public void setPhysicsTotal(int physicsTotal) {
+	public void setPhysicsTotal(long physicsTotal) {
 		this.physicsTotal = physicsTotal;
 	}
 
 	/**
 	 * 添加 Memory监测数据。
-	 * @param perc
+	 * @param memDetection
 	 */
-	public void addPrec(MemoryDetection perc) {
+	public void addMemoryDetection(MemoryDetection memDetection) {
 		synchronized (this.memQueue) {
-			this.memQueue.add(perc);
+			this.memQueue.add(memDetection);
 		}
 
 		if (this.memQueue.size() > this.maxPercs) {
@@ -52,13 +65,41 @@ public class Memory extends AbstractEntity {
 	}
 
 	/**
-	 * 返回内存监测列表。
+	 * 返回Memory监测列表。
 	 * @return
 	 */
-	public List<MemoryDetection> getPercs() {
+	public List<MemoryDetection> getMemoryDetections() {
 		ArrayList<MemoryDetection> ret = new ArrayList<MemoryDetection>(this.memQueue.size());
 		synchronized (this.memQueue) {
 			ret.addAll(this.memQueue);
+		}
+		return ret;
+	}
+	
+	/**
+	 * 添加 swap监测数据。
+	 * @param swapDetection
+	 */
+	public void addSwapDetection(SwapDetection swapDetection) {
+		synchronized (this.swapQueue) {
+			this.swapQueue.add(swapDetection);
+		}
+
+		if (this.swapQueue.size() > this.maxPercs) {
+			synchronized (this.swapQueue) {
+				this.swapQueue.poll();
+			}
+		}
+	}
+
+	/**
+	 * 返回swap监测列表。
+	 * @return
+	 */
+	public List<SwapDetection> getSwapDetections() {
+		ArrayList<SwapDetection> ret = new ArrayList<SwapDetection>(this.swapQueue.size());
+		synchronized (this.swapQueue) {
+			ret.addAll(this.swapQueue);
 		}
 		return ret;
 	}
