@@ -3,7 +3,7 @@ package smart.bean;
 import java.io.Serializable;
 
 /**
- * 网络接口使用信息。
+ * 网络接口采集信息。
  */
 public class NetInterfaceDetection implements Serializable {
 	
@@ -12,22 +12,28 @@ public class NetInterfaceDetection implements Serializable {
 	// 数据采集时间
 	private long timestamp;
 	
-	// 网络接口名
-	private String name;
-	// 网络接口类型
-	private String type;
-	// 目标地址ip
-	private String desip;
-	// 源ip
-	private String ip;
-	// 源mac地址
-	private String mac;
 	// 网络接口流量
 	private float traffic;
 	// 网络接口吞吐量
 	private float throughput;
 	// 接口状态
 	private String status;
+	// 接收
+	private long rxBytes;
+	private long rxDropped;
+	private long rxErrors;
+	private long rxFrame;
+	private long rxOverruns;
+	private long rxPackets;
+	private long speed;
+	// 传送
+	private long txBytes;
+	private long txCarrier;
+	private long txCollisions;
+	private long txDropped;
+	private long txErrors;
+	private long txOverruns;
+	private long txPackets;
 
 	public NetInterfaceDetection(long timestamp){
 		this.timestamp = timestamp;
@@ -35,26 +41,6 @@ public class NetInterfaceDetection implements Serializable {
 	
 	public long getTimestamp() {
 		return this.timestamp;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	public String getType() {
-		return type;
-	}
-
-	public String getDesip() {
-		return desip;
-	}
-
-	public String getIp() {
-		return ip;
-	}
-
-	public String getMac() {
-		return mac;
 	}
 
 	public String getStatus() {
@@ -67,6 +53,62 @@ public class NetInterfaceDetection implements Serializable {
 
 	public float getThroughput() {
 		return this.throughput;
+	}
+
+	public long getRxBytes() {
+		return this.rxBytes;
+	}
+
+	public long getRxDropped() {
+		return this.rxDropped;
+	}
+
+	public long getRxErrors() {
+		return this.rxErrors;
+	}
+
+	public long getRxFrame() {
+		return this.rxFrame;
+	}
+
+	public long getRxOverruns() {
+		return this.rxOverruns;
+	}
+
+	public long getRxPackets() {
+		return this.rxPackets;
+	}
+
+	public long getSpeed() {
+		return this.speed;
+	}
+
+	public long getTxBytes() {
+		return this.txBytes;
+	}
+
+	public long getTxCarrier() {
+		return this.txCarrier;
+	}
+
+	public long getTxCollisions() {
+		return this.txCollisions;
+	}
+
+	public long getTxDropped() {
+		return this.txDropped;
+	}
+
+	public long getTxErrors() {
+		return this.txErrors;
+	}
+
+	public long getTxOverruns() {
+		return this.txOverruns;
+	}
+
+	public long getTxPackets() {
+		return this.txPackets;
 	}
 
 }

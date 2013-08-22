@@ -12,12 +12,13 @@ public class MemoryDetection implements Serializable {
 	// 内存数据采集时间
 	private long timestamp;
 	
-	private int used;
-	private int IOBufferRam;
-	private int fileSystemCache;
-	private int availRealMem;
-	private int totalSawp;
-	private int totalRealMem;
+	private long actualFree;
+	private long actualUsed;
+	private long free;
+	private double freePercent;
+	private long ram;
+	private long used;
+	private double usedPercent;
 	
 	public MemoryDetection(long timestamp){
 		this.timestamp = timestamp;
@@ -27,28 +28,32 @@ public class MemoryDetection implements Serializable {
 		return this.timestamp;
 	}
 
-	public int getUsed() {
-		return used;
+	public long getActualFree() {
+		return this.actualFree;
 	}
 
-	public int getIOBufferRam() {
-		return IOBufferRam;
+	public long getActualUsed() {
+		return this.actualUsed;
 	}
 
-	public int getFileSystemCache() {
-		return fileSystemCache;
+	public long getFree() {
+		return this.free;
 	}
 
-	public int getAvailRealMem() {
-		return availRealMem;
+	public double getFreePercent() {
+		return this.freePercent;
 	}
 
-	public int getTotalSawp() {
-		return totalSawp;
+	public long getRam() {
+		return this.ram;
 	}
 
-	public int getTotalRealMem() {
-		return totalRealMem;
+	public long getUsed() {
+		return this.used;
+	}
+
+	public double getUsedPercent() {
+		return this.usedPercent;
 	}
 
 }

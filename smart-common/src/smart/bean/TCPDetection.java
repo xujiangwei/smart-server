@@ -12,16 +12,16 @@ public class TCPDetection implements Serializable {
 	// 数据采集时间
 	private long timestamp;
 	
-	private int inOpenConnections;
-	private int outOpenConnections;
-	private int currentConnections;
-	private int failedConnections;;
-	private int establishedResets;
-	private int resetsSent;
-	private int inSegments;
-	private int outSegments;
-	private int erroredSegments;
-	private int retransmissions;
+	private long activeOpens;
+	private long attemptFails;
+	private long currEstab;
+	private long estabResets;
+	private long inErrs;
+	private long inSegs;
+	private long outRsts;
+	private long outSegs;
+	private long passiveOpens;
+	private long retransSegs;
 	
 	public TCPDetection(long timestamp) {
 		this.timestamp = timestamp;
@@ -31,44 +31,44 @@ public class TCPDetection implements Serializable {
 		return this.timestamp;
 	}
 
-	public int getInOpenConnections() {
-		return this.inOpenConnections;
+	public long getActiveOpens() {
+		return this.activeOpens;
 	}
 
-	public int getOutOpenConnections() {
-		return this.outOpenConnections;
+	public long getAttemptFails() {
+		return this.attemptFails;
 	}
 
-	public int getCurrentConnections() {
-		return this.currentConnections;
+	public long getCurrEstab() {
+		return this.currEstab;
 	}
 
-	public int getFailedConnections() {
-		return this.failedConnections;
+	public long getEstabResets() {
+		return this.estabResets;
 	}
 
-	public int getEstablishedResets() {
-		return this.establishedResets;
+	public long getInErrs() {
+		return this.inErrs;
 	}
 
-	public int getResetsSent() {
-		return this.resetsSent;
+	public long getInSegs() {
+		return this.inSegs;
 	}
 
-	public int getInSegments() {
-		return this.inSegments;
+	public long getOutRsts() {
+		return this.outRsts;
 	}
 
-	public int getOutSegments() {
-		return this.outSegments;
+	public long getOutSegs() {
+		return this.outSegs;
 	}
 
-	public int getErroredSegments() {
-		return this.erroredSegments;
+	public long getPassiveOpens() {
+		return this.passiveOpens;
 	}
 
-	public int getRetransmissions() {
-		return this.retransmissions;
+	public long getRetransSegs() {
+		return this.retransSegs;
 	}
 	
 }
