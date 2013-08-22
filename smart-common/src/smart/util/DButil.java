@@ -12,7 +12,7 @@ import java.sql.Statement;
  */
 public class DButil {
 	// 定义连接数据库的URL字符串
-	private static final String URL = "jdbc:mariadb://192.168.1.123:3308/netdevice";
+	private static final String URL = "jdbc:mariadb://localhost:3308/netdevice";
 	// 连接数据库的用户名
 	private static final String USER = "root";
 	// 连接数据库的密码
