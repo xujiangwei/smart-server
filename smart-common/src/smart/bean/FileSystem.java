@@ -26,15 +26,17 @@ public class FileSystem extends AbstractEntity {
 	private  String typeName;
 	// 文件系统类型
 	private String sysTypeName;
+	private long flags;
+	private String options;
 	
 	/// 文件系统监测数据队列
-	private Queue<FileSystemDetection> queue;
+	private Queue<FileSystemUsage> queue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public FileSystem(long id) {
 		super(id);
-		this.queue = new LinkedList<FileSystemDetection>();
+		this.queue = new LinkedList<FileSystemUsage>();
 	}
 
 	public String getDevName() {
@@ -85,11 +87,27 @@ public class FileSystem extends AbstractEntity {
 		this.sysTypeName = sysTypeName;
 	}
 
+	public long getFlags() {
+		return flags;
+	}
+
+	public void setFlags(long flags) {
+		this.flags = flags;
+	}
+
+	public String getOptions() {
+		return options;
+	}
+
+	public void setOptions(String options) {
+		this.options = options;
+	}
+
 	/**
 	 * 添加文件系统监测数据。
 	 * @param fsDetection
 	 */
-	public void addFSDetection(FileSystemDetection fsDetection) {
+	public void addFSDetection(FileSystemUsage fsDetection) {
 		synchronized (this.queue) {
 			this.queue.add(fsDetection);
 		}
@@ -105,8 +123,8 @@ public class FileSystem extends AbstractEntity {
 	 * 返回文件系统监测数据列表。
 	 * @return
 	 */
-	public List<FileSystemDetection> getFSDetection() {
-		ArrayList<FileSystemDetection> ret = new ArrayList<FileSystemDetection>(this.queue.size());
+	public List<FileSystemUsage> getFSDetection() {
+		ArrayList<FileSystemUsage> ret = new ArrayList<FileSystemUsage>(this.queue.size());
 		synchronized (this.queue) {
 			ret.addAll(this.queue);
 		}

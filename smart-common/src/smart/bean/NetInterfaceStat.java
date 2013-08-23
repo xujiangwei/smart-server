@@ -5,7 +5,7 @@ import java.io.Serializable;
 /**
  * 网络接口采集信息。
  */
-public class NetInterfaceDetection implements Serializable {
+public class NetInterfaceStat implements Serializable {
 	
 	private static final long serialVersionUID = 4162739398121108684L;
 
@@ -35,10 +35,82 @@ public class NetInterfaceDetection implements Serializable {
 	private long txOverruns;
 	private long txPackets;
 
-	public NetInterfaceDetection(long timestamp){
+	public NetInterfaceStat(long timestamp){
 		this.timestamp = timestamp;
 	}
 	
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setTraffic(float traffic) {
+		this.traffic = traffic;
+	}
+
+	public void setThroughput(float throughput) {
+		this.throughput = throughput;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+
+	public void setRxBytes(long rxBytes) {
+		this.rxBytes = rxBytes;
+	}
+
+	public void setRxDropped(long rxDropped) {
+		this.rxDropped = rxDropped;
+	}
+
+	public void setRxErrors(long rxErrors) {
+		this.rxErrors = rxErrors;
+	}
+
+	public void setRxFrame(long rxFrame) {
+		this.rxFrame = rxFrame;
+	}
+
+	public void setRxOverruns(long rxOverruns) {
+		this.rxOverruns = rxOverruns;
+	}
+
+	public void setRxPackets(long rxPackets) {
+		this.rxPackets = rxPackets;
+	}
+
+	public void setSpeed(long speed) {
+		this.speed = speed;
+	}
+
+	public void setTxBytes(long txBytes) {
+		this.txBytes = txBytes;
+	}
+
+	public void setTxCarrier(long txCarrier) {
+		this.txCarrier = txCarrier;
+	}
+
+	public void setTxCollisions(long txCollisions) {
+		this.txCollisions = txCollisions;
+	}
+
+	public void setTxDropped(long txDropped) {
+		this.txDropped = txDropped;
+	}
+
+	public void setTxErrors(long txErrors) {
+		this.txErrors = txErrors;
+	}
+
+	public void setTxOverruns(long txOverruns) {
+		this.txOverruns = txOverruns;
+	}
+
+	public void setTxPackets(long txPackets) {
+		this.txPackets = txPackets;
+	}
+
 	public long getTimestamp() {
 		return this.timestamp;
 	}

@@ -22,6 +22,30 @@ public class SwapDetection implements Serializable {
 		this.timestamp = timestamp;
 	}
 
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setFree(long free) {
+		this.free = free;
+	}
+
+	public void setPageIn(long pageIn) {
+		this.pageIn = pageIn;
+	}
+
+	public void setPageOut(long pageOut) {
+		this.pageOut = pageOut;
+	}
+
+	public void setTotal(long total) {
+		this.total = total;
+	}
+
+	public void setUsed(long used) {
+		this.used = used;
+	}
+
 	public long getTimestamp() {
 		return this.timestamp;
 	}

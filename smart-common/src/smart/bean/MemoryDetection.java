@@ -24,6 +24,38 @@ public class MemoryDetection implements Serializable {
 		this.timestamp = timestamp;
 	}
 
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setActualFree(long actualFree) {
+		this.actualFree = actualFree;
+	}
+
+	public void setActualUsed(long actualUsed) {
+		this.actualUsed = actualUsed;
+	}
+
+	public void setFree(long free) {
+		this.free = free;
+	}
+
+	public void setFreePercent(double freePercent) {
+		this.freePercent = freePercent;
+	}
+
+	public void setRam(long ram) {
+		this.ram = ram;
+	}
+
+	public void setUsed(long used) {
+		this.used = used;
+	}
+
+	public void setUsedPercent(double usedPercent) {
+		this.usedPercent = usedPercent;
+	}
+
 	public long getTimestamp() {
 		return this.timestamp;
 	}
