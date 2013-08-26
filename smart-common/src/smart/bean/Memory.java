@@ -21,15 +21,12 @@ public class Memory extends AbstractEntity {
 	
 	/// Memory监测队列
 	private Queue<MemoryDetection> memQueue;
-	/// Swap监测队列
-	private Queue<SwapDetection> swapQueue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public Memory(long id) {
 		super(id);
 		this.memQueue = new LinkedList<MemoryDetection>();
-		this.swapQueue= new LinkedList<SwapDetection>();
 	}
 
 	public long getTotal() {
@@ -76,31 +73,4 @@ public class Memory extends AbstractEntity {
 		return ret;
 	}
 	
-	/**
-	 * 添加 swap监测数据。
-	 * @param swapDetection
-	 */
-	public void addSwapDetection(SwapDetection swapDetection) {
-		synchronized (this.swapQueue) {
-			this.swapQueue.add(swapDetection);
-		}
-
-		if (this.swapQueue.size() > this.maxPercs) {
-			synchronized (this.swapQueue) {
-				this.swapQueue.poll();
-			}
-		}
-	}
-
-	/**
-	 * 返回swap监测列表。
-	 * @return
-	 */
-	public List<SwapDetection> getSwapDetections() {
-		ArrayList<SwapDetection> ret = new ArrayList<SwapDetection>(this.swapQueue.size());
-		synchronized (this.swapQueue) {
-			ret.addAll(this.swapQueue);
-		}
-		return ret;
-	}
 }

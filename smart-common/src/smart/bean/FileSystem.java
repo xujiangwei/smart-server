@@ -105,11 +105,11 @@ public class FileSystem extends AbstractEntity {
 
 	/**
 	 * 添加文件系统监测数据。
-	 * @param fsDetection
+	 * @param usage
 	 */
-	public void addFSDetection(FileSystemUsage fsDetection) {
+	public void addUsage(FileSystemUsage usage) {
 		synchronized (this.queue) {
-			this.queue.add(fsDetection);
+			this.queue.add(usage);
 		}
 
 		if (this.queue.size() > this.maxPercs) {
@@ -123,7 +123,7 @@ public class FileSystem extends AbstractEntity {
 	 * 返回文件系统监测数据列表。
 	 * @return
 	 */
-	public List<FileSystemUsage> getFSDetection() {
+	public List<FileSystemUsage> getUsages() {
 		ArrayList<FileSystemUsage> ret = new ArrayList<FileSystemUsage>(this.queue.size());
 		synchronized (this.queue) {
 			ret.addAll(this.queue);
