@@ -27,6 +27,34 @@ public final class CPUPerc implements Serializable {
 		return this.timestamp;
 	}
 
+	public void setTimestamp(long timestamp) {
+		this.timestamp = timestamp;
+	}
+
+	public void setUser(double user) {
+		this.user = user;
+	}
+
+	public void setSys(double sys) {
+		this.sys = sys;
+	}
+
+	public void setNice(double nice) {
+		this.nice = nice;
+	}
+
+	public void setIdle(double idle) {
+		this.idle = idle;
+	}
+
+	public void setWait(double wait) {
+		this.wait = wait;
+	}
+
+	public void setCombined(double combined) {
+		this.combined = combined;
+	}
+
 	public double getUser() {
 		return this.user;
 	}

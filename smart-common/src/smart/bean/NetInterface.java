@@ -38,16 +38,13 @@ public class NetInterface extends AbstractEntity {
 	private long mtu;
 
 	/// 网络接口监测队列
-	private Queue<NetInterfaceDetection> queue;
-	/// 数据包监测队列
-	private Queue<DataPacketDetection> dpDetectionQueue;
+	private Queue<NetInterfaceStat> queue;
 	// 最大记录数
 	private volatile int maxPercs = 100;
 
 	public NetInterface(long id) {
 		super(id);
-		this.queue = new LinkedList<NetInterfaceDetection>();
-		this.dpDetectionQueue = new LinkedList<DataPacketDetection>();
+		this.queue = new LinkedList<NetInterfaceStat>();
 	}
 
 	public String getName() {
@@ -142,7 +139,7 @@ public class NetInterface extends AbstractEntity {
 	 * 添加网络接口监测数据。
 	 * @param niDetection
 	 */
-	public void addNiPrec(NetInterfaceDetection niDetection) {
+	public void addNiPrec(NetInterfaceStat niDetection) {
 		synchronized (this.queue) {
 			this.queue.add(niDetection);
 		}
@@ -158,39 +155,12 @@ public class NetInterface extends AbstractEntity {
 	 * 返回网络接口数据列表。
 	 * @return
 	 */
-	public List<NetInterfaceDetection> getNiPercs() {
-		ArrayList<NetInterfaceDetection> ret = new ArrayList<NetInterfaceDetection>(this.queue.size());
+	public List<NetInterfaceStat> getNiPercs() {
+		ArrayList<NetInterfaceStat> ret = new ArrayList<NetInterfaceStat>(this.queue.size());
 		synchronized (this.queue) {
 			ret.addAll(this.queue);
 		}
 		return ret;
 	}
 	
-	/**
-	 * 添加数据包监测数据。
-	 * @param 
-	 */
-	public void addDpDetection(DataPacketDetection dpDetection) {
-		synchronized (this.dpDetectionQueue) {
-			this.dpDetectionQueue.add(dpDetection);
-		}
-
-		if (this.dpDetectionQueue.size() > this.maxPercs) {
-			synchronized (this.dpDetectionQueue) {
-				this.dpDetectionQueue.poll();
-			}
-		}
-	}
-
-	/**
-	 * 返回数据包数据列表。
-	 * @return
-	 */
-	public List<DataPacketDetection> getDpDetections() {
-		ArrayList<DataPacketDetection> ret = new ArrayList<DataPacketDetection>(this.dpDetectionQueue.size());
-		synchronized (this.dpDetectionQueue) {
-			ret.addAll(this.dpDetectionQueue);
-		}
-		return ret;
-	}
 }
