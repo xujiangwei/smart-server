@@ -11,6 +11,8 @@ import smart.bean.Memory;
 import smart.bean.MemoryDetection;
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
+import smart.bean.Progress;
+import smart.bean.ProgressDetection;
 
 /**
  * 主机 DAO 。
@@ -80,12 +82,19 @@ public interface HostDao {
 	public List<MemoryDetection> getMemoryDetecsById(long id);
 
 	/**
-	 * 返回指定Host ID的进程
+	 * 返回指定Host ID的进程列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-//	 public List<Progress> getProgressById(long id);
+	 public List<Progress> getProgressById(long id);
+	 
+	 /**
+	  * 返回指定Progress ID的进程利用率的列表
+	  * @param id
+	  * @return
+	  */
+	 public List<ProgressDetection> getProgressDetecById(long id);
 
 	/**
 	 * 返回指定Host ID的文件系统列表

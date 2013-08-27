@@ -14,6 +14,8 @@ import smart.bean.Memory;
 import smart.bean.MemoryDetection;
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
+import smart.bean.Progress;
+import smart.bean.ProgressDetection;
 import smart.dao.AbstraceDao;
 import smart.dao.HostDao;
 
@@ -189,7 +191,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				memory=new Memory(rs.getLong("id"));
+				memory = new Memory(rs.getLong("id"));
 				memory.setPhysicsTotal(rs.getInt("physicsTotal"));
 			}
 		} catch (Exception e) {
@@ -225,11 +227,6 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		}
 		return list;
 	}
-
-	// @Override
-	// public Progress getProgressById(long id) {
-	// return null;
-	// }
 
 	/**
 	 * 返回指定Host ID的文件系统列表
@@ -360,6 +357,57 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 				nis.setTxPackets(rs.getLong("txPackets"));
 
 				list.add(nis);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<Progress> getProgressById(long id) {
+		String sql = "select * from h_progress where hostid=?";
+		List<Progress> list = new ArrayList<Progress>(20);
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				Progress pro = new Progress(rs.getLong("id"));
+				pro.setName(rs.getString("name"));
+				pro.setStartTime(rs.getString("startTime"));
+				pro.setUser(rs.getString("user"));
+
+				list.add(pro);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return list;
+	}
+
+	@Override
+	public List<ProgressDetection> getProgressDetecById(long id) {
+		String sql = "select * from h_prousage where progressid=?";
+		List<ProgressDetection> list = new ArrayList<ProgressDetection>(20);
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				ProgressDetection pd = new ProgressDetection(
+						rs.getLong("timestamp"));
+				pd.setCpuTime(rs.getLong("cpuTime"));
+				pd.setCpuUsed(rs.getLong("cpuUsed"));
+				pd.setMemShare(rs.getLong("memShare"));
+				pd.setMemSize(rs.getLong("memSize"));
+				pd.setMemUsed(rs.getLong("memUsed"));
+				pd.setState(rs.getString("sql"));
+				pd.setTimestamp(rs.getLong("timestamp"));
+
+				list.add(pd);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
