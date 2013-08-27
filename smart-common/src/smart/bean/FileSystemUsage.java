@@ -80,7 +80,7 @@ public class FileSystemUsage implements Serializable {
 		return this.timestamp;
 	}
 
-	public double getUsed() {
+	public long getUsed() {
 		return this.used;
 	}
 	

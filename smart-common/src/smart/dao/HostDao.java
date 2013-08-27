@@ -3,11 +3,14 @@ package smart.dao;
 import java.util.List;
 
 import smart.bean.CPU;
-import smart.bean.FileSystemDetection;
+import smart.bean.CPUPerc;
+import smart.bean.FileSystem;
+import smart.bean.FileSystemUsage;
 import smart.bean.Host;
 import smart.bean.Memory;
-import smart.bean.NetInterfaceDetection;
-import smart.bean.ProgressDetection;
+import smart.bean.MemoryDetection;
+import smart.bean.NetInterface;
+import smart.bean.NetInterfaceStat;
 
 /**
  * 主机 DAO 。
@@ -45,12 +48,20 @@ public interface HostDao {
 	public List<CPU> getCPUById(long id);
 
 	/**
-	 * 返回指定ID的进程
+	 * 返回指定时刻的CPU利用率
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public CPUPerc getCPUPercById(long time);
+
+	/**
+	 * 返回指定CPU id的CPU利用率列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public ProgressDetection getProgressDetectionById(long id);
+	public List<CPUPerc> getPercsById(long id);
 
 	/**
 	 * 返回指定ID的内存
@@ -61,18 +72,47 @@ public interface HostDao {
 	public Memory getMemoryById(long id);
 
 	/**
-	 * 返回指定ID的文件系统
+	 * 返回指定Memory Id 的MemoryDetection列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public FileSystemDetection getFileSystemDetectionById(long id);
+	public List<MemoryDetection> getMemoryDetecsById(long id);
 
 	/**
-	 * 返回指定ID的文件系统
+	 * 返回指定Host ID的进程
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public NetInterfaceDetection getNetInterfaceDetectionById(long id);
+//	 public List<Progress> getProgressById(long id);
+
+	/**
+	 * 返回指定Host ID的文件系统列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<FileSystem> getFileSystemById(long id);
+
+	/**
+	 * 返回指定 FileSystem ID的文件系统利用率列表
+	 * @param id
+	 * @return
+	 */
+	public List<FileSystemUsage> getFileSystemUsagesById(long id);
+	/**
+	 * 返回指定Host ID的文件系统列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<NetInterface> getNetInterfaceById(long id);
+	
+	/**
+	 * 返回指定接口 ID的网络接口采集信息列表
+	 * @param id
+	 * @return
+	 */
+	public List<NetInterfaceStat> getInterfaceStats(long id);
 }

@@ -1,6 +1,7 @@
 package smart.entity;
 
 import java.io.Serializable;
+import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * 模型实体。
@@ -43,4 +44,9 @@ public interface Entity extends Serializable {
 	 * @param parent
 	 */
 	public void setParent(Entity parent);
+	/**
+	 * 返回全部子实体。
+	 * @return
+	 */
+	public ConcurrentHashMap<Long, Entity> getChildren();
 }

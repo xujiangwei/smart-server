@@ -57,4 +57,10 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	public void setParent(Entity parent) {
 		this.parent = parent;
 	}
+
+	public ConcurrentHashMap<Long, Entity> getChildren() {
+		return this.children;
+	}
+	
+	
 }
