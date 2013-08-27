@@ -1,17 +1,14 @@
 package smart.bean;
 
-import java.io.Serializable;
+import smart.entity.AbstractEntity;
 
 /**
  * 路由表。
  */
-public class RouteTable implements Serializable {
+public class RouteTable extends AbstractEntity {
 
 	private static final long serialVersionUID = 8232119751680150873L;
 
-	// 数据采集时间
-	private long timestamp;
-	
 	// 路由目标地址
 	private String desIp;
 	// 目标地址子网掩码
@@ -25,12 +22,8 @@ public class RouteTable implements Serializable {
 	// PDU最大字节数
 	private double maxPUDBytes;
 
-	public RouteTable(long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public long getTimestamp() {
-		return this.timestamp;
+	public RouteTable(long id) {
+		super(id);
 	}
 
 	public String getDesIp() {

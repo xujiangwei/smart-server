@@ -137,11 +137,11 @@ public class NetInterface extends AbstractEntity {
 
 	/**
 	 * 添加网络接口监测数据。
-	 * @param niDetection
+	 * @param niStat
 	 */
-	public void addNiPrec(NetInterfaceStat niDetection) {
+	public void addNiStat(NetInterfaceStat niStat) {
 		synchronized (this.queue) {
-			this.queue.add(niDetection);
+			this.queue.add(niStat);
 		}
 
 		if (this.queue.size() > this.maxPercs) {
@@ -155,7 +155,7 @@ public class NetInterface extends AbstractEntity {
 	 * 返回网络接口数据列表。
 	 * @return
 	 */
-	public List<NetInterfaceStat> getNiPercs() {
+	public List<NetInterfaceStat> getNiStats() {
 		ArrayList<NetInterfaceStat> ret = new ArrayList<NetInterfaceStat>(this.queue.size());
 		synchronized (this.queue) {
 			ret.addAll(this.queue);
