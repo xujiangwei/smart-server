@@ -1,11 +1,11 @@
 package smart.bean;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import net.cellcloud.util.SlidingWindowExecutor;
 import net.cellcloud.util.SlidingWindowTask;
-
 import smart.dao.HostDao;
 import smart.dao.impl.HostDaoImpl;
 
@@ -58,13 +58,13 @@ public final class BeanFactory {
 	 * @return
 	 */
 	public List<Host> getHostList() {
-		final List<Host> hList = null;
+		final List<Host> list = new ArrayList<Host>(20);
 		// 新建滑窗执行器
 		SlidingWindowExecutor swe = SlidingWindowExecutor
 				.newSlidingWindowThreadPool(20);
 		swe.execute(new SlidingWindowTask(swe) {
 			public void run() {
-				hList = hostDao.getHostList();
+				List<Host> hList = hostDao.getHostList();
 				if (hList != null && hList.size() > 0) {
 					for (int i = 0; i < hList.size(); i++) {
 						Host host = new Host(hList.get(i).getId());
@@ -120,7 +120,8 @@ public final class BeanFactory {
 										cp.setSys(cpList.get(k).getSys());
 										cp.setUser(cpList.get(k).getUser());
 										cp.setWait(cpList.get(k).getWait());
-										// cp.setCombined(cpList.get(k).getCombined());
+										cp.setCombined(cpList.get(k)
+												.getCombined());
 										cpu.addPrec(cp);
 									}
 								}
@@ -290,9 +291,9 @@ public final class BeanFactory {
 									host.addChild(pro);
 								}
 							}
-//							hList.add(host);
+
 						}
-						 hList.add(host);
+						list.add(host);
 					}
 				}
 			}
@@ -318,7 +319,7 @@ public final class BeanFactory {
 			Thread.currentThread().interrupt();
 		}
 
-		return hList;
+		return list;
 
 	}
 
@@ -373,6 +374,5 @@ public final class BeanFactory {
 	public static void main(String[] args) {
 		BeanFactory be = new BeanFactory();
 		be.getHostList();
-
 	}
 }
