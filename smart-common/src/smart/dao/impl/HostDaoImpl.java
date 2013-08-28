@@ -101,7 +101,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定ID的CPU
 	 */
 	public List<CPU> getCPUById(long id) {
-		String sql = "select * from h_cpu where hostId=?";
+		String sql = "select * from h_cpu where hostid=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -137,13 +137,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			pstmt.setLong(1, time);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				cp.getIdle();
-				cp.getNice();
-				cp.getSys();
-				cp.getUser();
-				cp.getWait();
-				cp.getCombined();
-				cp.getTimestamp();
+				cp.setIdle(rs.getDouble("idle"));
+				cp.setNice(rs.getDouble("nice"));
+				cp.setSys(rs.getDouble("sys"));
+				cp.setUser(rs.getDouble("user"));
+				cp.setWait(rs.getDouble("wait"));
+				cp.setCombined(rs.getDouble("combined"));
+				cp.setTimestamp(rs.getLong("timestamp"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -169,7 +169,8 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 				cp.setSys(rs.getDouble("sys"));
 				cp.setUser(rs.getDouble("user"));
 				cp.setWait(rs.getDouble("wait"));
-				// cp.setCombined(rs.getDouble("combined"));
+				cp.setCombined(rs.getDouble("combined"));
+				cp.setTimestamp(rs.getLong("timestamp"));
 
 				list.add(cp);
 			}
@@ -404,7 +405,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 				pd.setMemShare(rs.getLong("memShare"));
 				pd.setMemSize(rs.getLong("memSize"));
 				pd.setMemUsed(rs.getLong("memUsed"));
-				pd.setState(rs.getString("sql"));
+				pd.setState(rs.getString("state"));
 				pd.setTimestamp(rs.getLong("timestamp"));
 
 				list.add(pd);
