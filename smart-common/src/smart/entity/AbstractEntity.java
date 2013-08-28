@@ -1,5 +1,7 @@
 package smart.entity;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import net.cellcloud.extras.memory.MemoryArea;
@@ -61,6 +63,17 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	public ConcurrentHashMap<Long, Entity> getChildren() {
 		return this.children;
 	}
-	
-	
+
+	// 返回当前节点的父辈节点集合
+	public List<Entity> getElders() {
+		List<Entity> elderList = new ArrayList<Entity>();
+		Entity parentNode = this.getParent();
+		if (parentNode == null) {
+			return elderList;
+		} else {
+			elderList.add(parentNode);
+			elderList.addAll(parentNode.getElders());
+			return elderList;
+		}
+	}
 }
