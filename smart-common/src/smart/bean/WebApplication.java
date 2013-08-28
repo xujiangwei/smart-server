@@ -1,39 +1,44 @@
 package smart.bean;
 
-import java.io.Serializable;
+import smart.entity.AbstractEntity;
 
 /**
- * Web应用信息
+ * Web应用
  */
-public class WebApplication implements Serializable {
+public class WebApplication extends AbstractEntity {
 
 	private static final long serialVersionUID = 2383276559491958823L;
 
-	// 数据采集时间
-	private long timestamp;
-	
 	private String serverName;
 	private String applicationName;
 	private String status;
 	
-	public WebApplication(long timestamp) {
-		this.timestamp = timestamp;
-	}
-
-	public long getTimestamp() {
-		return timestamp;
+	public WebApplication(long id) {
+		super(id);
 	}
 
 	public String getServerName() {
 		return serverName;
 	}
 
+	public void setServerName(String serverName) {
+		this.serverName = serverName;
+	}
+
 	public String getApplicationName() {
 		return applicationName;
 	}
 
+	public void setApplicationName(String applicationName) {
+		this.applicationName = applicationName;
+	}
+
 	public String getStatus() {
 		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
 	}
 
 }
