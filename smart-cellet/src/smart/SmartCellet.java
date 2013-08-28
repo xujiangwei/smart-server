@@ -11,6 +11,7 @@ import net.cellcloud.talk.dialect.Dialect;
 import org.eclipse.jetty.client.HttpClient;
 
 import smart.action.LoginListener;
+import smart.action.NodeDetectionListener;
 import smart.action.alarm.AlarmCoverageListener;
 import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
@@ -394,5 +395,10 @@ public class SmartCellet extends Cellet {
 		AlarmDistributionListener distribution = new AlarmDistributionListener(this);
 		distribution.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, distribution);
+		
+		// 节点监测
+		NodeDetectionListener nodeDec = new NodeDetectionListener(this);
+		nodeDec.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
 	}
 }

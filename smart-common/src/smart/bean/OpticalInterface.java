@@ -1,5 +1,10 @@
 package smart.bean;
 
+import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.Queue;
+
 import smart.entity.AbstractEntity;
 
 /**
@@ -16,8 +21,14 @@ public class OpticalInterface extends AbstractEntity {
 	// 类型
 	private String type;
 	
+	/// 光口数据队列
+	private Queue<OpticalInterfaceStat> queue;
+	// 最大记录数
+	private volatile int maxPercs = 100;
+	
 	public OpticalInterface(long id) {
 		super(id);
+		this.queue = new LinkedList<OpticalInterfaceStat>();
 	}
 
 	public int getMHz() {
@@ -44,4 +55,31 @@ public class OpticalInterface extends AbstractEntity {
 		this.type = type;
 	}
 	
+	/**
+	 * 添加光口采集数据。
+	 * @param stat
+	 */
+	public void addOiStat(OpticalInterfaceStat stat) {
+		synchronized (this.queue) {
+			this.queue.add(stat);
+		}
+
+		if (this.queue.size() > this.maxPercs) {
+			synchronized (this.queue) {
+				this.queue.poll();
+			}
+		}
+	}
+
+	/**
+	 * 返回采集的数据列表。
+	 * @return
+	 */
+	public List<OpticalInterfaceStat> getOiStats() {
+		ArrayList<OpticalInterfaceStat> ret = new ArrayList<OpticalInterfaceStat>(this.queue.size());
+		synchronized (this.queue) {
+			ret.addAll(this.queue);
+		}
+		return ret;
+	}
 }
