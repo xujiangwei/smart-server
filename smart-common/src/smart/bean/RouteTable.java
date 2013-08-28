@@ -20,34 +20,58 @@ public class RouteTable extends AbstractEntity {
 	// 路由协议
 	private String protocol;
 	// PDU最大字节数
-	private double maxPUDBytes;
+	private double maxPDUBytes;
 
 	public RouteTable(long id) {
 		super(id);
 	}
 
 	public String getDesIp() {
-		return this.desIp;
+		return desIp;
+	}
+
+	public void setDesIp(String desIp) {
+		this.desIp = desIp;
 	}
 
 	public String getDesSubnetMask() {
-		return this.desSubnetMask;
+		return desSubnetMask;
+	}
+
+	public void setDesSubnetMask(String desSubnetMask) {
+		this.desSubnetMask = desSubnetMask;
 	}
 
 	public String getNextHop() {
-		return this.nextHop;
+		return nextHop;
+	}
+
+	public void setNextHop(String nextHop) {
+		this.nextHop = nextHop;
 	}
 
 	public String getType() {
-		return this.type;
+		return type;
+	}
+
+	public void setType(String type) {
+		this.type = type;
 	}
 
 	public String getProtocol() {
-		return this.protocol;
+		return protocol;
 	}
 
-	public double getMaxPUDBytes() {
-		return this.maxPUDBytes;
+	public void setProtocol(String protocol) {
+		this.protocol = protocol;
+	}
+
+	public double getMaxPDUBytes() {
+		return maxPDUBytes;
+	}
+
+	public void setMaxPDUBytes(double maxPDUBytes) {
+		this.maxPDUBytes = maxPDUBytes;
 	}
 
 }
