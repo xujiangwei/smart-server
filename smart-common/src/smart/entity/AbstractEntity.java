@@ -16,9 +16,9 @@ public abstract class AbstractEntity extends MemoryArea implements Entity {
 	private static final long serialVersionUID = 1638959794358520994L;
 
 	private long id;
-	// / 子节点映射，Key：Entity ID
+	/// 子节点映射，Key：Entity ID
 	private ConcurrentHashMap<Long, Entity> children;
-	// / 父节点
+	/// 父节点
 	private Entity parent;
 
 	public AbstractEntity(long id) {
