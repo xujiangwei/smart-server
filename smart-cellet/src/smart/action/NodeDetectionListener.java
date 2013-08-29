@@ -23,7 +23,6 @@ public final class NodeDetectionListener extends AbstractListener {
 		super(cellet);
 	}
 
-	@SuppressWarnings("unused")
 	@Override
 	public void onAction(ActionDialect action) {
 
@@ -44,23 +43,27 @@ public final class NodeDetectionListener extends AbstractListener {
 		List<Long> listOne = NodeTraverse.getInstance().getParents(nodeOne);
 		List<Long> listTwo = NodeTraverse.getInstance().getParents(nodeTwo);
 		JSONArray ja = new JSONArray();
-		for (int i = 0; i < listOne.size(); i++) {
-			for (int j = 0; j < listTwo.size(); j++) {
-				if (listOne.get(i).equals(listTwo.get(j))) {
-					System.out.println("节点" + nodeOne + "和节点" + nodeTwo + "的公共父节点为："
-							+ listTwo.get(j));
-					ja.put(listTwo.get(j));
+		if (listOne.size() != 0 && listTwo.size() != 0) {
+			for (int i = 0; i < listOne.size(); i++) {
+				for (int j = 0; j < listTwo.size(); j++) {
+					if (listOne.get(i) == listTwo.get(j)) {
+						System.out.println("节点" + nodeOne + "和节点" + nodeTwo
+								+ "的公共父节点为：" + listTwo.get(j));
+						ja.put(listTwo.get(j));
+					}
 				}
 			}
 		}
 		
 		JSONObject jo = new JSONObject();
 		try {
-			if (ja == null) {
+			if (ja.length() == 0) {
 				jo.put("status", 601);
 				jo.put("errorInfo", "没找到公共节点");
+				jo.put("nodeInfo", ja);
 			}else{
 				jo.put("status", 300);
+				jo.put("errorInfo", "");
 				jo.put("nodeInfo", ja);
 			}
 		} catch (JSONException e) {
