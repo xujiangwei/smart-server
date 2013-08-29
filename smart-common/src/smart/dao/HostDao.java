@@ -42,20 +42,20 @@ public interface HostDao {
 	public List<Host> getHostList();
 
 	/**
-	 * 返回指定HostID的CPU
+	 * 返回指定HostID的CPU列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<CPU> getCPUById(long id);
+	public List<CPU> getCPUsById(long id);
 
 	/**
-	 * 返回指定时刻的CPU利用率
+	 * 返回指定ID的CPU
 	 * 
-	 * @param time
+	 * @param id
 	 * @return
 	 */
-	public CPUPerc getCPUPercById(long time);
+	public CPU getCPUById(long id);
 
 	/**
 	 * 返回指定CPU id的CPU利用率列表
@@ -66,7 +66,15 @@ public interface HostDao {
 	public List<CPUPerc> getPercsById(long id);
 
 	/**
-	 * 返回指定ID的内存
+	 * 返回指定时间戳的CPU利用率
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public CPUPerc getCPUPercById(long time,long timestamp);
+
+	/**
+	 * 返回指定 主机ID的内存
 	 * 
 	 * @param id
 	 * @return
@@ -74,7 +82,7 @@ public interface HostDao {
 	public Memory getMemoryById(long id);
 
 	/**
-	 * 返回指定Memory Id 的MemoryDetection列表
+	 * 返回指定内存Id的监测信息列表
 	 * 
 	 * @param id
 	 * @return
@@ -82,46 +90,106 @@ public interface HostDao {
 	public List<MemoryDetection> getMemoryDetecsById(long id);
 
 	/**
-	 * 返回指定Host ID的进程列表
+	 * 返回指定时间戳的内存监测信息
 	 * 
 	 * @param id
 	 * @return
 	 */
-	 public List<Progress> getProgressById(long id);
-	 
-	 /**
-	  * 返回指定Progress ID的进程利用率的列表
-	  * @param id
-	  * @return
-	  */
-	 public List<ProgressDetection> getProgressDetecById(long id);
+	public MemoryDetection getMemoryDetecById(long id,long timestamp);
 
 	/**
-	 * 返回指定Host ID的文件系统列表
+	 * 返回指定主机ID的进程列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<FileSystem> getFileSystemById(long id);
+	public List<Progress> getProgressesById(long id);
+
+	/**
+	 * 返回指定ID的进程
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Progress getProgressById(long id);
+
+	/**
+	 * 返回指定进程 ID的进程利用率的列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<ProgressDetection> getProgressDetecsById(long id);
+
+	/**
+	 * 返回指定时间戳的进程监测信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public ProgressDetection getProgressDetecById(long id,long timestamp);
+
+	/**
+	 * 返回指定主机ID的文件系统列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<FileSystem> getFileSystemsById(long id);
+
+	/**
+	 * 返回指定ID的文件系统
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public FileSystem getFileSystemById(long id);
 
 	/**
 	 * 返回指定 FileSystem ID的文件系统利用率列表
+	 * 
 	 * @param id
 	 * @return
 	 */
 	public List<FileSystemUsage> getFileSystemUsagesById(long id);
+
+	/**
+	 * 返回指定时间戳的文件系统利用率
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public FileSystemUsage getFileSysUsageById(long id,long timestamp);
+
 	/**
 	 * 返回指定Host ID的文件系统列表
 	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<NetInterface> getNetInterfaceById(long id);
-	
+	public List<NetInterface> getNetInterfacesById(long id);
+
 	/**
-	 * 返回指定接口 ID的网络接口采集信息列表
+	 * 返回指定ID的网络接口
+	 * 
 	 * @param id
 	 * @return
 	 */
-	public List<NetInterfaceStat> getInterfaceStats(long id);
+	public NetInterface getNetInterfaceById(long id);
+
+	/**
+	 * 返回指定接口 ID的网络接口采集信息列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<NetInterfaceStat> getInterfaceStatsById(long id);
+
+	/**
+	 * 返回指定时间戳的网络接口监测信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public NetInterfaceStat getInterfaceStatById(long id,long timestamp);
 }
