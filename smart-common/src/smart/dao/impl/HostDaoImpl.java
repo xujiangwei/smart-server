@@ -98,9 +98,9 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定ID的CPU
+	 * 获取指定主机ID的CPU列表
 	 */
-	public List<CPU> getCPUById(long id) {
+	public List<CPU> getCPUsById(long id) {
 		String sql = "select * from h_cpu where hostid=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
@@ -126,17 +126,43 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定时刻的CPU利用率
+	 * 获取指定ID的CPU
 	 */
-	public CPUPerc getCPUPercById(long time) {
-		String sql = "select * from h_cpuprec where timestamp=?";
-		CPUPerc cp = new CPUPerc(time);
+	public CPU getCPUById(long id) {
+		String sql = "select * from h_cpu where id=?";
+		CPU cpu = new CPU(id);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
-			pstmt.setLong(1, time);
+			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				cpu.setCacheSize(rs.getLong("cacheSize"));
+				cpu.setMhz(rs.getInt("mhz"));
+				cpu.setModel(rs.getString("model"));
+				cpu.setTotalCores(rs.getInt("totalCores"));
+				cpu.setVendor(rs.getString("vendor"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return cpu;
+	}
+
+	/**
+	 * 获取指定时间戳的CPU利用率
+	 */
+	public CPUPerc getCPUPercById(long id, long timestamp) {
+		String sql = "select * from h_cpuprec where cpuid=? and timestamp=?";
+		CPUPerc cp = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				cp = new CPUPerc(rs.getLong("timestamp"));
 				cp.setIdle(rs.getDouble("idle"));
 				cp.setNice(rs.getDouble("nice"));
 				cp.setSys(rs.getDouble("sys"));
@@ -202,7 +228,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 返回指定Memory Id 的MemoryDetection列表
+	 * 获取指定内存Id 的内存监测信息列表
 	 */
 	public List<MemoryDetection> getMemoryDetecsById(long id) {
 		String sql = "select * from h_memoryusage where memid=?";
@@ -230,9 +256,38 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 返回指定Host ID的文件系统列表
+	 * 获取指定时间戳的内存监测信息
 	 */
-	public List<FileSystem> getFileSystemById(long id) {
+	public MemoryDetection getMemoryDetecById(long id, long timestamp) {
+		String sql = "select * from h_memoryusage where memid=? and timestamp=?";
+		MemoryDetection memDetec = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				memDetec = new MemoryDetection(rs.getLong("timestamp"));
+				memDetec.setActualFree(rs.getLong("actualFree"));
+				memDetec.setActualUsed(rs.getLong("actualUsed"));
+				memDetec.setFree(rs.getLong("free"));
+				memDetec.setFreePercent(rs.getDouble("freePercent"));
+				memDetec.setRam(rs.getLong("ram"));
+				memDetec.setUsed(rs.getLong("used"));
+				memDetec.setUsedPercent(rs.getDouble("usedPercent"));
+				memDetec.setTimestamp(rs.getLong("timestamp"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return memDetec;
+	}
+
+	/**
+	 * 获取指定主机ID的文件系统列表
+	 */
+	public List<FileSystem> getFileSystemsById(long id) {
 		String sql = "select * from h_filesys where hostid=?";
 		List<FileSystem> list = new ArrayList<FileSystem>(20);
 		try {
@@ -260,7 +315,35 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 返回指定 FileSystem ID的文件系统利用率列表
+	 * 获取指定ID的文件系统
+	 */
+	public FileSystem getFileSystemById(long id) {
+		String sql = "select * from h_filesys where id=?";
+		FileSystem fs = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				fs = new FileSystem(rs.getLong("id"));
+				fs.setDevName(rs.getString("devName"));
+				fs.setDirName(rs.getString("dirName"));
+				fs.setFlags(rs.getLong("flags"));
+				fs.setOptions(rs.getString("options"));
+				fs.setSize(rs.getFloat("size"));
+				fs.setSysTypeName(rs.getString("sysTypeName"));
+				fs.setType(rs.getInt("type"));
+				fs.setTypeName(rs.getString("typeName"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fs;
+	}
+
+	/**
+	 * 获取指定文件系统ID的文件系统利用率列表
 	 */
 	public List<FileSystemUsage> getFileSystemUsagesById(long id) {
 		String sql = "select * from h_filesysusage where filesysid=?";
@@ -293,8 +376,43 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		return list;
 	}
 
-	@Override
-	public List<NetInterface> getNetInterfaceById(long id) {
+	/**
+	 * 获取指定时间戳的文件系统利用率
+	 */
+	public FileSystemUsage getFileSysUsageById(long id, long timestamp) {
+		String sql = "select * from h_filesysusage where filesysid=? and timestamp=?";
+		FileSystemUsage fsu = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				fsu = new FileSystemUsage(rs.getLong("timestamp"));
+				fsu.setDiskQueue(rs.getDouble("diskQueue"));
+				fsu.setDiskReadBytes(rs.getLong("diskReadBytes"));
+				fsu.setDiskReads(rs.getLong("diskReads"));
+				fsu.setDiskServiceTime(rs.getLong("diskServiceTime"));
+				fsu.setDiskWriteBytes(rs.getLong("diskWriteBytes"));
+				fsu.setDiskWrites(rs.getLong("diskWrites"));
+				fsu.setFiles(rs.getLong("files"));
+				fsu.setFree(rs.getLong("free"));
+				fsu.setFreeFiles(rs.getLong("freeFiles"));
+				fsu.setTimestamp(rs.getLong("timestamp"));
+				fsu.setUsed(rs.getLong("used"));
+				fsu.setUsePercent(rs.getDouble("usePercent"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return fsu;
+	}
+
+	/**
+	 * 获取指定主机ID的网络接口
+	 */
+	public List<NetInterface> getNetInterfacesById(long id) {
 		String sql = "select * from h_netinterface where hostid=?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
@@ -326,9 +444,41 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 返回指定接口 ID的网络接口采集信息列表
+	 * 获取指定ID的网络接口
 	 */
-	public List<NetInterfaceStat> getInterfaceStats(long id) {
+	public NetInterface getNetInterfaceById(long id) {
+		String sql = "select * from h_netinterface where id=?";
+		NetInterface nif = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				nif = new NetInterface(rs.getLong("id"));
+				nif.setAddress(rs.getString("address"));
+				nif.setBroadcast(rs.getString("broadcast"));
+				nif.setDescription(rs.getString("description"));
+				nif.setDestination(rs.getString("destination"));
+				nif.setGateway(rs.getString("gateway"));
+				nif.setMac(rs.getString("mac"));
+				nif.setMetric(rs.getLong("metric"));
+				nif.setMtu(rs.getLong("mtu"));
+				nif.setName(rs.getString("name"));
+				nif.setNetmask(rs.getString("netmask"));
+				nif.setType(rs.getString("type"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nif;
+
+	}
+
+	/**
+	 * 获取指定接口 ID的网络接口采集信息列表
+	 */
+	public List<NetInterfaceStat> getInterfaceStatsById(long id) {
 		String sql = "select * from h_nistatus where niid=?";
 		List<NetInterfaceStat> list = new ArrayList<NetInterfaceStat>(20);
 		try {
@@ -365,8 +515,49 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		return list;
 	}
 
-	@Override
-	public List<Progress> getProgressById(long id) {
+	/**
+	 * 获取指定时间戳的网络接口状态
+	 */
+	public NetInterfaceStat getInterfaceStatById(long id, long timestamp) {
+		String sql = "select * from h_nistatus where niid=? and timestamp=?";
+		NetInterfaceStat nis = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				nis = new NetInterfaceStat(rs.getLong("timestamp"));
+				nis.setRxBytes(rs.getLong("rxBytes"));
+				nis.setRxDropped(rs.getLong("rxDropped"));
+				nis.setRxErrors(rs.getLong("rxErrors"));
+				nis.setRxFrame(rs.getLong("rxFrame"));
+				nis.setRxOverruns(rs.getLong("rxOverruns"));
+				nis.setRxPackets(rs.getLong("rxPackets"));
+				nis.setSpeed(rs.getLong("speed"));
+				nis.setStatus(rs.getString("status"));
+				nis.setThroughput(rs.getFloat("throughput"));
+				nis.setTimestamp(rs.getLong("timestamp"));
+				nis.setTraffic(rs.getFloat("traffic"));
+				nis.setTxBytes(rs.getLong("txBytes"));
+				nis.setTxCarrier(rs.getLong("txCarrier"));
+				nis.setTxCollisions(rs.getLong("txCollisions"));
+				nis.setTxDropped(rs.getLong("txDropped"));
+				nis.setTxErrors(rs.getLong("txErrors"));
+				nis.setTxOverruns(rs.getLong("txOverruns"));
+				nis.setTxPackets(rs.getLong("txPackets"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return nis;
+	}
+
+	/**
+	 * 获取指定主机ID的进程
+	 */
+	public List<Progress> getProgressesById(long id) {
 		String sql = "select * from h_progress where hostid=?";
 		List<Progress> list = new ArrayList<Progress>(20);
 		try {
@@ -388,8 +579,33 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		return list;
 	}
 
-	@Override
-	public List<ProgressDetection> getProgressDetecById(long id) {
+	/**
+	 * 获取指定ID的进程
+	 */
+	public Progress getProgressById(long id) {
+		String sql = "select * from h_progress where id=?";
+		Progress pro = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				pro = new Progress(rs.getLong("id"));
+				pro.setName(rs.getString("name"));
+				pro.setStartTime(rs.getString("startTime"));
+				pro.setUser(rs.getString("user"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return pro;
+	}
+
+	/**
+	 * 获取指定主机ID的进程监测信息
+	 */
+	public List<ProgressDetection> getProgressDetecsById(long id) {
 		String sql = "select * from h_prousage where progressid=?";
 		List<ProgressDetection> list = new ArrayList<ProgressDetection>(20);
 		try {
@@ -414,6 +630,35 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			e.printStackTrace();
 		}
 		return list;
+	}
+
+	/**
+	 * 获取指定时间戳的进程监测信息
+	 */
+	public ProgressDetection getProgressDetecById(long id, long timestamp) {
+		String sql = "select * from h_prousage where progressid=? and timestamp=?";
+		ProgressDetection prod = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				prod = new ProgressDetection(rs.getLong("timestamp"));
+				prod.setCpuTime(rs.getLong("cpuTime"));
+				prod.setCpuUsed(rs.getLong("cpuUsed"));
+				prod.setMemShare(rs.getLong("memShare"));
+				prod.setMemSize(rs.getLong("memSize"));
+				prod.setMemUsed(rs.getLong("memUsed"));
+				prod.setState(rs.getString("state"));
+				prod.setTimestamp(rs.getLong("timestamp"));
+
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return prod;
 	}
 
 }
