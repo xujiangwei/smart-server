@@ -3,7 +3,7 @@ package smart.core;
 import java.util.Set;
 import java.util.concurrent.ConcurrentHashMap;
 
-import smart.auth.User;
+import smart.bean.User;
 
 /**
  * 用户管理器。

@@ -13,18 +13,19 @@ import smart.entity.Entity;
 public class NodeTraverse {
 
 	private static final NodeTraverse instance = new NodeTraverse();
+	private List<Host> l = null;
 	
 	public static NodeTraverse getInstance(){
 		return NodeTraverse.instance;
 	}
 	
-	public NodeTraverse() {
+	private NodeTraverse() {
+		l = BeanFactory.getInstance().getHostList();
 	}
 
 	// 根据子节点id遍历所有父节点id
 	// 先根据childId找到对应的实体节点
 	public List<Long> getParents(long childId){
-		List<Host> l = BeanFactory.getInstance().getHostList();
 		List<Long> ls = new ArrayList<Long>();
 		for (int i = 0; i < l.size(); i++) {
 			List<Entity> list = l.get(i).getElders();
