@@ -23,7 +23,7 @@ import org.json.JSONObject;
 
 import smart.api.API;
 import smart.api.RequestContentCapsule;
-import smart.auth.User;
+import smart.bean.User;
 import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
 
