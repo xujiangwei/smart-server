@@ -59,13 +59,14 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		// 查询数据
 		// 关闭连接
 		String sql = "select * from host where id=?";
-		Host host = new Host(id);
+		Host host = null;
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
+				host=new Host(rs.getLong("id"));
 				host.setName(rs.getString("name"));
 			}
 		} catch (Exception e) {
@@ -98,10 +99,10 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定主机ID的CPU列表
+	 * 获取指定ID的CPU列表
 	 */
 	public List<CPU> getCPUsById(long id) {
-		String sql = "select * from h_cpu where hostid=?";
+		String sql = "select * from dcpu where hostid=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -129,7 +130,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定ID的CPU
 	 */
 	public CPU getCPUById(long id) {
-		String sql = "select * from h_cpu where id=?";
+		String sql = "select * from dcpu where id=?";
 		CPU cpu = new CPU(id);
 		try {
 			super.doStart();
@@ -153,7 +154,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的CPU利用率
 	 */
 	public CPUPerc getCPUPercById(long id, long timestamp) {
-		String sql = "select * from h_cpuprec where cpuid=? and timestamp=?";
+		String sql = "select * from dcpuprec where cpuid=? and timestamp=?";
 		CPUPerc cp = null;
 		try {
 			super.doStart();
@@ -181,7 +182,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 返回指定CPU id的CPU利用率列表
 	 */
 	public List<CPUPerc> getPercsById(long id) {
-		String sql = "select * from h_cpuprec where cpuid=?";
+		String sql = "select * from dcpuprec where cpuid=?";
 		List<CPUPerc> list = new ArrayList<CPUPerc>(20);
 		try {
 			super.doStart();
@@ -210,7 +211,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的内存
 	 */
 	public Memory getMemoryById(long id) {
-		String sql = "select * from h_memory where hostid=?";
+		String sql = "select * from dmemory where hostid=?";
 		Memory memory = null;
 		try {
 			super.doStart();
@@ -231,7 +232,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定内存Id 的内存监测信息列表
 	 */
 	public List<MemoryDetection> getMemoryDetecsById(long id) {
-		String sql = "select * from h_memoryusage where memid=?";
+		String sql = "select * from dmemoryusage where memid=?";
 		List<MemoryDetection> list = new ArrayList<MemoryDetection>(20);
 		try {
 			super.doStart();
@@ -259,7 +260,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的内存监测信息
 	 */
 	public MemoryDetection getMemoryDetecById(long id, long timestamp) {
-		String sql = "select * from h_memoryusage where memid=? and timestamp=?";
+		String sql = "select * from dmemoryusage where memid=? and timestamp=?";
 		MemoryDetection memDetec = null;
 		try {
 			super.doStart();
@@ -288,7 +289,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的文件系统列表
 	 */
 	public List<FileSystem> getFileSystemsById(long id) {
-		String sql = "select * from h_filesys where hostid=?";
+		String sql = "select * from dfilesys where hostid=?";
 		List<FileSystem> list = new ArrayList<FileSystem>(20);
 		try {
 			super.doStart();
@@ -318,7 +319,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定ID的文件系统
 	 */
 	public FileSystem getFileSystemById(long id) {
-		String sql = "select * from h_filesys where id=?";
+		String sql = "select * from dfilesys where id=?";
 		FileSystem fs = null;
 		try {
 			super.doStart();
@@ -346,7 +347,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定文件系统ID的文件系统利用率列表
 	 */
 	public List<FileSystemUsage> getFileSystemUsagesById(long id) {
-		String sql = "select * from h_filesysusage where filesysid=?";
+		String sql = "select * from dfilesysusage where filesysid=?";
 		List<FileSystemUsage> list = new ArrayList<FileSystemUsage>(20);
 		try {
 			super.doStart();
@@ -380,7 +381,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的文件系统利用率
 	 */
 	public FileSystemUsage getFileSysUsageById(long id, long timestamp) {
-		String sql = "select * from h_filesysusage where filesysid=? and timestamp=?";
+		String sql = "select * from dfilesysusage where filesysid=? and timestamp=?";
 		FileSystemUsage fsu = null;
 		try {
 			super.doStart();
@@ -410,10 +411,10 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定主机ID的网络接口
+	 * 获取指定ID的网络接口列表
 	 */
 	public List<NetInterface> getNetInterfacesById(long id) {
-		String sql = "select * from h_netinterface where hostid=?";
+		String sql = "select * from dnetinterface where hostid=?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
 			super.doStart();
@@ -447,7 +448,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定ID的网络接口
 	 */
 	public NetInterface getNetInterfaceById(long id) {
-		String sql = "select * from h_netinterface where id=?";
+		String sql = "select * from dnetinterface where id=?";
 		NetInterface nif = null;
 		try {
 			super.doStart();
@@ -479,7 +480,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定接口 ID的网络接口采集信息列表
 	 */
 	public List<NetInterfaceStat> getInterfaceStatsById(long id) {
-		String sql = "select * from h_nistatus where niid=?";
+		String sql = "select * from dnistatus where niid=?";
 		List<NetInterfaceStat> list = new ArrayList<NetInterfaceStat>(20);
 		try {
 			super.doStart();
@@ -519,7 +520,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的网络接口状态
 	 */
 	public NetInterfaceStat getInterfaceStatById(long id, long timestamp) {
-		String sql = "select * from h_nistatus where niid=? and timestamp=?";
+		String sql = "select * from dnistatus where niid=? and timestamp=?";
 		NetInterfaceStat nis = null;
 		try {
 			super.doStart();
@@ -555,10 +556,10 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定主机ID的进程
+	 * 获取指定ID的进程
 	 */
 	public List<Progress> getProgressesById(long id) {
-		String sql = "select * from h_progress where hostid=?";
+		String sql = "select * from dprogress where hostid=?";
 		List<Progress> list = new ArrayList<Progress>(20);
 		try {
 			super.doStart();
@@ -583,7 +584,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定ID的进程
 	 */
 	public Progress getProgressById(long id) {
-		String sql = "select * from h_progress where id=?";
+		String sql = "select * from dprogress where id=?";
 		Progress pro = null;
 		try {
 			super.doStart();
@@ -603,10 +604,10 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	}
 
 	/**
-	 * 获取指定主机ID的进程监测信息
+	 * 获取指定ID的进程监测信息
 	 */
 	public List<ProgressDetection> getProgressDetecsById(long id) {
-		String sql = "select * from h_prousage where progressid=?";
+		String sql = "select * from dprousage where progressid=?";
 		List<ProgressDetection> list = new ArrayList<ProgressDetection>(20);
 		try {
 			super.doStart();
@@ -636,7 +637,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的进程监测信息
 	 */
 	public ProgressDetection getProgressDetecById(long id, long timestamp) {
-		String sql = "select * from h_prousage where progressid=? and timestamp=?";
+		String sql = "select * from dprousage where progressid=? and timestamp=?";
 		ProgressDetection prod = null;
 		try {
 			super.doStart();
