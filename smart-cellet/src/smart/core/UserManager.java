@@ -27,11 +27,18 @@ public final class UserManager {
 	private static ConcurrentHashMap<Integer, User> userMap = new ConcurrentHashMap<Integer, User>(10);
 	private static int count = 0;
 
-	public User signIn(String name, String passwordMD5) {
-		return null;
+	// 签入
+	public User signIn(long id, String name, String passwordMD5, String token, String ip, int port) {
+		User user = new User(id);
+		user.setName(name);
+		user.setPwd(passwordMD5);
+		user.setToken(token);
+		user.setIp(ip);
+		user.setPort(port);
+		return user;
 	}
 
-	// 创建用户
+	// 保存创建用户
 	public void userCreated(User user) {
 		userMap.put(user.getPort(), user);
 
