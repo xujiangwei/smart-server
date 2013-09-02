@@ -78,7 +78,7 @@ public final class LoginListener extends AbstractListener {
 
 		// 填写数据内容
 		DeferredContentProvider dcp = new DeferredContentProvider();
-		
+
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("username", username);
 		capsule.append("password", password);
@@ -115,15 +115,12 @@ public final class LoginListener extends AbstractListener {
 								"user_id");
 						token = jo.getJSONObject("loginInfo")
 								.getString("token");
-						if (!UserManager.getInstance().isExist(username, password, ip)) {
+						if (!UserManager.getInstance().isExist(username,
+								password, ip)) {
 
 							// 将登录成功后的返回对象保存到用户管理器
-							User user = new User(id);
-							user.setName(username);
-							user.setPwd(password);
-							user.setToken(token);
-							user.setIp(ip);
-							user.setPort(port);
+							User user = UserManager.getInstance().signIn(id,
+									username, password, token, ip, port);
 							UserManager.getInstance().userCreated(user);
 
 						}
