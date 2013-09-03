@@ -1,4 +1,4 @@
-package smart.action.logout;
+package smart.action;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;

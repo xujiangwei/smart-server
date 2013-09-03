@@ -11,6 +11,7 @@ import net.cellcloud.talk.dialect.Dialect;
 import org.eclipse.jetty.client.HttpClient;
 
 import smart.action.LoginListener;
+import smart.action.LogoutListener;
 import smart.action.NodeDetectionListener;
 import smart.action.alarm.AlarmCoverageListener;
 import smart.action.alarm.AlarmDealListener;
@@ -28,7 +29,6 @@ import smart.action.attention.AttentionListListener;
 import smart.action.attention.AttentionListener;
 import smart.action.attention.CancelAttentionListener;
 import smart.action.attention.DeleteAttentionListener;
-import smart.action.logout.LogoutListener;
 import smart.action.message.MessageContactsListener;
 import smart.action.message.MessageCustomTagListener;
 import smart.action.message.MessageDeleteListener;
