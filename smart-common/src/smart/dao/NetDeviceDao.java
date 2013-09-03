@@ -6,21 +6,21 @@ import smart.bean.CPU;
 import smart.bean.CPUPerc;
 import smart.bean.Memory;
 import smart.bean.MemoryDetection;
+import smart.bean.NetDevice;
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
-import smart.bean.Switch;
 
 /**
  * 交换机DAO
  */
-public interface SwitchDao {
+public interface NetDeviceDao {
 
 	/**
 	 * 返回交换机的ID列表
 	 * 
 	 * @return
 	 */
-	public List<Long> getSwitchIdList();
+	public List<Long> getNetDeviceIdList();
 
 	/**
 	 * 返回指定ID的交换机
@@ -28,14 +28,14 @@ public interface SwitchDao {
 	 * @param id
 	 * @return
 	 */
-	public Switch getSwitchById(long id);
+	public NetDevice getNetDeviceById(long id);
 
 	/**
 	 * 返回交换机的列表
 	 * 
 	 * @return
 	 */
-	public List<Switch> getSwitchsList();
+	public List<NetDevice> getNetDevicesList();
 
 	/**
 	 * 返回指定ID的CPU列表

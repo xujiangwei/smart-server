@@ -1,4 +1,4 @@
-package smart.bean;
+package smart.core;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -7,8 +7,22 @@ import java.util.concurrent.TimeUnit;
 
 import net.cellcloud.util.SlidingWindowExecutor;
 import net.cellcloud.util.SlidingWindowTask;
+import smart.bean.CPU;
+import smart.bean.CPUPerc;
+import smart.bean.FileSystem;
+import smart.bean.FileSystemUsage;
+import smart.bean.Host;
+import smart.bean.Memory;
+import smart.bean.MemoryDetection;
+import smart.bean.NetDevice;
+import smart.bean.NetInterface;
+import smart.bean.NetInterfaceStat;
+import smart.bean.Progress;
+import smart.bean.ProgressDetection;
 import smart.dao.HostDao;
+import smart.dao.NetDeviceDao;
 import smart.dao.impl.HostDaoImpl;
+import smart.dao.impl.NetDeviceDaoImpl;
 import smart.entity.Entity;
 
 /**
@@ -19,11 +33,15 @@ import smart.entity.Entity;
 public final class BeanFactory {
 
 	private static final BeanFactory instance = new BeanFactory();
+	private SlidingWindowExecutor swe = SlidingWindowExecutor
+			.newSlidingWindowThreadPool(20);
 	private List<Host> list = new ArrayList<Host>(20);
 	private HostDao hostDao;
+	private NetDeviceDao switchDao;
 
 	private BeanFactory() {
 		this.hostDao = new HostDaoImpl();
+		this.switchDao = new NetDeviceDaoImpl();
 	}
 
 	public static BeanFactory getInstance() {
@@ -60,9 +78,6 @@ public final class BeanFactory {
 	 * @return
 	 */
 	public List<Host> getHostList() {
-		// 新建滑窗执行器
-		SlidingWindowExecutor swe = SlidingWindowExecutor
-				.newSlidingWindowThreadPool(20);
 		swe.execute(new SlidingWindowTask(swe) {
 			public void run() {
 				List<Host> hList = hostDao.getHostList();
@@ -77,7 +92,7 @@ public final class BeanFactory {
 							if (memList != null && memList.size() > 0) {
 								for (int j = 0; j < memList.size(); j++) {
 									MemoryDetection memDetec = new MemoryDetection(
-											memList.get(j).getUsed());
+											memList.get(j).getTimestamp());
 									mem.addMemoryDetection(memDetec);
 								}
 							}
@@ -408,6 +423,86 @@ public final class BeanFactory {
 		synchronized (this.hostDao) {
 			return this.hostDao.getInterfaceStatById(id, timestamp);
 		}
+	}
+
+	public List<NetDevice> getSwitchsList() {
+		swe.execute(new SlidingWindowTask(swe) {
+			public void run() {
+				List<NetDevice> sList = switchDao.getNetDevicesList();
+				if (sList != null && sList.size() > 0) {
+					for (int i = 0; i < sList.size(); i++) {
+						NetDevice nd = new NetDevice(sList.get(i).getId());
+
+						Memory mem = switchDao.getMemoryById(sList.get(i)
+								.getId());
+						if (mem != null) {
+							List<MemoryDetection> mdList = switchDao
+									.getMemoryDetecsById(mem.getId());
+							if (mdList != null && mdList.size() > 0) {
+								for (int j = 0; j < mdList.size(); j++) {
+									MemoryDetection md = new MemoryDetection(
+											mdList.get(j).getTimestamp());
+									mem.addMemoryDetection(md);
+
+								}
+							}
+
+						}
+						nd.addChild(mem);
+
+						List<CPU> cList = switchDao.getCPUsById(sList.get(i)
+								.getId());
+						if (cList != null && cList.size() > 0) {
+							for (int j = 0; j < cList.size(); j++) {
+								CPU cpu = new CPU(cList.get(j).getId());
+
+								List<CPUPerc> cuList = switchDao
+										.getPercsById(cpu.getId());
+								if (cuList != null && cuList.size() > 0) {
+									for (int k = 0; k < cuList.size(); k++) {
+										CPUPerc cp = new CPUPerc(cuList.get(k)
+												.getTimestamp());
+										cpu.addPrec(cp);
+									}
+								}
+								if (cpu != null) {
+									nd.addChild(cpu);
+								}
+							}
+						}
+
+						List<NetInterface> nList = switchDao
+								.getNetInterfacesById(sList.get(i).getId());
+						if (nList != null && nList.size() > 0) {
+							for (int j = 0; j < nList.size(); j++) {
+								NetInterface ni = new NetInterface(nList.get(j)
+										.getId());
+
+								List<NetInterfaceStat> niList = switchDao
+										.getInterfaceStatsById(ni.getId());
+								if (niList != null && niList.size() > 0) {
+									for (int k = 0; k < niList.size(); k++) {
+										NetInterfaceStat nif = new NetInterfaceStat(
+												niList.get(k).getTimestamp());
+										ni.addNiStat(nif);
+									}
+								}
+								if (ni != null) {
+									nd.addChild(ni);
+								}
+							}
+
+						}
+
+						// ------神奇分割线------
+					}
+				}
+
+			}
+		});
+
+		return null;
+
 	}
 
 	public static void main(String[] args) {
