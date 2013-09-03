@@ -11,7 +11,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import smart.traverse.NodeTraverse;
+import smart.core.NodeTraverse;
 import cn.com.dhcc.mast.action.Action;
 
 /**
