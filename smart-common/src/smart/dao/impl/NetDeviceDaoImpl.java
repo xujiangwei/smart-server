@@ -11,27 +11,27 @@ import smart.bean.Memory;
 import smart.bean.MemoryDetection;
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
-import smart.bean.Switch;
+import smart.bean.NetDevice;
 import smart.dao.AbstraceDao;
-import smart.dao.SwitchDao;
+import smart.dao.NetDeviceDao;
 
 /**
  * 交换机DAO实现
  */
-public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
+public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 
-	public SwitchDaoImpl() {
+	public NetDeviceDaoImpl() {
 		super();
 	}
 
 	/**
 	 * 返回交换机ID列表
 	 */
-	public List<Long> getSwitchIdList() {
-		String sql = "select id from switch";
+	public List<Long> getNetDeviceIdList() {
+		String sql = "select id from netdevice";
 		List<Long> list = new ArrayList<Long>(20);
 		try {
 			super.doStart();
@@ -49,15 +49,15 @@ public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
 	/**
 	 * 返回指定ID的交换机
 	 */
-	public Switch getSwitchById(long id) {
-		String sql = "select * from switch where id=?";
-		Switch sw = null;
+	public NetDevice getNetDeviceById(long id) {
+		String sql = "select * from netdevice where id=?";
+		NetDevice sw = null;
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				sw = new Switch(rs.getLong("id"));
+				sw = new NetDevice(rs.getLong("id"));
 				sw.setName(rs.getString("name"));
 			}
 		} catch (Exception e) {
@@ -69,15 +69,15 @@ public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
 	/**
 	 * 返回交换机列表
 	 */
-	public List<Switch> getSwitchsList() {
-		String sql = "select * from switch";
-		List<Switch> list = new ArrayList<Switch>(20);
+	public List<NetDevice> getNetDevicesList() {
+		String sql = "select * from netdevice";
+		List<NetDevice> list = new ArrayList<NetDevice>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Switch sw = new Switch(rs.getLong("id"));
+				NetDevice sw = new NetDevice(rs.getLong("id"));
 				sw.setName(rs.getString("name"));
 				list.add(sw);
 			}
@@ -91,7 +91,7 @@ public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
 	 * 返回指定CPU id的CPU列表
 	 */
 	public List<CPU> getCPUsById(long id) {
-		String sql = "select * from dcpu where hostid=?";
+		String sql = "select * from dcpu where id=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -200,7 +200,7 @@ public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
 	 * 获取指定ID的内存
 	 */
 	public Memory getMemoryById(long id) {
-		String sql = "select * from dmemory where hostid=?";
+		String sql = "select * from dmemory where id=?";
 		Memory memory = null;
 		try {
 			super.doStart();
@@ -278,7 +278,7 @@ public class SwitchDaoImpl extends AbstraceDao implements SwitchDao {
 	 * 获取指定ID的网络接口
 	 */
 	public List<NetInterface> getNetInterfacesById(long id) {
-		String sql = "select * from dnetinterface where hostid=?";
+		String sql = "select * from dnetinterface where id=?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
 			super.doStart();
