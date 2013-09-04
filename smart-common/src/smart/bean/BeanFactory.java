@@ -1,4 +1,4 @@
-package smart.core;
+package smart.bean;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -36,12 +36,13 @@ public final class BeanFactory {
 	private SlidingWindowExecutor swe = SlidingWindowExecutor
 			.newSlidingWindowThreadPool(20);
 	private List<Host> list = new ArrayList<Host>(20);
+	private List<NetDevice> list1 = new ArrayList<NetDevice>(20);
 	private HostDao hostDao;
-	private NetDeviceDao switchDao;
+	private NetDeviceDao netDeviceDao;
 
 	private BeanFactory() {
 		this.hostDao = new HostDaoImpl();
-		this.switchDao = new NetDeviceDaoImpl();
+		this.netDeviceDao = new NetDeviceDaoImpl();
 	}
 
 	public static BeanFactory getInstance() {
@@ -84,11 +85,10 @@ public final class BeanFactory {
 				if (hList != null && hList.size() > 0) {
 					for (int i = 0; i < hList.size(); i++) {
 						Host host = new Host(hList.get(i).getId());
-						Memory mem = hostDao
-								.getMemoryById(hList.get(i).getId());
+						Memory mem = getMemoryById(hList.get(i).getId());
 						if (mem != null) {
-							List<MemoryDetection> memList = hostDao
-									.getMemoryDetecsById(mem.getId());
+							List<MemoryDetection> memList = getMemoryDetecsById(mem
+									.getId());
 							if (memList != null && memList.size() > 0) {
 								for (int j = 0; j < memList.size(); j++) {
 									MemoryDetection memDetec = new MemoryDetection(
@@ -98,13 +98,11 @@ public final class BeanFactory {
 							}
 							host.addChild(mem);
 						}
-						List<CPU> cList = hostDao.getCPUsById(hList.get(i)
-								.getId());
+						List<CPU> cList = getCPUsById(hList.get(i).getId());
 						if (cList != null && cList.size() > 0) {
 							for (int j = 0; j < cList.size(); j++) {
 								CPU cpu = new CPU(cList.get(j).getId());
-								List<CPUPerc> cpList = hostDao.getPercsById(cpu
-										.getId());
+								List<CPUPerc> cpList = getPercsById(cpu.getId());
 								if (cpList != null && cpList.size() > 0) {
 									for (int k = 0; k < cpList.size(); k++) {
 										CPUPerc cp = new CPUPerc(cpList.get(k)
@@ -117,14 +115,14 @@ public final class BeanFactory {
 								}
 							}
 						}
-						List<NetInterface> nList = hostDao
-								.getNetInterfacesById(hList.get(i).getId());
+						List<NetInterface> nList = getNetInterfacesById(hList
+								.get(i).getId());
 						if (nList != null && nList.size() > 0) {
 							for (int j = 0; j < nList.size(); j++) {
 								NetInterface nif = new NetInterface(nList
 										.get(j).getId());
-								List<NetInterfaceStat> nisList = hostDao
-										.getInterfaceStatsById(nif.getId());
+								List<NetInterfaceStat> nisList = getInterfaceStatsById(nif
+										.getId());
 								if (nisList != null && nisList.size() > 0) {
 									for (int k = 0; k < nisList.size(); k++) {
 										NetInterfaceStat nis = new NetInterfaceStat(
@@ -138,14 +136,14 @@ public final class BeanFactory {
 							}
 						}
 
-						List<FileSystem> fList = hostDao
-								.getFileSystemsById(hList.get(i).getId());
+						List<FileSystem> fList = getFileSystemsById(hList
+								.get(i).getId());
 						if (fList != null && fList.size() > 0) {
 							for (int j = 0; j < fList.size(); j++) {
 								FileSystem fs = new FileSystem(fList.get(j)
 										.getId());
-								List<FileSystemUsage> fsuList = hostDao
-										.getFileSystemUsagesById(fs.getId());
+								List<FileSystemUsage> fsuList = getFileSystemUsagesById(fs
+										.getId());
 								if (fsuList != null && fsuList.size() > 0) {
 									for (int k = 0; k < fsuList.size(); k++) {
 										FileSystemUsage fsu = new FileSystemUsage(
@@ -159,14 +157,14 @@ public final class BeanFactory {
 							}
 						}
 
-						List<Progress> pList = hostDao.getProgressesById(hList
-								.get(i).getId());
+						List<Progress> pList = getProgressesById(hList.get(i)
+								.getId());
 						if (pList != null && pList.size() > 0) {
 							for (int j = 0; j < pList.size(); j++) {
 								Progress pro = new Progress(pList.get(j)
 										.getId());
-								List<ProgressDetection> pdList = hostDao
-										.getProgressDetecsById(pro.getId());
+								List<ProgressDetection> pdList = getProgressDetecsById(pro
+										.getId());
 								if (pdList != null && pdList.size() > 0) {
 									for (int k = 0; k < pdList.size(); k++) {
 										ProgressDetection pd = new ProgressDetection(
@@ -215,7 +213,7 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public List<CPU> getCPUById(long id) {
+	public List<CPU> getCPUsById(long id) {
 		synchronized (this.hostDao) {
 			return this.hostDao.getCPUsById(id);
 		}
@@ -425,19 +423,23 @@ public final class BeanFactory {
 		}
 	}
 
-	public List<NetDevice> getSwitchsList() {
+	/**
+	 * 获取网络设备列表
+	 * 
+	 * @return
+	 */
+	public List<NetDevice> getNetDevicesList() {
 		swe.execute(new SlidingWindowTask(swe) {
 			public void run() {
-				List<NetDevice> sList = switchDao.getNetDevicesList();
+				List<NetDevice> sList = netDeviceDao.getNetDevicesList();
 				if (sList != null && sList.size() > 0) {
 					for (int i = 0; i < sList.size(); i++) {
 						NetDevice nd = new NetDevice(sList.get(i).getId());
 
-						Memory mem = switchDao.getMemoryById(sList.get(i)
-								.getId());
+						Memory mem = getMemoryByNdevId(sList.get(i).getId());
 						if (mem != null) {
-							List<MemoryDetection> mdList = switchDao
-									.getMemoryDetecsById(mem.getId());
+							List<MemoryDetection> mdList = getMemoryDetecsByNdevId(mem
+									.getId());
 							if (mdList != null && mdList.size() > 0) {
 								for (int j = 0; j < mdList.size(); j++) {
 									MemoryDetection md = new MemoryDetection(
@@ -448,16 +450,16 @@ public final class BeanFactory {
 							}
 
 						}
-						nd.addChild(mem);
-
-						List<CPU> cList = switchDao.getCPUsById(sList.get(i)
-								.getId());
+						if (mem != null) {
+							nd.addChild(mem);
+						}
+						List<CPU> cList = getCPUsByNdevId(sList.get(i).getId());
 						if (cList != null && cList.size() > 0) {
 							for (int j = 0; j < cList.size(); j++) {
 								CPU cpu = new CPU(cList.get(j).getId());
 
-								List<CPUPerc> cuList = switchDao
-										.getPercsById(cpu.getId());
+								List<CPUPerc> cuList = getPercsByNdevId(cpu
+										.getId());
 								if (cuList != null && cuList.size() > 0) {
 									for (int k = 0; k < cuList.size(); k++) {
 										CPUPerc cp = new CPUPerc(cuList.get(k)
@@ -471,15 +473,15 @@ public final class BeanFactory {
 							}
 						}
 
-						List<NetInterface> nList = switchDao
-								.getNetInterfacesById(sList.get(i).getId());
+						List<NetInterface> nList = getNetInterfacesByNdevId(sList
+								.get(i).getId());
 						if (nList != null && nList.size() > 0) {
 							for (int j = 0; j < nList.size(); j++) {
 								NetInterface ni = new NetInterface(nList.get(j)
 										.getId());
 
-								List<NetInterfaceStat> niList = switchDao
-										.getInterfaceStatsById(ni.getId());
+								List<NetInterfaceStat> niList = getInterfaceStatsByNdevId(ni
+										.getId());
 								if (niList != null && niList.size() > 0) {
 									for (int k = 0; k < niList.size(); k++) {
 										NetInterfaceStat nif = new NetInterfaceStat(
@@ -493,23 +495,175 @@ public final class BeanFactory {
 							}
 
 						}
-
-						// ------神奇分割线------
+						list1.add(nd);
 					}
 				}
 
 			}
 		});
+		// 等待子线程全部结束
+		try {
+			Thread.sleep(500);
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
 
-		return null;
+		// 关闭所有子线程，不关的话主线程会一直阻塞
+		swe.shutdown();
+		try {
+			// 等待线程终止
+			if (!swe.awaitTermination(60, TimeUnit.SECONDS)) {
+				swe.shutdownNow();
+				if (!swe.awaitTermination(60, TimeUnit.SECONDS))
+					System.err.println("Pool did not terminate");
+			}
+		} catch (InterruptedException ie) {
+			swe.shutdownNow();
+			Thread.currentThread().interrupt();
+		}
+		return list1;
 
+	}
+
+	/**
+	 * 获取指定ID的CPU列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<CPU> getCPUsByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getCPUsByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定ID的CPU
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public CPU getCPUByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getCPUByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定CPU id的CPU利用率列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<CPUPerc> getPercsByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getPercsByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定时间戳的CPU利用率
+	 * 
+	 * @param time
+	 * @return
+	 */
+	public CPUPerc getCPUPercByNdevId(long id, long timestamp) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getCPUPercByNdevId(id, timestamp);
+		}
+	}
+
+	/**
+	 * 获取指定ID的内存
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public Memory getMemoryByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getMemoryByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定内存Id的监测信息列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<MemoryDetection> getMemoryDetecsByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getMemoryDetecsByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定时间戳的内存监测信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getMemoryDetecByNdevId(id, timestamp);
+		}
+	}
+
+	/**
+	 * 获取指定ID的网络接口列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+
+	public List<NetInterface> getNetInterfacesByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getNetInterfacesByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定ID的网络接口
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public NetInterface getNetInterfaceByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getNetInterfaceByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定接口 ID的网络接口采集信息列表
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getInterfaceStatsByNdevId(id);
+		}
+	}
+
+	/**
+	 * 获取指定时间戳的网络接口监测信息
+	 * 
+	 * @param id
+	 * @return
+	 */
+	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp) {
+		synchronized (this.netDeviceDao) {
+			return this.netDeviceDao.getInterfaceStatByNdevId(id, timestamp);
+		}
 	}
 
 	public static void main(String[] args) {
 		BeanFactory be = BeanFactory.getInstance();
 		// be.getHostList();
 
-		List<Host> list = be.getHostList();
+		// List<Host> list = be.getHostList();
+		List<NetDevice> list = be.getNetDevicesList();
 		if (list != null && list.size() > 0) {
 			for (int i = 0; i < list.size(); i++) {
 				System.out.println("hname__" + list.get(i).getName());

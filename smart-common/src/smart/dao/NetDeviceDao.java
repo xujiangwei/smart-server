@@ -43,7 +43,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<CPU> getCPUsById(long id);
+	public List<CPU> getCPUsByNdevId(long id);
 
 	/**
 	 * 返回指定ID的CPU
@@ -51,7 +51,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public CPU getCPUById(long id);
+	public CPU getCPUByNdevId(long id);
 
 	/**
 	 * 返回指定CPU id的CPU利用率列表
@@ -59,7 +59,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<CPUPerc> getPercsById(long id);
+	public List<CPUPerc> getPercsByNdevId(long id);
 
 	/**
 	 * 返回指定时间戳的CPU利用率
@@ -67,7 +67,7 @@ public interface NetDeviceDao {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercById(long id, long timestamp);
+	public CPUPerc getCPUPercByNdevId(long id, long timestamp);
 
 	/**
 	 * 返回指定ID的内存
@@ -75,7 +75,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public Memory getMemoryById(long id);
+	public Memory getMemoryByNdevId(long id);
 
 	/**
 	 * 返回指定内存Id的监测信息列表
@@ -83,7 +83,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<MemoryDetection> getMemoryDetecsById(long id);
+	public List<MemoryDetection> getMemoryDetecsByNdevId(long id);
 
 	/**
 	 * 返回指定时间戳的内存监测信息
@@ -91,7 +91,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public MemoryDetection getMemoryDetecById(long id, long timestamp);
+	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp);
 
 	/**
 	 * 返回指定ID的网络接口列表
@@ -100,7 +100,7 @@ public interface NetDeviceDao {
 	 * @return
 	 */
 
-	public List<NetInterface> getNetInterfacesById(long id);
+	public List<NetInterface> getNetInterfacesByNdevId(long id);
 
 	/**
 	 * 返回指定ID的网络接口
@@ -108,7 +108,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public NetInterface getNetInterfaceById(long id);
+	public NetInterface getNetInterfaceByNdevId(long id);
 
 	/**
 	 * 返回指定接口 ID的网络接口采集信息列表
@@ -116,7 +116,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<NetInterfaceStat> getInterfaceStatsById(long id);
+	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id);
 
 	/**
 	 * 返回指定时间戳的网络接口监测信息
@@ -124,6 +124,6 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public NetInterfaceStat getInterfaceStatById(long id, long timestamp);
+	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp);
 
 }

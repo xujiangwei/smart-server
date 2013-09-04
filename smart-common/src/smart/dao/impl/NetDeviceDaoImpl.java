@@ -28,17 +28,17 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	}
 
 	/**
-	 * 返回交换机ID列表
+	 * 返回网络设备ID列表
 	 */
 	public List<Long> getNetDeviceIdList() {
-		String sql = "select id from netdevice";
+		String sql = "select neteqpt_id from t_netequipment";
 		List<Long> list = new ArrayList<Long>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				list.add(rs.getLong("id"));
+				list.add(rs.getLong("neteqpt_id"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -47,18 +47,19 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	}
 
 	/**
-	 * 返回指定ID的交换机
+	 * 返回指定ID的网络设备
 	 */
 	public NetDevice getNetDeviceById(long id) {
-		String sql = "select * from netdevice where id=?";
+		String sql = "select * from t_netequipment where neteqpt_id=?";
 		NetDevice sw = null;
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				sw = new NetDevice(rs.getLong("id"));
-				sw.setName(rs.getString("name"));
+				sw = new NetDevice(rs.getLong("neteqpt_id"));
+				sw.setName(rs.getString("neteqpt_name"));
+				sw.setName(rs.getString("neteqpt_type"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -67,18 +68,19 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	}
 
 	/**
-	 * 返回交换机列表
+	 * 返回网络设备列表
 	 */
 	public List<NetDevice> getNetDevicesList() {
-		String sql = "select * from netdevice";
+		String sql = "select * from t_netequipment";
 		List<NetDevice> list = new ArrayList<NetDevice>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				NetDevice sw = new NetDevice(rs.getLong("id"));
-				sw.setName(rs.getString("name"));
+				NetDevice sw = new NetDevice(rs.getLong("neteqpt_id"));
+				sw.setName(rs.getString("neteqpt_name"));
+				sw.setName(rs.getString("neteqpt_type"));
 				list.add(sw);
 			}
 		} catch (Exception e) {
@@ -88,10 +90,10 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	}
 
 	/**
-	 * 返回指定CPU id的CPU列表
+	 * 返回指定Id的CPU列表
 	 */
-	public List<CPU> getCPUsById(long id) {
-		String sql = "select * from dcpu where id=?";
+	public List<CPU> getCPUsByNdevId(long id) {
+		String sql = "select * from t_cpu where cpu__neteqptid=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -99,13 +101,12 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				CPU cpu = new CPU(rs.getLong("id"));
-				cpu.setTotalCores(rs.getInt("totalCores"));
-				cpu.setMhz(rs.getInt("mhz"));
-				cpu.setCacheSize(rs.getLong("cacheSize"));
-				cpu.setModel(rs.getString("model"));
-				cpu.setVendor(rs.getString("vendor"));
-
+				CPU cpu = new CPU(rs.getLong("cpu_id"));
+				cpu.setTotalCores(rs.getInt("cpu_totalCores"));
+				cpu.setMhz(rs.getInt("cpu_mhz"));
+				cpu.setCacheSize(rs.getLong("cpu_cacheSize"));
+				cpu.setModel(rs.getString("cpu_model"));
+				cpu.setVendor(rs.getString("cpu_vendor"));
 				list.add(cpu);
 			}
 		} catch (Exception e) {
@@ -118,20 +119,21 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的CPU
 	 */
-	public CPU getCPUById(long id) {
-		String sql = "select * from dcpu where id=?";
-		CPU cpu = new CPU(id);
+	public CPU getCPUByNdevId(long id) {
+		String sql = "select * from t_cpu where cpu_id=?";
+		CPU cpu = null;
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				cpu.setCacheSize(rs.getLong("cacheSize"));
-				cpu.setMhz(rs.getInt("mhz"));
-				cpu.setModel(rs.getString("model"));
-				cpu.setTotalCores(rs.getInt("totalCores"));
-				cpu.setVendor(rs.getString("vendor"));
+				cpu = new CPU(rs.getLong("cpu_id"));
+				cpu.setCacheSize(rs.getLong("cpu_cacheSize"));
+				cpu.setMhz(rs.getInt("cpu_mhz"));
+				cpu.setModel(rs.getString("cpu_model"));
+				cpu.setTotalCores(rs.getInt("cpu_totalCores"));
+				cpu.setVendor(rs.getString("cpu_vendor"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -142,8 +144,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定CPU ID的CPU利用率列表
 	 */
-	public List<CPUPerc> getPercsById(long id) {
-		String sql = "select * from dcpuprec where cpuid=?";
+	public List<CPUPerc> getPercsByNdevId(long id) {
+		String sql = "select * from t_cpu_prec where prec_cpuid=?";
 		List<CPUPerc> list = new ArrayList<CPUPerc>(20);
 		try {
 			super.doStart();
@@ -151,14 +153,14 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				CPUPerc cp = new CPUPerc(rs.getLong("id"));
-				cp.setIdle(rs.getDouble("idle"));
-				cp.setNice(rs.getDouble("nice"));
-				cp.setSys(rs.getDouble("sys"));
-				cp.setUser(rs.getDouble("user"));
-				cp.setWait(rs.getDouble("wait"));
-				cp.setCombined(rs.getDouble("combined"));
-				cp.setTimestamp(rs.getLong("timestamp"));
+				CPUPerc cp = new CPUPerc(rs.getLong("prec_timestamp"));
+				cp.setIdle(rs.getDouble("prec_idle"));
+				cp.setNice(rs.getDouble("prec_nice"));
+				cp.setSys(rs.getDouble("prec_sys"));
+				cp.setUser(rs.getDouble("prec_user"));
+				cp.setWait(rs.getDouble("prec_wait"));
+				cp.setCombined(rs.getDouble("prec_combined"));
+				cp.setTimestamp(rs.getLong("prec_timestamp"));
 
 				list.add(cp);
 			}
@@ -171,8 +173,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的CPU利用率
 	 */
-	public CPUPerc getCPUPercById(long id, long timestamp) {
-		String sql = "select * from dcpuprec where cpuid=? and timestamp=?";
+	public CPUPerc getCPUPercByNdevId(long id, long timestamp) {
+		String sql = "select * from dcpuprec where prec_cpuid=? and prec_timestamp=?";
 		CPUPerc cp = null;
 		try {
 			super.doStart();
@@ -181,14 +183,14 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(2, timestamp);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				cp = new CPUPerc(rs.getLong("timestamp"));
-				cp.setIdle(rs.getDouble("idle"));
-				cp.setNice(rs.getDouble("nice"));
-				cp.setSys(rs.getDouble("sys"));
-				cp.setUser(rs.getDouble("user"));
-				cp.setWait(rs.getDouble("wait"));
-				cp.setCombined(rs.getDouble("combined"));
-				cp.setTimestamp(rs.getLong("timestamp"));
+				cp = new CPUPerc(rs.getLong("prec_timestamp"));
+				cp.setIdle(rs.getDouble("prec_idle"));
+				cp.setNice(rs.getDouble("prec_nice"));
+				cp.setSys(rs.getDouble("prec_sys"));
+				cp.setUser(rs.getDouble("prec_user"));
+				cp.setWait(rs.getDouble("prec_wait"));
+				cp.setCombined(rs.getDouble("prec_combined"));
+				cp.setTimestamp(rs.getLong("prec_timestamp"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -199,8 +201,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的内存
 	 */
-	public Memory getMemoryById(long id) {
-		String sql = "select * from dmemory where id=?";
+	public Memory getMemoryByNdevId(long id) {
+		String sql = "select * from t_memory where mem_neteqptid=?";
 		Memory memory = null;
 		try {
 			super.doStart();
@@ -208,8 +210,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				memory = new Memory(rs.getLong("id"));
-				memory.setPhysicsTotal(rs.getInt("physicsTotal"));
+				memory = new Memory(rs.getLong("mem_Id"));
+				memory.setPhysicsTotal(rs.getInt("mem_physicsTotal"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -220,8 +222,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定内存Id 的内存监测信息列表
 	 */
-	public List<MemoryDetection> getMemoryDetecsById(long id) {
-		String sql = "select * from dmemoryusage where memid=?";
+	public List<MemoryDetection> getMemoryDetecsByNdevId(long id) {
+		String sql = "select * from t_mem_usage where memusage_memid=?";
 		List<MemoryDetection> list = new ArrayList<MemoryDetection>(20);
 		try {
 			super.doStart();
@@ -229,15 +231,16 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				MemoryDetection memDetc = new MemoryDetection(rs.getLong("id"));
-				memDetc.setActualFree(rs.getLong("actualFree"));
-				memDetc.setActualUsed(rs.getLong("actualUsed"));
-				memDetc.setFree(rs.getLong("free"));
-				memDetc.setFreePercent(rs.getDouble("freePercent"));
-				memDetc.setRam(rs.getLong("ram"));
-				memDetc.setUsed(rs.getLong("used"));
-				memDetc.setUsedPercent(rs.getDouble("usedPercent"));
-				memDetc.setTimestamp(rs.getLong("timestamp"));
+				MemoryDetection memDetc = new MemoryDetection(
+						rs.getLong("memusage_timestamp"));
+				memDetc.setActualFree(rs.getLong("memusage_actualFree"));
+				memDetc.setActualUsed(rs.getLong("memusage_actualUsed"));
+				memDetc.setFree(rs.getLong("memusage_free"));
+				memDetc.setFreePercent(rs.getDouble("memusage_freePercent"));
+				memDetc.setRam(rs.getLong("memusage_ram"));
+				memDetc.setUsed(rs.getLong("memusage_used"));
+				memDetc.setUsedPercent(rs.getDouble("memusage_usedPercent"));
+				memDetc.setTimestamp(rs.getLong("memusage_timestamp"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -248,8 +251,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的内存监测信息
 	 */
-	public MemoryDetection getMemoryDetecById(long id, long timestamp) {
-		String sql = "select * from dmemoryusage where memid=? and timestamp=?";
+	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp) {
+		String sql = "select * from dmemoryusage where memusage_memid=? and memusage_timestamp=?";
 		MemoryDetection memDetec = null;
 		try {
 			super.doStart();
@@ -258,15 +261,15 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(2, timestamp);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				memDetec = new MemoryDetection(rs.getLong("timestamp"));
-				memDetec.setActualFree(rs.getLong("actualFree"));
-				memDetec.setActualUsed(rs.getLong("actualUsed"));
+				memDetec = new MemoryDetection(rs.getLong("memusage_timestamp"));
+				memDetec.setActualFree(rs.getLong("memusage_actualFree"));
+				memDetec.setActualUsed(rs.getLong("memusage_actualUsed"));
 				memDetec.setFree(rs.getLong("free"));
-				memDetec.setFreePercent(rs.getDouble("freePercent"));
-				memDetec.setRam(rs.getLong("ram"));
-				memDetec.setUsed(rs.getLong("used"));
-				memDetec.setUsedPercent(rs.getDouble("usedPercent"));
-				memDetec.setTimestamp(rs.getLong("timestamp"));
+				memDetec.setFreePercent(rs.getDouble("memusage_freePercent"));
+				memDetec.setRam(rs.getLong("memusage_ram"));
+				memDetec.setUsed(rs.getLong("memusage_used"));
+				memDetec.setUsedPercent(rs.getDouble("memusage_usedPercent"));
+				memDetec.setTimestamp(rs.getLong("memusage_timestamp"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -277,8 +280,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网络接口
 	 */
-	public List<NetInterface> getNetInterfacesById(long id) {
-		String sql = "select * from dnetinterface where id=?";
+	public List<NetInterface> getNetInterfacesByNdevId(long id) {
+		String sql = "select * from t_netinterface where netif_neteqptid=?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
 			super.doStart();
@@ -286,18 +289,18 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				NetInterface nif = new NetInterface(rs.getLong("id"));
-				nif.setAddress(rs.getString("address"));
-				nif.setBroadcast(rs.getString("broadcast"));
-				nif.setDescription(rs.getString("description"));
-				nif.setDestination(rs.getString("destination"));
-				nif.setGateway(rs.getString("gateway"));
-				nif.setMac(rs.getString("mac"));
-				nif.setMetric(rs.getLong("metric"));
-				nif.setMtu(rs.getLong("mtu"));
-				nif.setName(rs.getString("name"));
-				nif.setNetmask(rs.getString("netmask"));
-				nif.setType(rs.getString("type"));
+				NetInterface nif = new NetInterface(rs.getLong("netif_id"));
+				nif.setAddress(rs.getString("netif_address"));
+				nif.setBroadcast(rs.getString("netif_broadcast"));
+				nif.setDescription(rs.getString("netif_description"));
+				nif.setDestination(rs.getString("netif_destination"));
+				nif.setGateway(rs.getString("netif_gateway"));
+				nif.setMac(rs.getString("netif_mac"));
+				nif.setMetric(rs.getLong("netif_metric"));
+				nif.setMtu(rs.getLong("netif_mtu"));
+				nif.setName(rs.getString("netif_name"));
+				nif.setNetmask(rs.getString("netif_netmask"));
+				nif.setType(rs.getString("netif_type"));
 
 				list.add(nif);
 			}
@@ -311,8 +314,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网路接口
 	 */
-	public NetInterface getNetInterfaceById(long id) {
-		String sql = "select * from dnetinterface where id=?";
+	public NetInterface getNetInterfaceByNdevId(long id) {
+		String sql = "select * from t_netinterface where netif_id=?";
 		NetInterface nif = null;
 		try {
 			super.doStart();
@@ -320,18 +323,18 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				nif = new NetInterface(rs.getLong("id"));
-				nif.setAddress(rs.getString("address"));
-				nif.setBroadcast(rs.getString("broadcast"));
-				nif.setDescription(rs.getString("description"));
-				nif.setDestination(rs.getString("destination"));
-				nif.setGateway(rs.getString("gateway"));
-				nif.setMac(rs.getString("mac"));
-				nif.setMetric(rs.getLong("metric"));
-				nif.setMtu(rs.getLong("mtu"));
-				nif.setName(rs.getString("name"));
-				nif.setNetmask(rs.getString("netmask"));
-				nif.setType(rs.getString("type"));
+				nif = new NetInterface(rs.getLong("netif_id"));
+				nif.setAddress(rs.getString("netif_address"));
+				nif.setBroadcast(rs.getString("netif_broadcast"));
+				nif.setDescription(rs.getString("netif_description"));
+				nif.setDestination(rs.getString("netif_destination"));
+				nif.setGateway(rs.getString("netif_gateway"));
+				nif.setMac(rs.getString("netif_mac"));
+				nif.setMetric(rs.getLong("netif_metric"));
+				nif.setMtu(rs.getLong("netif_mtu"));
+				nif.setName(rs.getString("netif_name"));
+				nif.setNetmask(rs.getString("netif_netmask"));
+				nif.setType(rs.getString("netif_type"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -343,8 +346,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网络接状态信息
 	 */
-	public List<NetInterfaceStat> getInterfaceStatsById(long id) {
-		String sql = "select * from dnistatus where niid=?";
+	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id) {
+		String sql = "select * from t_netif_status where netifstat_netifid=?";
 		List<NetInterfaceStat> list = new ArrayList<NetInterfaceStat>(20);
 		try {
 			super.doStart();
@@ -352,25 +355,26 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				NetInterfaceStat nis = new NetInterfaceStat(rs.getLong("id"));
-				nis.setRxBytes(rs.getLong("rxBytes"));
-				nis.setRxDropped(rs.getLong("rxDropped"));
-				nis.setRxErrors(rs.getLong("rxErrors"));
-				nis.setRxFrame(rs.getLong("rxFrame"));
-				nis.setRxOverruns(rs.getLong("rxOverruns"));
-				nis.setRxPackets(rs.getLong("rxPackets"));
-				nis.setSpeed(rs.getLong("speed"));
-				nis.setStatus(rs.getString("status"));
-				nis.setThroughput(rs.getFloat("throughput"));
-				nis.setTimestamp(rs.getLong("timestamp"));
-				nis.setTraffic(rs.getFloat("traffic"));
-				nis.setTxBytes(rs.getLong("txBytes"));
-				nis.setTxCarrier(rs.getLong("txCarrier"));
-				nis.setTxCollisions(rs.getLong("txCollisions"));
-				nis.setTxDropped(rs.getLong("txDropped"));
-				nis.setTxErrors(rs.getLong("txErrors"));
-				nis.setTxOverruns(rs.getLong("txOverruns"));
-				nis.setTxPackets(rs.getLong("txPackets"));
+				NetInterfaceStat nis = new NetInterfaceStat(
+						rs.getLong("netifstat_timestamp"));
+				nis.setRxBytes(rs.getLong("netifstat_rxBytes"));
+				nis.setRxDropped(rs.getLong("netifstat_rxDropped"));
+				nis.setRxErrors(rs.getLong("netifstat_rxErrors"));
+				nis.setRxFrame(rs.getLong("netifstat_rxFrame"));
+				nis.setRxOverruns(rs.getLong("netifstat_rxOverruns"));
+				nis.setRxPackets(rs.getLong("netifstat_rxPackets"));
+				nis.setSpeed(rs.getLong("netifstat_speed"));
+				nis.setStatus(rs.getString("netifstat_status"));
+				nis.setThroughput(rs.getFloat("netifstat_throughput"));
+				nis.setTimestamp(rs.getLong("netifstat_timestamp"));
+				nis.setTraffic(rs.getFloat("netifstat_traffic"));
+				nis.setTxBytes(rs.getLong("netifstat_txBytes"));
+				nis.setTxCarrier(rs.getLong("netifstat_txCarrier"));
+				nis.setTxCollisions(rs.getLong("netifstat_txCollisions"));
+				nis.setTxDropped(rs.getLong("netifstat_txDropped"));
+				nis.setTxErrors(rs.getLong("netifstat_txErrors"));
+				nis.setTxOverruns(rs.getLong("netifstat_txOverruns"));
+				nis.setTxPackets(rs.getLong("netifstat_txPackets"));
 
 				list.add(nis);
 			}
@@ -383,8 +387,8 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的网络接口状态信息
 	 */
-	public NetInterfaceStat getInterfaceStatById(long id, long timestamp) {
-		String sql = "select * from dnistatus where niid=? and timestamp=?";
+	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp) {
+		String sql = "select * from t_netif_status where netifstat_netifid=? and netifstat_timestamp=?";
 		NetInterfaceStat nis = null;
 		try {
 			super.doStart();
@@ -393,25 +397,25 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 			pstmt.setLong(2, timestamp);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				nis = new NetInterfaceStat(rs.getLong("timestamp"));
-				nis.setRxBytes(rs.getLong("rxBytes"));
-				nis.setRxDropped(rs.getLong("rxDropped"));
-				nis.setRxErrors(rs.getLong("rxErrors"));
-				nis.setRxFrame(rs.getLong("rxFrame"));
-				nis.setRxOverruns(rs.getLong("rxOverruns"));
-				nis.setRxPackets(rs.getLong("rxPackets"));
-				nis.setSpeed(rs.getLong("speed"));
-				nis.setStatus(rs.getString("status"));
-				nis.setThroughput(rs.getFloat("throughput"));
-				nis.setTimestamp(rs.getLong("timestamp"));
-				nis.setTraffic(rs.getFloat("traffic"));
-				nis.setTxBytes(rs.getLong("txBytes"));
-				nis.setTxCarrier(rs.getLong("txCarrier"));
-				nis.setTxCollisions(rs.getLong("txCollisions"));
-				nis.setTxDropped(rs.getLong("txDropped"));
-				nis.setTxErrors(rs.getLong("txErrors"));
-				nis.setTxOverruns(rs.getLong("txOverruns"));
-				nis.setTxPackets(rs.getLong("txPackets"));
+				nis = new NetInterfaceStat(rs.getLong("netifstat_timestamp"));
+				nis.setRxBytes(rs.getLong("netifstat_rxBytes"));
+				nis.setRxDropped(rs.getLong("netifstat_rxDropped"));
+				nis.setRxErrors(rs.getLong("netifstat_rxErrors"));
+				nis.setRxFrame(rs.getLong("netifstat_rxFrame"));
+				nis.setRxOverruns(rs.getLong("netifstat_rxOverruns"));
+				nis.setRxPackets(rs.getLong("netifstat_rxPackets"));
+				nis.setSpeed(rs.getLong("netifstat_speed"));
+				nis.setStatus(rs.getString("netifstat_status"));
+				nis.setThroughput(rs.getFloat("netifstat_throughput"));
+				nis.setTimestamp(rs.getLong("netifstat_timestamp"));
+				nis.setTraffic(rs.getFloat("netifstat_traffic"));
+				nis.setTxBytes(rs.getLong("netifstat_txBytes"));
+				nis.setTxCarrier(rs.getLong("netifstat_txCarrier"));
+				nis.setTxCollisions(rs.getLong("netifstat_txCollisions"));
+				nis.setTxDropped(rs.getLong("netifstat_txDropped"));
+				nis.setTxErrors(rs.getLong("netifstat_txErrors"));
+				nis.setTxOverruns(rs.getLong("netifstat_txOverruns"));
+				nis.setTxPackets(rs.getLong("netifstat_txPackets"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();

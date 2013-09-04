@@ -3,6 +3,7 @@ package smart.core;
 import java.util.ArrayList;
 import java.util.List;
 
+import smart.bean.BeanFactory;
 import smart.bean.Host;
 import smart.entity.Entity;
 
