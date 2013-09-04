@@ -6,8 +6,6 @@ import java.util.concurrent.TimeoutException;
 
 import net.cellcloud.common.Logger;
 import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.TalkService;
-import net.cellcloud.talk.TalkTracker;
 import net.cellcloud.talk.dialect.ActionDialect;
 import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
@@ -23,7 +21,6 @@ import org.json.JSONObject;
 
 import smart.api.API;
 import smart.api.RequestContentCapsule;
-import smart.bean.User;
 import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
 
@@ -63,16 +60,6 @@ public final class LoginListener extends AbstractListener {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-
-		// 获取客户端的 IP 地址
-		TalkTracker talkTracker = TalkService.getInstance().findTracker(
-				this.getCellet(), this.getSourceTag());
-		String ip = talkTracker.getEndpoint().getCoordinate().getAddress()
-				.getAddress().getHostAddress();
-
-		// 获取客户端的端口port
-		int port = talkTracker.getEndpoint().getCoordinate().getAddress()
-				.getPort();
 
 		Properties params = new Properties();
 
@@ -116,13 +103,15 @@ public final class LoginListener extends AbstractListener {
 						token = jo.getJSONObject("loginInfo")
 								.getString("token");
 						if (!UserManager.getInstance().isExist(username,
-								password, ip)) {
+								password)) {
 
 							// 将登录成功后的返回对象保存到用户管理器
-							User user = UserManager.getInstance().signIn(id,
-									username, password, token, ip, port);
-							UserManager.getInstance().userCreated(user);
+							UserManager.getInstance().signIn(id, username,
+									password, token);
 
+						} else {
+							// 更新该用户的最近登录时间
+							UserManager.getInstance().update(username);
 						}
 					}
 					jo.remove("loginInfo");

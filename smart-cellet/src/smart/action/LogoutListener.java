@@ -6,8 +6,6 @@ import java.util.concurrent.TimeoutException;
 
 import net.cellcloud.common.Logger;
 import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.TalkService;
-import net.cellcloud.talk.TalkTracker;
 import net.cellcloud.talk.dialect.ActionDialect;
 import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
@@ -20,7 +18,6 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.core.UserManager;
@@ -53,15 +50,9 @@ public final class LogoutListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
-		// 获取客户端的 IP 地址
-		TalkTracker talkTracker = TalkService.getInstance().findTracker(
-				this.getCellet(), this.getSourceTag());
-		String ip = talkTracker.getEndpoint().getCoordinate().getAddress()
-				.getAddress().getHostAddress();
-
 		Properties params = new Properties();
 		if (token != null
-				&& UserManager.getInstance().getName(token, ip) != null) {
+				&& UserManager.getInstance().getUsername(token) != null) {
 
 			// 组装URL
 			StringBuilder url = new StringBuilder(this.getHost())
@@ -102,7 +93,6 @@ public final class LogoutListener extends AbstractListener {
 					String content = new String(bytes, Charset.forName("UTF-8"));
 					try {
 						jo = new JSONObject(content);
-						UserManager.getInstance().userDestoryed(token, ip);
 
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
