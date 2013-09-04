@@ -1,7 +1,5 @@
 package smart.dao;
 
-import java.util.List;
-
 import smart.bean.User;
 
 /**
@@ -10,18 +8,15 @@ import smart.bean.User;
 public interface UserDao {
 
 	/**
-	 * 获取所有在线用户
-	 * @return
-	 */
-	public List<User> getUSers();
-	
-	/**
-	 * 获取用户名
+	 * 保存用户到数据库
+	 * @param id
+	 * @param name
+	 * @param passwordMD5
 	 * @param token
-	 * @param ip
-	 * @return
 	 */
-	public String getName(String token, String ip);
+	public void saveUser(long id, String name, String passwordMD5, String token);
+	
+	public void updateUser(String name);
 	
 	/**
 	 * 获取用户名
@@ -34,16 +29,14 @@ public interface UserDao {
 	 * 获取指定用户
 	 * @param username
 	 * @param password
-	 * @param ip
 	 * @return
 	 */
-	public User getUser(String username, String password, String ip);
+	public User getUser(String username, String password);
 	
 	/**
 	 * 获取指定用户
 	 * @param token
-	 * @param ip
 	 * @return
 	 */
-	public User getUser(String token, String ip);
+	public User getUser(String token);
 }

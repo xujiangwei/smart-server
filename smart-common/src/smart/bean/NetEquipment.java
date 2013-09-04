@@ -5,7 +5,7 @@ import smart.entity.AbstractEntity;
 /**
  * 网络设备
  */
-public class NetDevice extends AbstractEntity {
+public class NetEquipment extends AbstractEntity {
 
 	private static final long serialVersionUID = -6703502500894715521L;
 
@@ -14,7 +14,7 @@ public class NetDevice extends AbstractEntity {
 	// 设备类型
 	private String type;
 	
-	public NetDevice(long id) {
+	public NetEquipment(long id) {
 		super(id);
 	}
 

@@ -15,8 +15,7 @@ public class User extends AbstractEntity {
 	private String name;
 	private String pwd;
 	private String token;
-	private String ip;
-	private int port;
+	private long lastLogin;
 	
 	public User(long id) {
 		super(id);
@@ -46,19 +45,12 @@ public class User extends AbstractEntity {
 		this.token = token;
 	}
 
-	public String getIp() {
-		return ip;
+	public long getLastLogin() {
+		return lastLogin;
 	}
 
-	public void setIp(String ip) {
-		this.ip = ip;
+	public void setLastLogin(long lastLogin) {
+		this.lastLogin = lastLogin;
 	}
 
-	public int getPort() {
-		return port;
-	}
-
-	public void setPort(int port) {
-		this.port = port;
-	}
 }
