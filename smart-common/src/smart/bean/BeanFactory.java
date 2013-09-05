@@ -7,22 +7,10 @@ import java.util.concurrent.TimeUnit;
 
 import net.cellcloud.util.SlidingWindowExecutor;
 import net.cellcloud.util.SlidingWindowTask;
-import smart.bean.CPU;
-import smart.bean.CPUPerc;
-import smart.bean.FileSystem;
-import smart.bean.FileSystemUsage;
-import smart.bean.Host;
-import smart.bean.Memory;
-import smart.bean.MemoryDetection;
-import smart.bean.NetDevice;
-import smart.bean.NetInterface;
-import smart.bean.NetInterfaceStat;
-import smart.bean.Progress;
-import smart.bean.ProgressDetection;
 import smart.dao.HostDao;
-import smart.dao.NetDeviceDao;
+import smart.dao.NetEquipmentDao;
 import smart.dao.impl.HostDaoImpl;
-import smart.dao.impl.NetDeviceDaoImpl;
+import smart.dao.impl.NetEquipmentDaoImpl;
 import smart.entity.Entity;
 
 /**
@@ -36,13 +24,13 @@ public final class BeanFactory {
 	private SlidingWindowExecutor swe = SlidingWindowExecutor
 			.newSlidingWindowThreadPool(20);
 	private List<Host> list = new ArrayList<Host>(20);
-	private List<NetDevice> list1 = new ArrayList<NetDevice>(20);
+	private List<NetEquipment> list1 = new ArrayList<NetEquipment>(20);
 	private HostDao hostDao;
-	private NetDeviceDao netDeviceDao;
+	private NetEquipmentDao netEqptDao;
 
 	private BeanFactory() {
 		this.hostDao = new HostDaoImpl();
-		this.netDeviceDao = new NetDeviceDaoImpl();
+		this.netEqptDao = new NetEquipmentDaoImpl();
 	}
 
 	public static BeanFactory getInstance() {
@@ -203,6 +191,18 @@ public final class BeanFactory {
 			Thread.currentThread().interrupt();
 		}
 
+		if (list != null && list.size() > 0) {
+			for (int i = 0; i < list.size(); i++) {
+				System.out.println("hname__" + list.get(i).getName());
+				Map<Long, Entity> map = list.get(i).getChildren();
+				System.out.println("**_" + map.size());
+				for (long key : map.keySet()) {
+					System.out.println("key= " + key + " and value= "
+							+ map.get(key));
+				}
+
+			}
+		}
 		return list;
 
 	}
@@ -428,17 +428,17 @@ public final class BeanFactory {
 	 * 
 	 * @return
 	 */
-	public List<NetDevice> getNetDevicesList() {
+	public List<NetEquipment> getNetEquipmentsList() {
 		swe.execute(new SlidingWindowTask(swe) {
 			public void run() {
-				List<NetDevice> sList = netDeviceDao.getNetDevicesList();
+				List<NetEquipment> sList = netEqptDao.getNetEqptsList();
 				if (sList != null && sList.size() > 0) {
 					for (int i = 0; i < sList.size(); i++) {
-						NetDevice nd = new NetDevice(sList.get(i).getId());
+						NetEquipment netEqpt = new NetEquipment(sList.get(i).getId());
 
-						Memory mem = getMemoryByNdevId(sList.get(i).getId());
+						Memory mem = getNetEqptMemoryById(sList.get(i).getId());
 						if (mem != null) {
-							List<MemoryDetection> mdList = getMemoryDetecsByNdevId(mem
+							List<MemoryDetection> mdList = getNetEqptMemoryDetecsById(mem
 									.getId());
 							if (mdList != null && mdList.size() > 0) {
 								for (int j = 0; j < mdList.size(); j++) {
@@ -451,14 +451,14 @@ public final class BeanFactory {
 
 						}
 						if (mem != null) {
-							nd.addChild(mem);
+							netEqpt.addChild(mem);
 						}
-						List<CPU> cList = getCPUsByNdevId(sList.get(i).getId());
+						List<CPU> cList = getNetEqptCPUsById(sList.get(i).getId());
 						if (cList != null && cList.size() > 0) {
 							for (int j = 0; j < cList.size(); j++) {
 								CPU cpu = new CPU(cList.get(j).getId());
 
-								List<CPUPerc> cuList = getPercsByNdevId(cpu
+								List<CPUPerc> cuList = getNetEqptPercsById(cpu
 										.getId());
 								if (cuList != null && cuList.size() > 0) {
 									for (int k = 0; k < cuList.size(); k++) {
@@ -468,19 +468,19 @@ public final class BeanFactory {
 									}
 								}
 								if (cpu != null) {
-									nd.addChild(cpu);
+									netEqpt.addChild(cpu);
 								}
 							}
 						}
 
-						List<NetInterface> nList = getNetInterfacesByNdevId(sList
+						List<NetInterface> nList = getNetEqptNetInterfacesById(sList
 								.get(i).getId());
 						if (nList != null && nList.size() > 0) {
 							for (int j = 0; j < nList.size(); j++) {
 								NetInterface ni = new NetInterface(nList.get(j)
 										.getId());
 
-								List<NetInterfaceStat> niList = getInterfaceStatsByNdevId(ni
+								List<NetInterfaceStat> niList = getNetEqptInterfaceStatsById(ni
 										.getId());
 								if (niList != null && niList.size() > 0) {
 									for (int k = 0; k < niList.size(); k++) {
@@ -490,12 +490,12 @@ public final class BeanFactory {
 									}
 								}
 								if (ni != null) {
-									nd.addChild(ni);
+									netEqpt.addChild(ni);
 								}
 							}
 
 						}
-						list1.add(nd);
+						list1.add(netEqpt);
 					}
 				}
 
@@ -531,9 +531,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public List<CPU> getCPUsByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getCPUsByNdevId(id);
+	public List<CPU> getNetEqptCPUsById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptCPUsById(id);
 		}
 	}
 
@@ -543,9 +543,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public CPU getCPUByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getCPUByNdevId(id);
+	public CPU getNetEqptCPUById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptCPUById(id);
 		}
 	}
 
@@ -555,9 +555,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public List<CPUPerc> getPercsByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getPercsByNdevId(id);
+	public List<CPUPerc> getNetEqptPercsById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptPercsById(id);
 		}
 	}
 
@@ -567,9 +567,9 @@ public final class BeanFactory {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercByNdevId(long id, long timestamp) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getCPUPercByNdevId(id, timestamp);
+	public CPUPerc getNetEqptCPUPercById(long id, long timestamp) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptCPUPercById(id, timestamp);
 		}
 	}
 
@@ -579,9 +579,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public Memory getMemoryByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getMemoryByNdevId(id);
+	public Memory getNetEqptMemoryById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptMemoryById(id);
 		}
 	}
 
@@ -591,9 +591,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public List<MemoryDetection> getMemoryDetecsByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getMemoryDetecsByNdevId(id);
+	public List<MemoryDetection> getNetEqptMemoryDetecsById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptMemoryDetecsById(id);
 		}
 	}
 
@@ -604,8 +604,8 @@ public final class BeanFactory {
 	 * @return
 	 */
 	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getMemoryDetecByNdevId(id, timestamp);
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptMemoryDetecById(id, timestamp);
 		}
 	}
 
@@ -616,9 +616,9 @@ public final class BeanFactory {
 	 * @return
 	 */
 
-	public List<NetInterface> getNetInterfacesByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getNetInterfacesByNdevId(id);
+	public List<NetInterface> getNetEqptNetInterfacesById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptNetInterfacesById(id);
 		}
 	}
 
@@ -628,9 +628,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public NetInterface getNetInterfaceByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getNetInterfaceByNdevId(id);
+	public NetInterface getNetEqptNetInterfaceById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptNetInterfaceById(id);
 		}
 	}
 
@@ -640,9 +640,9 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getInterfaceStatsByNdevId(id);
+	public List<NetInterfaceStat> getNetEqptInterfaceStatsById(long id) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptInterfaceStatsById(id);
 		}
 	}
 
@@ -652,30 +652,30 @@ public final class BeanFactory {
 	 * @param id
 	 * @return
 	 */
-	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp) {
-		synchronized (this.netDeviceDao) {
-			return this.netDeviceDao.getInterfaceStatByNdevId(id, timestamp);
+	public NetInterfaceStat getNetEqptInterfaceStatById(long id, long timestamp) {
+		synchronized (this.netEqptDao) {
+			return this.netEqptDao.getNetEqptInterfaceStatById(id, timestamp);
 		}
 	}
 
 	public static void main(String[] args) {
 		BeanFactory be = BeanFactory.getInstance();
-		// be.getHostList();
+		 be.getHostList();
 
 		// List<Host> list = be.getHostList();
-		List<NetDevice> list = be.getNetDevicesList();
-		if (list != null && list.size() > 0) {
-			for (int i = 0; i < list.size(); i++) {
-				System.out.println("hname__" + list.get(i).getName());
-				Map<Long, Entity> map = list.get(i).getChildren();
-				System.out.println("**_" + map.size());
-				for (long key : map.keySet()) {
-					System.out.println("key= " + key + " and value= "
-							+ map.get(key));
-				}
-
-			}
-		}
+//		List<NetDevice> list = be.getNetDevicesList();
+//		if (list != null && list.size() > 0) {
+//			for (int i = 0; i < list.size(); i++) {
+//				System.out.println("hname__" + list.get(i).getName());
+//				Map<Long, Entity> map = list.get(i).getChildren();
+//				System.out.println("**_" + map.size());
+//				for (long key : map.keySet()) {
+//					System.out.println("key= " + key + " and value= "
+//							+ map.get(key));
+//				}
+//
+//			}
+//		}
 
 	}
 }
