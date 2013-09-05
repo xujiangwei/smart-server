@@ -6,21 +6,22 @@ import smart.bean.CPU;
 import smart.bean.CPUPerc;
 import smart.bean.Memory;
 import smart.bean.MemoryDetection;
-import smart.bean.NetDevice;
+import smart.bean.NetEquipment;
+
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
 
 /**
  * 交换机DAO
  */
-public interface NetDeviceDao {
+public interface NetEquipmentDao {
 
 	/**
 	 * 返回交换机的ID列表
 	 * 
 	 * @return
 	 */
-	public List<Long> getNetDeviceIdList();
+	public List<Long> getNetEqptIdList();
 
 	/**
 	 * 返回指定ID的交换机
@@ -28,14 +29,14 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public NetDevice getNetDeviceById(long id);
+	public NetEquipment getNetEqptById(long id);
 
 	/**
 	 * 返回交换机的列表
 	 * 
 	 * @return
 	 */
-	public List<NetDevice> getNetDevicesList();
+	public List<NetEquipment> getNetEqptsList();
 
 	/**
 	 * 返回指定ID的CPU列表
@@ -43,7 +44,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<CPU> getCPUsByNdevId(long id);
+	public List<CPU> getNetEqptCPUsById(long id);
 
 	/**
 	 * 返回指定ID的CPU
@@ -51,7 +52,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public CPU getCPUByNdevId(long id);
+	public CPU getNetEqptCPUById(long id);
 
 	/**
 	 * 返回指定CPU id的CPU利用率列表
@@ -59,7 +60,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<CPUPerc> getPercsByNdevId(long id);
+	public List<CPUPerc> getNetEqptPercsById(long id);
 
 	/**
 	 * 返回指定时间戳的CPU利用率
@@ -67,7 +68,7 @@ public interface NetDeviceDao {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercByNdevId(long id, long timestamp);
+	public CPUPerc getNetEqptCPUPercById(long id, long timestamp);
 
 	/**
 	 * 返回指定ID的内存
@@ -75,7 +76,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public Memory getMemoryByNdevId(long id);
+	public Memory getNetEqptMemoryById(long id);
 
 	/**
 	 * 返回指定内存Id的监测信息列表
@@ -83,7 +84,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<MemoryDetection> getMemoryDetecsByNdevId(long id);
+	public List<MemoryDetection> getNetEqptMemoryDetecsById(long id);
 
 	/**
 	 * 返回指定时间戳的内存监测信息
@@ -91,7 +92,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp);
+	public MemoryDetection getNetEqptMemoryDetecById(long id, long timestamp);
 
 	/**
 	 * 返回指定ID的网络接口列表
@@ -100,7 +101,7 @@ public interface NetDeviceDao {
 	 * @return
 	 */
 
-	public List<NetInterface> getNetInterfacesByNdevId(long id);
+	public List<NetInterface> getNetEqptNetInterfacesById(long id);
 
 	/**
 	 * 返回指定ID的网络接口
@@ -108,7 +109,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public NetInterface getNetInterfaceByNdevId(long id);
+	public NetInterface getNetEqptNetInterfaceById(long id);
 
 	/**
 	 * 返回指定接口 ID的网络接口采集信息列表
@@ -116,7 +117,7 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id);
+	public List<NetInterfaceStat> getNetEqptInterfaceStatsById(long id);
 
 	/**
 	 * 返回指定时间戳的网络接口监测信息
@@ -124,6 +125,6 @@ public interface NetDeviceDao {
 	 * @param id
 	 * @return
 	 */
-	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp);
+	public NetInterfaceStat getNetEqptInterfaceStatById(long id, long timestamp);
 
 }

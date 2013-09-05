@@ -9,28 +9,28 @@ import smart.bean.CPU;
 import smart.bean.CPUPerc;
 import smart.bean.Memory;
 import smart.bean.MemoryDetection;
+import smart.bean.NetEquipment;
 import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
-import smart.bean.NetDevice;
 import smart.dao.AbstraceDao;
-import smart.dao.NetDeviceDao;
+import smart.dao.NetEquipmentDao;
 
 /**
  * 交换机DAO实现
  */
-public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
+public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao {
 
 	private PreparedStatement pstmt;
 	private ResultSet rs;
 
-	public NetDeviceDaoImpl() {
+	public NetEquipmentDaoImpl() {
 		super();
 	}
 
 	/**
 	 * 返回网络设备ID列表
 	 */
-	public List<Long> getNetDeviceIdList() {
+	public List<Long> getNetEqptIdList() {
 		String sql = "select neteqpt_id from t_netequipment";
 		List<Long> list = new ArrayList<Long>(20);
 		try {
@@ -49,39 +49,40 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 返回指定ID的网络设备
 	 */
-	public NetDevice getNetDeviceById(long id) {
+	public NetEquipment getNetEqptById(long id) {
 		String sql = "select * from t_netequipment where neteqpt_id=?";
-		NetDevice sw = null;
+		NetEquipment netEqpt = null;
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				sw = new NetDevice(rs.getLong("neteqpt_id"));
-				sw.setName(rs.getString("neteqpt_name"));
-				sw.setName(rs.getString("neteqpt_type"));
+				netEqpt = new NetEquipment(rs.getLong("neteqpt_id"));
+				netEqpt.setName(rs.getString("neteqpt_name"));
+				netEqpt.setName(rs.getString("neteqpt_type"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
-		return sw;
+		return netEqpt;
 	}
 
 	/**
 	 * 返回网络设备列表
 	 */
-	public List<NetDevice> getNetDevicesList() {
+	public List<NetEquipment> getNetEqptsList() {
 		String sql = "select * from t_netequipment";
-		List<NetDevice> list = new ArrayList<NetDevice>(20);
+		List<NetEquipment> list = new ArrayList<NetEquipment>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				NetDevice sw = new NetDevice(rs.getLong("neteqpt_id"));
-				sw.setName(rs.getString("neteqpt_name"));
-				sw.setName(rs.getString("neteqpt_type"));
-				list.add(sw);
+				NetEquipment netEqpt = new NetEquipment(
+						rs.getLong("neteqpt_id"));
+				netEqpt.setName(rs.getString("neteqpt_name"));
+				netEqpt.setName(rs.getString("neteqpt_type"));
+				list.add(netEqpt);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -92,7 +93,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 返回指定Id的CPU列表
 	 */
-	public List<CPU> getCPUsByNdevId(long id) {
+	public List<CPU> getNetEqptCPUsById(long id) {
 		String sql = "select * from t_cpu where cpu__neteqptid=?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
@@ -119,7 +120,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的CPU
 	 */
-	public CPU getCPUByNdevId(long id) {
+	public CPU getNetEqptCPUById(long id) {
 		String sql = "select * from t_cpu where cpu_id=?";
 		CPU cpu = null;
 		try {
@@ -144,7 +145,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定CPU ID的CPU利用率列表
 	 */
-	public List<CPUPerc> getPercsByNdevId(long id) {
+	public List<CPUPerc> getNetEqptPercsById(long id) {
 		String sql = "select * from t_cpu_prec where prec_cpuid=?";
 		List<CPUPerc> list = new ArrayList<CPUPerc>(20);
 		try {
@@ -173,7 +174,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的CPU利用率
 	 */
-	public CPUPerc getCPUPercByNdevId(long id, long timestamp) {
+	public CPUPerc getNetEqptCPUPercById(long id, long timestamp) {
 		String sql = "select * from dcpuprec where prec_cpuid=? and prec_timestamp=?";
 		CPUPerc cp = null;
 		try {
@@ -201,7 +202,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的内存
 	 */
-	public Memory getMemoryByNdevId(long id) {
+	public Memory getNetEqptMemoryById(long id) {
 		String sql = "select * from t_memory where mem_neteqptid=?";
 		Memory memory = null;
 		try {
@@ -222,7 +223,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定内存Id 的内存监测信息列表
 	 */
-	public List<MemoryDetection> getMemoryDetecsByNdevId(long id) {
+	public List<MemoryDetection> getNetEqptMemoryDetecsById(long id) {
 		String sql = "select * from t_mem_usage where memusage_memid=?";
 		List<MemoryDetection> list = new ArrayList<MemoryDetection>(20);
 		try {
@@ -251,7 +252,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的内存监测信息
 	 */
-	public MemoryDetection getMemoryDetecByNdevId(long id, long timestamp) {
+	public MemoryDetection getNetEqptMemoryDetecById(long id, long timestamp) {
 		String sql = "select * from dmemoryusage where memusage_memid=? and memusage_timestamp=?";
 		MemoryDetection memDetec = null;
 		try {
@@ -280,7 +281,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网络接口
 	 */
-	public List<NetInterface> getNetInterfacesByNdevId(long id) {
+	public List<NetInterface> getNetEqptNetInterfacesById(long id) {
 		String sql = "select * from t_netinterface where netif_neteqptid=?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
@@ -314,7 +315,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网路接口
 	 */
-	public NetInterface getNetInterfaceByNdevId(long id) {
+	public NetInterface getNetEqptNetInterfaceById(long id) {
 		String sql = "select * from t_netinterface where netif_id=?";
 		NetInterface nif = null;
 		try {
@@ -346,7 +347,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定ID的网络接状态信息
 	 */
-	public List<NetInterfaceStat> getInterfaceStatsByNdevId(long id) {
+	public List<NetInterfaceStat> getNetEqptInterfaceStatsById(long id) {
 		String sql = "select * from t_netif_status where netifstat_netifid=?";
 		List<NetInterfaceStat> list = new ArrayList<NetInterfaceStat>(20);
 		try {
@@ -387,7 +388,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 	/**
 	 * 获取指定时间戳的网络接口状态信息
 	 */
-	public NetInterfaceStat getInterfaceStatByNdevId(long id, long timestamp) {
+	public NetInterfaceStat getNetEqptInterfaceStatById(long id, long timestamp) {
 		String sql = "select * from t_netif_status where netifstat_netifid=? and netifstat_timestamp=?";
 		NetInterfaceStat nis = null;
 		try {
@@ -422,5 +423,7 @@ public class NetDeviceDaoImpl extends AbstraceDao implements NetDeviceDao {
 		}
 		return nis;
 	}
+
+
 
 }
