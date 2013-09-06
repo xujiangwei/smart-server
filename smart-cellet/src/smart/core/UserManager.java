@@ -1,5 +1,7 @@
 package smart.core;
 
+import java.util.Date;
+
 import smart.bean.User;
 import smart.dao.UserDao;
 import smart.dao.impl.UserDaoImpl;
@@ -26,7 +28,12 @@ public final class UserManager {
 
 	// 签入
 	public void signIn(long id, String name, String passwordMD5, String token) {
-		userDao.saveUser(id, name, passwordMD5, token);
+		User user = new User(id);
+		user.setName(name);
+		user.setPwd(passwordMD5);
+		user.setToken(token);
+		user.setLastLogin((new Date()).getTime());
+		userDao.saveUser(user);
 	}
 
 	// 更新登录信息

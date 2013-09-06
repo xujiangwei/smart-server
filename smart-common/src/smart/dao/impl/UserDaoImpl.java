@@ -23,7 +23,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 
 	@Override
 	public String getName(String token) {
-		String sql = "select name from t_user where token = ?";
+		String sql = "select user_name from t_user where user_token = ?";
 		String name = null;
 		try {
 			super.doStart();
@@ -31,7 +31,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 			pstmt.setString(1, token);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				name = rs.getString("name");
+				name = rs.getString("user_name");
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -41,7 +41,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 
 	@Override
 	public User getUser(String username, String password) {
-		String sql = "select * from t_user where name = ? and password = ?";
+		String sql = "select * from t_user where user_name = ? and user_password = ?";
 		User user = null;
 		try {
 			super.doStart();
@@ -50,11 +50,11 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 			pstmt.setString(2, password);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getLong("id"));
-				user.setName(rs.getString("name"));
-				user.setPwd(rs.getString("password"));
-				user.setToken(rs.getString("token"));
-				user.setLastLogin(rs.getLong("lastLogin"));
+				user = new User(rs.getLong("user_id"));
+				user.setName(rs.getString("user_name"));
+				user.setPwd(rs.getString("user_password"));
+				user.setToken(rs.getString("user_token"));
+				user.setLastLogin(rs.getLong("user_lastLogin"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -64,7 +64,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 
 	@Override
 	public User getUser(String token) {
-		String sql = "select * form t_user where token = ?";
+		String sql = "select * form t_user where user_token = ?";
 		User user = null;
 		try {
 			super.doStart();
@@ -72,11 +72,11 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 			pstmt.setString(1, token);
 			rs = pstmt.executeQuery();
 			if (rs.next()) {
-				user = new User(rs.getLong("id"));
-				user.setName(rs.getString("name"));
-				user.setPwd(rs.getString("password"));
-				user.setToken(rs.getString("token"));
-				user.setLastLogin(rs.getLong("lastLogin"));
+				user = new User(rs.getLong("user_id"));
+				user.setName(rs.getString("user_name"));
+				user.setPwd(rs.getString("user_password"));
+				user.setToken(rs.getString("user_token"));
+				user.setLastLogin(rs.getLong("user_lastLogin"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -85,17 +85,16 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 	}
 
 	@Override
-	public void saveUser(long id, String name, String passwordMD5,
-			String token) {
-		String sql = "insert into t_user (id, name, password, token, lastLogin) values (?,?,?,?,?)";
+	public void saveUser(User user) {
+		String sql = "insert into t_user (user_id, user_name, user_password, user_token, user_lastLogin) values (?,?,?,?,?)";
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
-			pstmt.setLong(1, id);
-			pstmt.setString(2, name);
-			pstmt.setString(3, passwordMD5);
-			pstmt.setString(4, token);
-			pstmt.setLong(5, (new Date()).getTime());
+			pstmt.setLong(1, user.getId());
+			pstmt.setString(2, user.getName());
+			pstmt.setString(3, user.getPwd());
+			pstmt.setString(4, user.getToken());
+			pstmt.setLong(5, user.getLastLogin());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -106,7 +105,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 
 	@Override
 	public void updateUser(String name) {
-		String sql = "update t_user set lastLogin = ? where name = ?";
+		String sql = "update t_user set user_lastLogin = ? where user_name = ?";
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
