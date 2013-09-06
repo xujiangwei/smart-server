@@ -9,13 +9,14 @@ public interface UserDao {
 
 	/**
 	 * 保存用户到数据库
-	 * @param id
-	 * @param name
-	 * @param passwordMD5
-	 * @param token
+	 * @param user
 	 */
-	public void saveUser(long id, String name, String passwordMD5, String token);
+	public void saveUser(User user);
 	
+	/**
+	 * 更新指定用户登录信息
+	 * @param name
+	 */
 	public void updateUser(String name);
 	
 	/**
