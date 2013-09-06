@@ -21,6 +21,7 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.core.AlarmManager;
 import cn.com.dhcc.mast.action.Action;
 
 /**
@@ -96,6 +97,21 @@ public final class AlarmDetailListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
+						if (!"".equals(jo.getJSONObject("baseInfo"))) {
+							String moType = jo.getJSONObject("baseInfo").getString("moType");
+							String location = jo.getJSONObject("baseInfo").getString("location");
+							String detail = jo.getJSONObject("baseInfo").getString("detail");
+							String almStatus = jo.getJSONObject("baseInfo").getString("almStatus");
+							long occurTime = jo.getJSONObject("baseInfo").getLong("occurTime");
+							String trend = jo.getJSONObject("baseInfo").getString("trend");
+							int count = jo.getJSONObject("baseInfo").getInt("count");
+							int upgradeCount = jo.getJSONObject("baseInfo").getInt("upgradeCount");
+							String confirmUser = jo.getJSONObject("baseInfo").getString("confirmUser");
+							long confirmTime = jo.getJSONObject("baseInfo").getLong("confirmTime");
+							String delUser = jo.getJSONObject("baseInfo").getString("delUser");
+							long delTime = jo.getJSONObject("baseInfo").getLong("delTime");
+							AlarmManager.getInstance().signInDetail(almId, moType, location, detail, almStatus, occurTime, trend, count, upgradeCount, confirmUser, confirmTime, delUser, delTime);
+						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 

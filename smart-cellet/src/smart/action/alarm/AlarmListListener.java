@@ -16,12 +16,14 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.core.AlarmManager;
 import cn.com.dhcc.mast.action.Action;
 
 /**
@@ -116,6 +118,22 @@ public final class AlarmListListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
+						if (!"".equals(jo.getJSONObject("alarmListInfo").getJSONArray("almList"))) {
+							JSONArray ja = jo.getJSONObject("alarmListInfo").getJSONArray("almList");
+							for (int i = 0; i < ja.length(); i++) {
+								long moId = ja.getJSONObject(i).getLong("moId");
+								long almId = ja.getJSONObject(i).getLong("almId");
+								String moName = ja.getJSONObject(i).getString("moName");
+								String almCause = ja.getJSONObject(i).getString("almCause");
+								int severity = ja.getJSONObject(i).getInt("severity");
+								String moIp = ja.getJSONObject(i).getString("moIp");
+								long lastTime = ja.getJSONObject(i).getLong("lastTime");
+								boolean b = AlarmManager.getInstance().isExist(almId);
+								if (!b) {
+									AlarmManager.getInstance().signInList(moId, almId, moName, almCause, severity, moIp, lastTime);
+								}
+							}
+						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 
