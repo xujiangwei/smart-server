@@ -46,6 +46,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return list;
@@ -71,6 +77,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return host;
@@ -93,6 +105,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 
@@ -121,6 +139,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 
 		return list;
@@ -147,6 +171,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return cpu;
 	}
@@ -175,6 +205,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return cp;
 	}
@@ -204,6 +240,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -225,6 +267,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return memory;
 	}
@@ -254,6 +302,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -283,6 +337,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return memDetec;
 	}
@@ -312,6 +372,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 
@@ -341,6 +407,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return fs;
 	}
@@ -377,6 +449,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -411,6 +489,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return fsu;
 	}
@@ -444,6 +528,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 
@@ -476,6 +566,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return nif;
 
@@ -518,6 +614,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -557,6 +659,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return nis;
 	}
@@ -582,6 +690,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -605,6 +719,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return pro;
 	}
@@ -635,6 +755,12 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return list;
 	}
@@ -664,8 +790,35 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
 		}
 		return prod;
+	}
+
+	/**
+	 * 销毁指定ID的主机
+	 */
+	public void destoryHostById(long id) {
+		String sql = "delete from t_host where host_id=?";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			try {
+				super.doStop();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
+
 	}
 
 }

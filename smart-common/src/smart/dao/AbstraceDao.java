@@ -29,8 +29,5 @@ public abstract class AbstraceDao extends AbstractLifeCycle {
 	@Override
 	protected void doStop() throws Exception {
 		DButil.close(stmt, rs);
-		DButil.close(conn);
-		
-		
 	}
 }
