@@ -24,37 +24,39 @@ import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
 /**
- * 设备基本信息监听
- *
+ * 改变监控状态监听器
  */
-public final class DeviceBasicListener extends AbstractListener {
+public final class EquipmentMonitorStateListener extends AbstractListener {
 
-	public DeviceBasicListener(Cellet cellet) {
+	public EquipmentMonitorStateListener(Cellet cellet) {
 		super(cellet);
 	}
 
+	@Override
 	public void onAction(ActionDialect action) {
 
-		// 使用同步的方式进行请求
-		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
-		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
-		// 因此，这里可以用同步方式请求 HTTP API 。
+		// 使用同步的方法进行请求
+		// 注意：onAction方法是由Cell Cloud 的action dialect进行回调的
+		// 该方法独享一个线程，可以在这里进行阻塞式调用
+		// 因此，在这里可以用同步的方式请求HTTP API
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.DEVICEBASIC);
+				.append(API.EQUIPMENTMONITORSTATE);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.GET);
+		request.method(HttpMethod.POST);
 		url = null;
 
 		// 获取参数
 		JSONObject json = null;
-		long moId = 0;
+		long eqptId = 0;
+		int isMonitoring = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			moId = json.getLong("moId");
+			eqptId = json.getLong("eqptId");
+			isMonitoring = json.getInt("isMonitoring");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -63,7 +65,8 @@ public final class DeviceBasicListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("moId", moId);
+		capsule.append("eqptId", eqptId);
+		capsule.append("isMonitoring", isMonitoring);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -86,7 +89,8 @@ public final class DeviceBasicListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从Web服务器上返回的数据
+				
+				// 获取从web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
@@ -97,15 +101,16 @@ public final class DeviceBasicListener extends AbstractListener {
 					e.printStackTrace();
 				}
 				
-				// 响应动作，即想客户端发送ActionDialect
-				// 参数tracker 是一次动作的追踪表示。
-				this.response(Action.DEVICEBASIC, params);
+				// 响应动作，即向客户端发送ActionDialect
+				// 参数tracker 是一次动作的追踪标识符
+				this.response(Action.EQUIPMENTMONITORSTATE, params);
 			} else {
-				this.reportHTTPError(Action.DEVICEBASIC);
+				this.reportHTTPError(Action.EQUIPMENTMONITORSTATE);
 			}
 			break;
 		default:
-			Logger.w(DeviceBasicListener.class, "返回响应码" + response.getStatus());
+			Logger.w(EquipmentMonitorStateListener.class,
+					"返回响应码" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -117,10 +122,9 @@ public final class DeviceBasicListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.DEVICEBASIC, params);
+			this.response(Action.EQUIPMENTMONITORSTATE, params);
 			break;
 		}
-
 	}
 
 }

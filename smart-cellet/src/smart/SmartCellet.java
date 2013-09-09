@@ -43,17 +43,16 @@ import smart.action.message.MessageTagDeleteListener;
 import smart.action.message.MessageTagDisplayListener;
 import smart.action.message.MessageTagModifyListener;
 import smart.action.message.MessageTopInfoListener;
-import smart.action.resource.DeleteDeviceListener;
-import smart.action.resource.DeviceAlarmListener;
-import smart.action.resource.DeviceBasicListener;
-import smart.action.resource.DeviceHealthStatusListener;
-import smart.action.resource.DeviceMonitorStateListener;
-import smart.action.resource.DevicePerformanceListener;
-import smart.action.resource.DeviceTopoListener;
+import smart.action.resource.DeleteEquipmentListener;
+import smart.action.resource.EquipmentAlarmListener;
+import smart.action.resource.EquipmentBasicListener;
+import smart.action.resource.EquipmentHealthStatusListener;
+import smart.action.resource.EquipmentMonitorStateListener;
+import smart.action.resource.EquipmentPerformanceListener;
+import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.HostListener;
-import smart.action.resource.RouterListener;
+import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
-import smart.action.resource.SwitchListener;
 import smart.action.time.CurrentTimeListener;
 import cn.com.dhcc.mast.Root;
 import cn.com.dhcc.mast.action.Action;
@@ -63,9 +62,9 @@ import cn.com.dhcc.mast.core.SystemCategory;
 public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
-	
+
 	private String apiHost = "http://127.0.0.1:8080";
-	
+
 	private HttpClient httpClient;
 
 	public SmartCellet() {
@@ -159,40 +158,42 @@ public class SmartCellet extends Cellet {
 		LoginListener login = new LoginListener(this);
 		login.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.LOGIN, login);
-		
+
 		// 获取首页关注
 		AttentionListener attention = new AttentionListener(this);
 		attention.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ATTENTION, attention);
-		
+
 		// 获取关注列表
 		AttentionListListener attentionList = new AttentionListListener(this);
 		attentionList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ATTENTIONLIST, attentionList);
-		
+
 		// 取消关注
-		CancelAttentionListener cancelAttention = new CancelAttentionListener(this);
+		CancelAttentionListener cancelAttention = new CancelAttentionListener(
+				this);
 		cancelAttention.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CANCELATTENTION, cancelAttention);
-		
+
 		AttentionListListener al = new AttentionListListener(this);
 		al.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CANCELATTENTION, al);
-		
+
 		// 删除关注
-		DeleteAttentionListener deleteAttention = new DeleteAttentionListener(this);
+		DeleteAttentionListener deleteAttention = new DeleteAttentionListener(
+				this);
 		deleteAttention.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DELETEATTENTION, deleteAttention);
-		
+
 		AttentionListListener al1 = new AttentionListListener(this);
 		al1.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DELETEATTENTION, al1);
-		
+
 		// 添加关注
 		AddAttentionListener addAttention = new AddAttentionListener(this);
 		addAttention.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ADDATTENTION, addAttention);
-		
+
 		AttentionListListener al2 = new AttentionListListener(this);
 		al2.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ADDATTENTION, al2);
@@ -201,132 +202,144 @@ public class SmartCellet extends Cellet {
 		MessageListListener messageList = new MessageListListener(this);
 		messageList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGELIST, messageList);
-		
-		//获取消息详细
-		MessageDetailListener messageDetailListener=new MessageDetailListener(this);
+
+		// 获取消息详细
+		MessageDetailListener messageDetailListener = new MessageDetailListener(
+				this);
 		messageDetailListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGEDETAIL, messageDetailListener);
-		
-		//删除消息
-		MessageDeleteListener MessageDeleteListener =new MessageDeleteListener(this);
+
+		// 删除消息
+		MessageDeleteListener MessageDeleteListener = new MessageDeleteListener(
+				this);
 		MessageDeleteListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGEDELETE, MessageDeleteListener);
-		
-		//转移消息
-		MessageMoveListener MessageMoveListener =new MessageMoveListener(this);
+
+		// 转移消息
+		MessageMoveListener MessageMoveListener = new MessageMoveListener(this);
 		MessageMoveListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGEMOVE, MessageMoveListener);
-		
-		//标记消息
-		MessageMarkListener MessageMarkListener=new MessageMarkListener(this);;
+
+		// 标记消息
+		MessageMarkListener MessageMarkListener = new MessageMarkListener(this);
+		;
 		MessageMarkListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGEMARK, MessageMarkListener);
-		
+
 		// 获取联系人
-		MessageContactsListener messageContactsListener= new MessageContactsListener(this);
+		MessageContactsListener messageContactsListener = new MessageContactsListener(
+				this);
 		messageContactsListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGECONTACTS, messageContactsListener);
-		
+
 		// 发送消息
 		MessageSendListener messageSendListener = new MessageSendListener(this);
 		messageSendListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGESEND, messageSendListener);
-	
+
 		// 消息置顶
 		MessageTopInfoListener messageTopInfoListener = new MessageTopInfoListener(
 				this);
 		messageTopInfoListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGETOPINFO, messageTopInfoListener);
-		
-		//添加消息标签
-		MessageTagAddListener messageTagAddListener=new MessageTagAddListener(this);
+
+		// 添加消息标签
+		MessageTagAddListener messageTagAddListener = new MessageTagAddListener(
+				this);
 		messageTagAddListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGETAGADD, messageTagAddListener);
-		
-		//删除消息标签
-		MessageTagDeleteListener messageTagDeleteListener=new MessageTagDeleteListener(this);
+
+		// 删除消息标签
+		MessageTagDeleteListener messageTagDeleteListener = new MessageTagDeleteListener(
+				this);
 		messageTagDeleteListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGDELETE, messageTagDeleteListener);
-		
-		//修改消息标签
-		MessageTagModifyListener messageTagModifyListener=new MessageTagModifyListener(this);
+		dispatcher.addListener(Action.MESSAGETAGDELETE,
+				messageTagDeleteListener);
+
+		// 修改消息标签
+		MessageTagModifyListener messageTagModifyListener = new MessageTagModifyListener(
+				this);
 		messageTagModifyListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGMODIFY, messageTagModifyListener);
-		
-		//设置消息标签为显示或隐藏状态
-		MessageTagDisplayListener messageTagDisplayListener=new MessageTagDisplayListener(this);
+		dispatcher.addListener(Action.MESSAGETAGMODIFY,
+				messageTagModifyListener);
+
+		// 设置消息标签为显示或隐藏状态
+		MessageTagDisplayListener messageTagDisplayListener = new MessageTagDisplayListener(
+				this);
 		messageTagDisplayListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGDISPLAY, messageTagDisplayListener);
-		
+		dispatcher.addListener(Action.MESSAGETAGDISPLAY,
+				messageTagDisplayListener);
+
 		// 获取所有自定义标签
 		MessageCustomTagListener messageCustomTagListener = new MessageCustomTagListener(
 				this);
 		messageCustomTagListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGECUSTOMTAGS, messageCustomTagListener);
+		dispatcher.addListener(Action.MESSAGECUSTOMTAGS,
+				messageCustomTagListener);
 
 		// 上传附件
-		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(this);
+		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(
+				this);
 		messageFileUploadListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGEFILEUPLOAD, messageFileUploadListener);
-		
-		//获取主机设备
+		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
+				messageFileUploadListener);
+
+		// 获取主机设备
 		HostListener host = new HostListener(this);
 		host.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DEVICE, host);
 
-		//获取交换机设备
-		SwitchListener switchs = new SwitchListener(this);
-		switchs.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICE, switchs);
-		
-		//获取路由器设备
-		RouterListener router = new RouterListener(this);
-		router.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICE, router);
-		
-		//获取设备基本信息
-		DeviceBasicListener moBasicListener=new DeviceBasicListener(this);
-		moBasicListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEDETAIL, moBasicListener);
-		
-		//获取设备性能信息
-		DevicePerformanceListener devicePerformance = new DevicePerformanceListener(this);
-		devicePerformance.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEDETAIL, devicePerformance);
+		// 获取网络设备
+		NetEquipmentListener netEqpt = new NetEquipmentListener(this);
+		netEqpt.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQUIPMENT, netEqpt);
 
-		//获取设备健康状态
-		DeviceHealthStatusListener healthStatus=new DeviceHealthStatusListener(this);
+		// 获取设备基本信息
+		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(
+				this);
+		eqptBasicListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTDETAIL, eqptBasicListener);
+
+		// 获取设备性能信息
+		EquipmentPerformanceListener eqptPerformance = new EquipmentPerformanceListener(
+				this);
+		eqptPerformance.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTDETAIL, eqptPerformance);
+
+		// 获取设备健康状态
+		EquipmentHealthStatusListener healthStatus = new EquipmentHealthStatusListener(
+				this);
 		healthStatus.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEDETAIL, healthStatus);
-		
+		dispatcher.addListener(Action.EQUIPMENTDETAIL, healthStatus);
+
 		// 删除设备
-		DeleteDeviceListener deviceDelete = new DeleteDeviceListener(this);
-		deviceDelete.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEDELETE, deviceDelete);
+		DeleteEquipmentListener equipmentDelete = new DeleteEquipmentListener(this);
+		equipmentDelete.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DELETEEQUIPMENT, equipmentDelete);
 
 		// 获取设备告警
-		DeviceAlarmListener moAlarmListener = new DeviceAlarmListener(this);
-		moAlarmListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEALARM, moAlarmListener);
+		EquipmentAlarmListener eqptAlarmListener = new EquipmentAlarmListener(
+				this);
+		eqptAlarmListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTALARM, eqptAlarmListener);
 
 		// 改变设备监控状态
-		DeviceMonitorStateListener moChangeMonitorStatusListener = new DeviceMonitorStateListener(
+		EquipmentMonitorStateListener eqptChangeMonitorStatusListener = new EquipmentMonitorStateListener(
 				this);
-		moChangeMonitorStatusListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICEMONITORSTATE,
-				moChangeMonitorStatusListener);
+		eqptChangeMonitorStatusListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTMONITORSTATE,
+				eqptChangeMonitorStatusListener);
 
 		// 发送快照
-		SendSnapshotListener sendSnapshot = new SendSnapshotListener(
-				this);
+		SendSnapshotListener sendSnapshot = new SendSnapshotListener(this);
 		sendSnapshot.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.SENDSNAPSHOT, sendSnapshot);
 
 		// 获取设备拓扑
-		DeviceTopoListener moTopoListener = new DeviceTopoListener(this);
-		moTopoListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICETOPOS, moTopoListener);
-		
+		EquipmentTopoListener eqptTopoListener = new EquipmentTopoListener(this);
+		eqptTopoListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTTOPO, eqptTopoListener);
+
 		// 注销
 		LogoutListener logout = new LogoutListener(this);
 		logout.setHttpClient(this.httpClient);
@@ -341,7 +354,7 @@ public class SmartCellet extends Cellet {
 		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
 		alarmDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmDetail);
-		
+
 		// 告警操作
 		AlarmDealListener alarmDeal = new AlarmDealListener(this);
 		alarmDeal.setHttpClient(this.httpClient);
@@ -365,37 +378,39 @@ public class SmartCellet extends Cellet {
 		AlarmListListener alarmList = new AlarmListListener(this);
 		alarmList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMLIST, alarmList);
-		
-		//获取告警处理信息
+
+		// 获取告警处理信息
 		AlarmOpInfoListener alarmOpInfo = new AlarmOpInfoListener(this);
 		alarmOpInfo.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmOpInfo);
-		
-		//获取告警维护经验
-		AlarmExperienceListener alarmExperience = new AlarmExperienceListener(this);
+
+		// 获取告警维护经验
+		AlarmExperienceListener alarmExperience = new AlarmExperienceListener(
+				this);
 		alarmExperience.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
-		
-		//获取告警影响范围
+
+		// 获取告警影响范围
 		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
 		alarmCoverage.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
-		
-		//获取告警生命周期
+
+		// 获取告警生命周期
 		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
 		lifeCycle.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
-		
-		//获取压制的告警
+
+		// 获取压制的告警
 		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
 		suppressed.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
-		
-		//获取告警分布
-		AlarmDistributionListener distribution = new AlarmDistributionListener(this);
+
+		// 获取告警分布
+		AlarmDistributionListener distribution = new AlarmDistributionListener(
+				this);
 		distribution.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, distribution);
-		
+
 		// 节点监测
 		NodeDetectionListener nodeDec = new NodeDetectionListener(this);
 		nodeDec.setHttpClient(this.httpClient);

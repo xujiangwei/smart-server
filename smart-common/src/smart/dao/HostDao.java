@@ -71,7 +71,7 @@ public interface HostDao {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercById(long time,long timestamp);
+	public CPUPerc getCPUPercById(long time, long timestamp);
 
 	/**
 	 * 返回指定 主机ID的内存
@@ -95,7 +95,7 @@ public interface HostDao {
 	 * @param id
 	 * @return
 	 */
-	public MemoryDetection getMemoryDetecById(long id,long timestamp);
+	public MemoryDetection getMemoryDetecById(long id, long timestamp);
 
 	/**
 	 * 返回指定主机ID的进程列表
@@ -127,7 +127,7 @@ public interface HostDao {
 	 * @param id
 	 * @return
 	 */
-	public ProgressDetection getProgressDetecById(long id,long timestamp);
+	public ProgressDetection getProgressDetecById(long id, long timestamp);
 
 	/**
 	 * 返回指定主机ID的文件系统列表
@@ -159,7 +159,7 @@ public interface HostDao {
 	 * @param id
 	 * @return
 	 */
-	public FileSystemUsage getFileSysUsageById(long id,long timestamp);
+	public FileSystemUsage getFileSysUsageById(long id, long timestamp);
 
 	/**
 	 * 返回指定Host ID的文件系统列表
@@ -191,5 +191,25 @@ public interface HostDao {
 	 * @param id
 	 * @return
 	 */
-	public NetInterfaceStat getInterfaceStatById(long id,long timestamp);
+	public NetInterfaceStat getInterfaceStatById(long id, long timestamp);
+
+	// public void updateCPUsById(long id);
+	//
+	// public void updateCPUPrecsById(long id);
+	//
+	// public void updateMemoryDetecById(long id);
+	//
+	// public void updateProgressDetection(long id);
+	//
+	// public void updateFileSystemUsages(long id);
+	//
+	// public void updateInterfaceStatsById(long id);
+
+	/**
+	 * 销毁指定ID的主机
+	 * 
+	 * @param id
+	 */
+	public void destoryHostById(long id);
+
 }

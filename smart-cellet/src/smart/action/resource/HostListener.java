@@ -103,6 +103,12 @@ public final class HostListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 
+					if(data != null && !"".equals(data)){
+						
+						
+						
+					}
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
