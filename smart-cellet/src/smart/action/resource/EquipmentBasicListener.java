@@ -24,37 +24,37 @@ import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
 /**
- * 删除设备监听器
+ * 设备基本信息监听
+ *
  */
-public final class DeleteDeviceListener extends AbstractListener {
+public final class EquipmentBasicListener extends AbstractListener {
 
-	public DeleteDeviceListener(Cellet cellet) {
+	public EquipmentBasicListener(Cellet cellet) {
 		super(cellet);
 	}
 
-	@Override
 	public void onAction(ActionDialect action) {
 
-		// 使用同步的方法进行请求
-		// 注意：onAction方法是由Cell Cloud 的action dialect进行回调的
-		// 该方法独享一个线程，可以在这里进行阻塞式调用
-		// 因此，在这里可以用同步的方式请求HTTP API
+		// 使用同步的方式进行请求
+		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
+		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
+		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.DELETEDEVICE);
+				.append(API.EQUIPMENTBASIC);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.POST);
+		request.method(HttpMethod.GET);
 		url = null;
 
 		// 获取参数
 		JSONObject json = null;
-		String moId = null;
+		long equipmentId = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			moId = json.getString("moId");
+			equipmentId = json.getLong("equipmentId");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -63,7 +63,7 @@ public final class DeleteDeviceListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("moId", moId);
+		capsule.append("equipmentId", equipmentId);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -86,26 +86,26 @@ public final class DeleteDeviceListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从web服务器返回的数据
+				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-
-				// 响应动作，即向客户端发送ActionDialect
-				// 参数tracker 是一次动作的追踪标识
-				this.response(Action.DEVICEDELETE, params);
+				
+				// 响应动作，即想客户端发送ActionDialect
+				// 参数tracker 是一次动作的追踪表示。
+				this.response(Action.EQUIPMENTBASIC, params);
 			} else {
-				this.reportHTTPError(Action.DEVICEDELETE);
+				this.reportHTTPError(Action.EQUIPMENTBASIC);
 			}
 			break;
 		default:
-			Logger.w(DeleteDeviceListener.class, "返回响应码：" + response.getStatus());
+			Logger.w(EquipmentBasicListener.class, "返回响应码" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -117,9 +117,10 @@ public final class DeleteDeviceListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.DEVICEDELETE, params);
+			this.response(Action.EQUIPMENTBASIC, params);
 			break;
 		}
+
 	}
 
 }
