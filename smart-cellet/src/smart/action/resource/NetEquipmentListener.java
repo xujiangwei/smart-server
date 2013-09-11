@@ -24,39 +24,45 @@ import smart.api.RequestContentCapsule;
 import cn.com.dhcc.mast.action.Action;
 
 /**
- * 改变监控状态监听器
+ * 路由监听器
+ *
  */
-public final class DeviceMonitorStateListener extends AbstractListener {
+public final class NetEquipmentListener extends AbstractListener {
 
-	public DeviceMonitorStateListener(Cellet cellet) {
+	public NetEquipmentListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
 
-		// 使用同步的方法进行请求
-		// 注意：onAction方法是由Cell Cloud 的action dialect进行回调的
-		// 该方法独享一个线程，可以在这里进行阻塞式调用
-		// 因此，在这里可以用同步的方式请求HTTP API
+		// 使用同步的方式进行请求
+		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
+		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
+		// 因此，这里可以用同步的方式请求HTTP API
 
 		// URL
 		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.DEVICEMONITORSTATE);
+				.append(API.NETEQUIPMENT);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.POST);
+		request.method(HttpMethod.GET);
 		url = null;
 
 		// 获取参数
 		JSONObject json = null;
-		long moId = 0;
-		int isMonitoring = 0;
+		int pageSize = 0;
+		int currentIndex = 0;
+		String orderBy = null;
+		String condition = null;
+
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			moId = json.getLong("moId");
-			isMonitoring = json.getInt("isMonitoring");
+			pageSize = json.getInt("pageSize");
+			currentIndex = json.getInt("currentIndex");
+			orderBy = json.getString("orderBy");
+			condition = json.getString("condition");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -65,8 +71,10 @@ public final class DeviceMonitorStateListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("moId", moId);
-		capsule.append("isMonitoring", isMonitoring);
+		capsule.append("pageSize", pageSize);
+		capsule.append("currentIndex", currentIndex);
+		capsule.append("orderBy", orderBy);
+		capsule.append("condition", condition);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -90,11 +98,11 @@ public final class DeviceMonitorStateListener extends AbstractListener {
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
 				
-				// 获取从web服务器上返回的数据
+				// 获取从Web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -102,15 +110,14 @@ public final class DeviceMonitorStateListener extends AbstractListener {
 				}
 				
 				// 响应动作，即向客户端发送ActionDialect
-				// 参数tracker 是一次动作的追踪标识符
-				this.response(Action.DEVICEMONITORSTATE, params);
+				// 参数tracker是一次动作的追踪标识符
+				this.response(Action.NETEQUIPMENT, params);
 			} else {
-				this.reportHTTPError(Action.DEVICEMONITORSTATE);
+				this.reportHTTPError(Action.NETEQUIPMENT);
 			}
 			break;
 		default:
-			Logger.w(DeviceMonitorStateListener.class,
-					"返回响应码" + response.getStatus());
+			Logger.w(NetEquipmentListener.class, "返回响应码:" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -122,9 +129,14 @@ public final class DeviceMonitorStateListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.DEVICEMONITORSTATE, params);
+			this.response(Action.NETEQUIPMENT, params);
 			break;
 		}
+
+	}
+
+	public static void main(String[] args) {
+		
 	}
 
 }

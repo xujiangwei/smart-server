@@ -46,20 +46,19 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
-	public final static String HOST = "/monitoring-system/moHosts/requestMoHosts";
-	public final static String SWITCH = "/monitoring-system/moSwitchs/requestMoSwitchs";
-	public final static String ROUTER = "/monitoring-system/moRouters/requestMoRouters";
+	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
+	public final static String NETEQUIPMENT = "/monitoring-system/netEquipment/requestNetEquipment";
 
-	public final static String DEVICEBASIC = "/monitoring-system/basic/requestMoBasic";
-	public final static String DEVICEPERFORMANCE = "/monitoring-system/performance/requestPerformance";
-	public final static String DEVICEHEALTHSTATUS = "/monitoring-system/health/requestMoHealthStatus";
+	public final static String EQUIPMENTBASIC = "/monitoring-system/basic/requestEquipmentBasic";
+	public final static String EQUIPMENTPERFORMANCE = "/monitoring-system/performance/requestEquipmentPerformance";
+	public final static String EQUIPMENTHEALTHSTATUS = "/monitoring-system/health/requestEquipmentHealthStatus";
 
 	public final static String DEVICEINFO = "/monitoring-system/moInfo/requestMoInfo";
-	public final static String DELETEDEVICE = "/monitoring-system/moDel/moDelete";
-	public final static String DEVICEALARM = "/monitoring-system/moAlarms/requestMoAlarms";
-	public final static String DEVICEMONITORSTATE = "/monitoring-system/monitorStatus/moChangeMonitorStatus";
-	public final static String SENDSNAPSHOT = "/monitoring-system/snapshot/moSendSnapshot";
-	public final static String DEVICETOPO = "/monitoring-system/moTopos/requestMoTopos";
+	public final static String DELETEEQUIPMENT = "/monitoring-system/equipmentDel/equipmentDelete";
+	public final static String EQUIPMENTALARM = "/monitoring-system/equipmentAlarms/requestEquipmentAlarms";
+	public final static String EQUIPMENTMONITORSTATE = "/monitoring-system/monitorStatus/equipmentChangeMonitorStatus";
+	public final static String SENDSNAPSHOT = "/monitoring-system/snapshot/equipmentSendSnapshot";
+	public final static String EQUIPMENTTOPO = "/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
 
 	private API() {
