@@ -1,6 +1,7 @@
 package smart.core;
 
 import smart.bean.Alarm;
+import smart.bean.AlarmCoverage;
 import smart.dao.AlarmDao;
 import smart.dao.impl.AlarmDaoImpl;
 
@@ -21,6 +22,11 @@ public class AlarmManager {
 		return AlarmManager.instance;
 	}
 
+	// 判断告警表中是否已有该对象
+	public boolean isExist(long almId) {
+		return alarmDao.isExist(almId);
+	}
+	
 	// 签入告警列表
 	public void signInList(long moId, long almId, String moName,
 			String almCause, int severity, String moIp, long lastTime) {
@@ -55,9 +61,28 @@ public class AlarmManager {
 		alarmDao.saveAlarmDetail(alarm);
 	}
 
-	// 判断数据库中是否已有该对象
-	public boolean isExist(long almId) {
-		return alarmDao.isExist(almId);
+	// 判断告警影响范围中是否已存在此受影响设备信息
+	public boolean isExist(long moId, long relatedMoId){
+		return alarmDao.isExist(moId, relatedMoId);
 	}
 
+	// 签入告警影响范围
+	public void signInCoverage(long moId, long relatedMoId, String relatedMoIp,
+			String relatedMoName, int level) {
+		AlarmCoverage ac = new AlarmCoverage(relatedMoId);
+		ac.setRelatedMoIp(relatedMoIp);
+		ac.setRelatedMoName(relatedMoName);	
+		ac.setLevel(level);
+		ac.setMoId(moId);
+		alarmDao.saveAlarmCoverage(ac);
+	}
+	
+	// 告警处理
+	public void alarmDeal(long almId, String opType, String username, long dealTime) {
+		if ("almConfirm".equals(opType)) {
+			alarmDao.alarmConfirm(almId, username, dealTime);
+		} else if ("almDel".equals(opType)) {
+			alarmDao.alarmDelete(almId);
+		}
+	}
 }

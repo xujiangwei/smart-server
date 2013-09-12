@@ -118,7 +118,7 @@ public final class AlarmListListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
-						if (!"".equals(jo.getJSONObject("alarmListInfo").getJSONArray("almList"))) {
+						if (!"".equals(jo.get("alarmListInfo"))&&!"".equals(jo.getJSONObject("alarmListInfo").get("almList"))) {
 							JSONArray ja = jo.getJSONObject("alarmListInfo").getJSONArray("almList");
 							for (int i = 0; i < ja.length(); i++) {
 								long moId = ja.getJSONObject(i).getLong("moId");
