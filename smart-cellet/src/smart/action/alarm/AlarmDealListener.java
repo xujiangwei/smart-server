@@ -22,6 +22,7 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.core.AlarmManager;
 import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
 
@@ -69,11 +70,13 @@ public final class AlarmDealListener extends AbstractListener {
 			url = null;
 
 			// 填写数据内容
+			String username = UserManager.getInstance().getUsername(token);
+			long opTime = new Date().getTime();
 			DeferredContentProvider dcp = new DeferredContentProvider();
 			RequestContentCapsule capsule = new RequestContentCapsule();
-			capsule.append("username", UserManager.getInstance().getUsername(token));
+			capsule.append("username", username);
 			capsule.append("almId", almId);
-			capsule.append("opTime", new Date().getTime());
+			capsule.append("opTime", opTime);
 			capsule.append("opType", opType);
 			capsule.append("token", token);
 			dcp.offer(capsule.toBuffer());
@@ -103,6 +106,9 @@ public final class AlarmDealListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
+						if (jo.getInt("status") == 300) {
+							AlarmManager.getInstance().alarmDeal(almId, opType, username, opTime);
+						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 
