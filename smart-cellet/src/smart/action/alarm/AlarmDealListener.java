@@ -23,7 +23,7 @@ import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.core.UserManager;
-import cn.com.dhcc.mast.action.Action;
+import smart.mast.action.Action;
 
 /**
  * 告警处理监听

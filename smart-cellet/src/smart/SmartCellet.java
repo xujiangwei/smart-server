@@ -55,10 +55,10 @@ import smart.action.resource.HostListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.time.CurrentTimeListener;
-import cn.com.dhcc.mast.Root;
-import cn.com.dhcc.mast.action.Action;
-import cn.com.dhcc.mast.action.ActionDispatcher;
-import cn.com.dhcc.mast.core.SystemCategory;
+import smart.mast.Root;
+import smart.mast.action.Action;
+import smart.mast.action.ActionDispatcher;
+import smart.mast.core.SystemCategory;
 
 public class SmartCellet extends Cellet {
 

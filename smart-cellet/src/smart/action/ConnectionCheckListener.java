@@ -8,7 +8,8 @@ import net.cellcloud.util.Properties;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import cn.com.dhcc.mast.action.Action;
+import smart.mast.action.Action;
+
 
 /**
  * 服务器连接检测

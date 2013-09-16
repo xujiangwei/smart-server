@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.eclipse.jetty.client.HttpClient;
 
 import smart.SmartCellet;
+import smart.mast.action.ActionListener;
 
 import net.cellcloud.core.Cellet;
 import net.cellcloud.talk.dialect.ActionDialect;
@@ -16,7 +17,6 @@ import net.cellcloud.util.LongProperty;
 import net.cellcloud.util.Properties;
 import net.cellcloud.util.PropertyReference;
 import net.cellcloud.util.StringProperty;
-import cn.com.dhcc.mast.action.ActionListener;
 
 /*
  * 抽象监听器

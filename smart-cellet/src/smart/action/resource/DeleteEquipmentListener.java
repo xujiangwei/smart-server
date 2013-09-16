@@ -22,7 +22,7 @@ import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.core.HostManager;
-import cn.com.dhcc.mast.action.Action;
+import smart.mast.action.Action;
 
 /**
  * 删除设备监听器
