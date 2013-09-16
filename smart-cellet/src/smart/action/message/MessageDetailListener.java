@@ -21,7 +21,7 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
-import cn.com.dhcc.mast.action.Action;
+import smart.mast.action.Action;
 
 /**
  * 信息详细内容监听器
