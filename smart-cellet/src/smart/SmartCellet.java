@@ -10,6 +10,7 @@ import net.cellcloud.talk.dialect.Dialect;
 
 import org.eclipse.jetty.client.HttpClient;
 
+import smart.action.ConnectionCheckListener;
 import smart.action.LoginListener;
 import smart.action.LogoutListener;
 import smart.action.NodeDetectionListener;
@@ -63,7 +64,7 @@ public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
 
-	private String apiHost = "http://127.0.0.1:8081";
+	private String apiHost = "http://10.10.152.26:8080";
 
 	private HttpClient httpClient;
 
@@ -154,6 +155,11 @@ public class SmartCellet extends Cellet {
 	private void initListeners() {
 		ActionDispatcher dispatcher = ActionDispatcher.getInstance();
 
+		// 服务器连接检测
+		ConnectionCheckListener check = new ConnectionCheckListener(this);
+		check.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CONNECTIONCHECK, check);
+		
 		// 登录
 		LoginListener login = new LoginListener(this);
 		login.setHttpClient(this.httpClient);
