@@ -21,7 +21,6 @@ import org.json.JSONObject;
 
 import smart.api.API;
 import smart.api.RequestContentCapsule;
-import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
 
 /**
@@ -97,23 +96,23 @@ public final class LoginListener extends AbstractListener {
 				try {
 					jo = new JSONObject(content);
 					String token = "";
-					if (!"".equals(jo.get("loginInfo"))) {
-						long id = jo.getJSONObject("loginInfo").getLong(
-								"user_id");
-						token = jo.getJSONObject("loginInfo")
-								.getString("token");
-						if (!UserManager.getInstance().isExist(username,
-								password)) {
-
-							// 将登录成功后的返回对象保存到用户管理器
-							UserManager.getInstance().signIn(id, username,
-									password, token);
-
-						} else {
-							// 更新该用户的最近登录时间
-							UserManager.getInstance().update(username);
-						}
-					}
+//					if (!"".equals(jo.get("loginInfo"))) {
+//						long id = jo.getJSONObject("loginInfo").getLong(
+//								"user_id");
+//						token = jo.getJSONObject("loginInfo")
+//								.getString("token");
+//						if (!UserManager.getInstance().isExist(username,
+//								password)) {
+//
+//							// 将登录成功后的返回对象保存到用户管理器
+//							UserManager.getInstance().signIn(id, username,
+//									password, token);
+//
+//						} else {
+//							// 更新该用户的最近登录时间
+//							UserManager.getInstance().update(username);
+//						}
+//					}
 					jo.remove("loginInfo");
 					jo.put("token", token);
 

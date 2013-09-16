@@ -11,6 +11,7 @@ public final class Main {
 		// 配置内核参数
 		NucleusConfig config = new NucleusConfig();
 
+		config.talk.block = 131072;
 		try {
 			Nucleus nucleus = new Nucleus(config);
 			// 注册 SmartCellet

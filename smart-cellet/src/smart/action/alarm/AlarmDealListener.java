@@ -22,7 +22,6 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
-import smart.core.AlarmManager;
 import smart.core.UserManager;
 import cn.com.dhcc.mast.action.Action;
 
@@ -107,7 +106,7 @@ public final class AlarmDealListener extends AbstractListener {
 						jo = new JSONObject(content);
 
 						if (jo.getInt("status") == 300) {
-							AlarmManager.getInstance().alarmDeal(almId, opType, username, opTime);
+//							AlarmManager.getInstance().alarmDeal(almId, opType, username, opTime);
 						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));

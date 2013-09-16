@@ -60,7 +60,6 @@ public final class API {
 	public final static String SENDSNAPSHOT = "/monitoring-system/snapshot/equipmentSendSnapshot";
 	public final static String EQUIPMENTTOPO = "/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
-
 	private API() {
 	}
 
