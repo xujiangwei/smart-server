@@ -4,6 +4,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 
 import smart.bean.Alarm;
+import smart.bean.AlarmCoverage;
 import smart.dao.AbstraceDao;
 import smart.dao.AlarmDao;
 import smart.util.DButil;
@@ -35,7 +36,9 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		}  finally {
+			DButil.close(pstmt, rs);
+		}
 		return b;
 	}
 
@@ -91,8 +94,80 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 	}
 
 	@Override
-	public void alarmDeal() {
+	public void saveAlarmCoverage(AlarmCoverage coverage) {
+		String sql = "insert into t_alarm_coverage(tac_related_moId, " +
+				"tac_related_moName, tac_related_moIp, tac_related_level, tac_moId) " +
+				"values (?,?,?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, coverage.getId());
+			pstmt.setString(2, coverage.getRelatedMoName());
+			pstmt.setString(3, coverage.getRelatedMoIp());
+			pstmt.setInt(4, coverage.getLevel());
+			pstmt.setLong(5, coverage.getMoId());
+			pstmt.executeQuery();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+	}
 
+	@Override
+	public boolean isExist(long moId, long relatedMoId) {
+		String sql = "select tac_related_moId from t_alarm_coverage where tac_moId = ?";
+		boolean b = false;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, moId);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				if (rs.getLong("tac_related_moId") == relatedMoId) {
+					b = true;
+				}
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}  finally {
+			DButil.close(pstmt, rs);
+		}
+		return b;
+	}
+
+	@Override
+	public void alarmConfirm(long almId, String username, long dealTime) {
+		String sql = "update t_alarm set ta_almStatus = ?,ta_confirmUser = ?," +
+				"ta_confirmTime=? where ta_almId = ?";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setString(1, "确认");
+			pstmt.setString(2, username);
+			pstmt.setLong(3, dealTime);
+			pstmt.setLong(4, almId);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+	}
+
+	@Override
+	public void alarmDelete(long almId) {
+		String sql = "delete from t_alarm where ta_almId = ?";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, almId);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
 	}
 
 }

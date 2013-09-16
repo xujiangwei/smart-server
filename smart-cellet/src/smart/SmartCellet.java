@@ -63,7 +63,7 @@ public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
 
-	private String apiHost = "http://127.0.0.1:8080";
+	private String apiHost = "http://127.0.0.1:8081";
 
 	private HttpClient httpClient;
 

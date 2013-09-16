@@ -15,12 +15,14 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.core.AlarmManager;
 import cn.com.dhcc.mast.action.Action;
 
 /**
@@ -67,7 +69,7 @@ public final class AlarmCoverageListener extends AbstractListener {
 
 			// 填写数据内容
 			DeferredContentProvider dcp = new DeferredContentProvider();
-			
+
 			RequestContentCapsule capsule = new RequestContentCapsule();
 			capsule.append("token", token);
 			capsule.append("almId", almId);
@@ -98,6 +100,29 @@ public final class AlarmCoverageListener extends AbstractListener {
 
 					try {
 						jo = new JSONObject(content);
+
+						if (!"".equals(jo.getJSONObject("affectedMoInfo").get(
+								"related"))) {
+							JSONArray ja = jo.getJSONObject("affectedMoInfo")
+									.getJSONArray("related");
+							long moId = jo.getJSONObject("affectedMoInfo")
+									.getLong("moId");
+							for (int i = 0; i < ja.length(); i++) {
+								long relatedMoId = ja.getJSONObject(i).getLong(
+										"relatedMoId");
+								String relatedMoIp = ja.getJSONObject(i)
+										.getString("relatedMoIp");
+								String relatedMoName = ja.getJSONObject(i)
+										.getString("relatedMoName");
+								int level = ja.getJSONObject(i).getInt("level");
+								if (!AlarmManager.getInstance().isExist(moId,
+										relatedMoId)) {
+									AlarmManager.getInstance().signInCoverage(
+											moId, relatedMoId, relatedMoIp,
+											relatedMoName, level);
+								}
+							}
+						}
 
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));

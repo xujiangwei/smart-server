@@ -97,7 +97,7 @@ public final class AlarmDetailListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
-						if (!"".equals(jo.getJSONObject("baseInfo"))) {
+						if (jo.get("baseInfo") != null && !"".equals(jo.get("baseInfo"))) {
 							String moType = jo.getJSONObject("baseInfo").getString("moType");
 							String location = jo.getJSONObject("baseInfo").getString("location");
 							String detail = jo.getJSONObject("baseInfo").getString("detail");

@@ -1,6 +1,7 @@
 package smart.dao;
 
 import smart.bean.Alarm;
+import smart.bean.AlarmCoverage;
 
 /**
  * 告警DAO。
@@ -26,5 +27,31 @@ public interface AlarmDao {
 	 */
 	public void saveAlarmDetail(Alarm alarm);
 	
-	public void alarmDeal();
+	/**
+	 * 保存告警影响范围
+	 * @param coverage
+	 */
+	public void saveAlarmCoverage(AlarmCoverage coverage);
+	
+	/**
+	 * 判断告警设备的影响范围中是否存在指定设备
+	 * @param moId
+	 * @param relatedMoId
+	 * @return
+	 */
+	public boolean isExist(long moId, long relatedMoId);
+	
+	/**
+	 * 告警确认操作
+	 * @param almId
+	 * @param username
+	 * @param dealTime
+	 */
+	public void alarmConfirm(long almId, String username, long dealTime);
+	
+	/**
+	 * 告警删除操作
+	 * @param almId
+	 */
+	public void alarmDelete(long almId);
 }
