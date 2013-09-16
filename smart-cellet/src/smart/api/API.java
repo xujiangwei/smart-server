@@ -60,7 +60,7 @@ public final class API {
 	public final static String SENDSNAPSHOT = "/monitoring-system/snapshot/equipmentSendSnapshot";
 	public final static String EQUIPMENTTOPO = "/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
-	//待办
+	//待办（故障）
 	public final static String INCIDENTLIST = "/fvsd-branch/incidentm/listTodos.html?username=admin";
 	
 	private API() {
