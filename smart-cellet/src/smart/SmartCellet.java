@@ -54,6 +54,7 @@ import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.HostListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
+import smart.action.task.IncidentListListener;
 import smart.action.time.CurrentTimeListener;
 import smart.mast.Root;
 import smart.mast.action.Action;
@@ -64,7 +65,7 @@ public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
 
-	private String apiHost = "http://10.10.152.26:8080";
+	private String apiHost = "http://10.10.152.84:8080";
 
 	private HttpClient httpClient;
 
@@ -421,5 +422,12 @@ public class SmartCellet extends Cellet {
 		NodeDetectionListener nodeDec = new NodeDetectionListener(this);
 		nodeDec.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
+		
+		//待办
+		IncidentListListener  incidentList = new IncidentListListener(this);
+		
+		incidentList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INCIDENTLIST, incidentList);
+		
 	}
 }
