@@ -41,8 +41,7 @@ public final class AlarmDistributionListener extends AbstractListener {
 		// 设置请求HTTP API方式
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.ALARMDISTRIBUTION);
+		StringBuilder url = new StringBuilder(API.ALARMDISTRIBUTION);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

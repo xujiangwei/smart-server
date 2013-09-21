@@ -42,8 +42,7 @@ public final class MessageDetailListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGEDETAIL);
+		StringBuilder url = new StringBuilder(API.MESSAGEDETAIL);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

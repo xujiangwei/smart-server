@@ -44,8 +44,7 @@ public final class EquipmentTopoListener extends AbstractListener {
 		// 因此，这里可以用同步的方式请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.EQUIPMENTTOPO);
+		StringBuilder url = new StringBuilder(API.EQUIPMENTTOPO);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

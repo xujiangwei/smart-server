@@ -1,7 +1,13 @@
 package smart.action.alarm;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
 import java.util.Iterator;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -16,6 +22,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -42,8 +49,7 @@ public final class AlarmListListener extends AbstractListener {
 		// 设置请求HTTP API方式
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.ALARMLIST);
+		StringBuilder url = new StringBuilder(API.ALARMLIST);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -91,86 +97,171 @@ public final class AlarmListListener extends AbstractListener {
 		}
 
 		Properties params = new Properties();
-		if (token != null && !"".equals(token)) {
+		// if (token != null && !"".equals(token)) {
 
-			// 发送请求
-			ContentResponse response = null;
-			try {
-				response = request.send();
-			} catch (InterruptedException e1) {
-				e1.printStackTrace();
-			} catch (TimeoutException e1) {
-				e1.printStackTrace();
-			} catch (ExecutionException e1) {
-				e1.printStackTrace();
-			}
+		// 发送请求
+		ContentResponse response = null;
+		try {
+			response = request.send();
+		} catch (InterruptedException e1) {
+			e1.printStackTrace();
+		} catch (TimeoutException e1) {
+			e1.printStackTrace();
+		} catch (ExecutionException e1) {
+			e1.printStackTrace();
+		}
 
-			JSONObject jo = null;
-			switch (response.getStatus()) {
-			case HttpStatus.OK_200:
-				byte[] bytes = response.getContent();
-				if (null != bytes) {
+		JSONObject jo = null;
+		switch (response.getStatus()) {
+		case HttpStatus.OK_200:
+			byte[] bytes = response.getContent();
+			if (null != bytes) {
 
-					// 获取从Web服务器上返回的数据
-					String content = new String(bytes, Charset.forName("UTF-8"));
-					try {
-						jo = new JSONObject(content);
-
-//						if (!"".equals(jo.get("alarmListInfo"))&&!"".equals(jo.getJSONObject("alarmListInfo").get("almList"))) {
-//							JSONArray ja = jo.getJSONObject("alarmListInfo").getJSONArray("almList");
-//							for (int i = 0; i < ja.length(); i++) {
-//								long moId = ja.getJSONObject(i).getLong("moId");
-//								long almId = ja.getJSONObject(i).getLong("almId");
-//								String moName = ja.getJSONObject(i).getString("moName");
-//								String almCause = ja.getJSONObject(i).getString("almCause");
-//								int severity = ja.getJSONObject(i).getInt("severity");
-//								String moIp = ja.getJSONObject(i).getString("moIp");
-//								long lastTime = ja.getJSONObject(i).getLong("lastTime");
-//								boolean b = AlarmManager.getInstance().isExist(almId);
-//								if (!b) {
-//									AlarmManager.getInstance().signInList(moId, almId, moName, almCause, severity, moIp, lastTime);
-//								}
-//							}
-//						}
-						// 设置参数
-						params.addProperty(new ObjectProperty("data", jo));
-
-						// 响应动作，即向客户端发送ActionDialect
-						// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
-						this.response(token, Action.ALARMLIST, params);
-
-					} catch (JSONException e) {
-						e.printStackTrace();
-					}
-				} else {
-					this.reportHTTPError(token, Action.ALARMLIST);
-				}
-				break;
-			default:
-				Logger.w(AlarmListListener.class,
-						"返回响应码：" + response.getStatus());
-				jo = new JSONObject();
+				// 获取从Web服务器上返回的数据
+				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
-					jo.put("status", 900);
+					jo = new JSONObject(content);
+					JSONArray ja = new JSONArray();
+					if ("成功".equals(jo.get("result"))) {
+						ja = jo.getJSONArray("almlist");
+						JSONArray jar = new JSONArray();
+						List<String> list = Arrays.asList("almId", "moId",
+								"rootMoId", "parentMoId", "typeCode",
+								"almCause", "isSuppressed", "severity",
+								"extraInfo", "almStatus", "trend", "occurTime",
+								"lastTime", "count", "detail", "originalInfo",
+								"confirmTime", "confirmUserId", "confirmUser",
+								"moIp", "moName", "causeAlias", "location");
+						for (int i = 0; i < ja.length(); i++) {
+							JSONObject job = new JSONObject();
+							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
+								for (int k = 0; k < list.size(); k++) {
+									if (k == j) {
+										if ("almId".equals(list.get(k))
+												|| "moId".equals(list.get(k))
+												|| ("confirmUserId".equals(list
+														.get(k)) && !""
+														.equals(ja
+																.getJSONArray(i)
+																.getString(j)))) {
+											job.put(list.get(k), Long
+													.valueOf(ja.getJSONArray(i)
+															.getString(j)));
+										} else if ("occurTime".equals(list
+												.get(k))
+												|| "lastTime".equals(list
+														.get(k))
+												|| ("confirmTime".equals(list
+														.get(k)) && !""
+														.equals(ja
+																.getJSONArray(i)
+																.get(j)))) {
+											DateFormat df = new SimpleDateFormat(
+													"yyyy-MM-dd HH:mm:ss");
+											Date date = null;
+											try {
+												date = df.parse(ja
+														.getJSONArray(i)
+														.getString(j));
+												job.put(list.get(k),
+														date.getTime());
+											} catch (ParseException e) {
+												e.printStackTrace();
+											}
+										} else if ("count".equals(list.get(k))
+												|| "severity".equals(list
+														.get(k))) {
+											job.put(list.get(k), Integer
+													.parseInt(ja
+															.getJSONArray(i)
+															.getString(j)));
+										} else if (("confirmUserId".equals(list
+												.get(k)) || "confirmTime"
+												.equals(list.get(k)))
+												&& "".equals(ja.getJSONArray(i)
+														.getString(j))) {
+											job.put(list.get(k), 0);
+										} else {
+											job.put(list.get(k), ja
+													.getJSONArray(i).get(j));
+										}
+									}
+								}
+							}
+							jar.put(job);
+						}
+						System.out.println("jsonArray:" + jar.length() + jar);
+						jo.remove("result");
+						jo.remove("almlist");
+						jo.put("almList", jar);
+						jo.put("status", 300);
+						jo.put("errorInfo", "");
+					} else {
+						jo.remove("result");
+						jo.remove("almlist");
+						jo.put("almList", "");
+						jo.put("status", 301);
+						jo.put("errorInfo", "找不到符合条件的相关告警列表");
+					}
+					// if
+					// (!"".equals(jo.get("alarmListInfo"))&&!"".equals(jo.getJSONObject("alarmListInfo").get("almList")))
+					// {
+					// JSONArray ja =
+					// jo.getJSONObject("alarmListInfo").getJSONArray("almList");
+					// for (int i = 0; i < ja.length(); i++) {
+					// long moId = ja.getJSONObject(i).getLong("moId");
+					// long almId = ja.getJSONObject(i).getLong("almId");
+					// String moName = ja.getJSONObject(i).getString("moName");
+					// String almCause =
+					// ja.getJSONObject(i).getString("almCause");
+					// int severity = ja.getJSONObject(i).getInt("severity");
+					// String moIp = ja.getJSONObject(i).getString("moIp");
+					// long lastTime = ja.getJSONObject(i).getLong("lastTime");
+					// boolean b = AlarmManager.getInstance().isExist(almId);
+					// if (!b) {
+					// AlarmManager.getInstance().signInList(moId, almId,
+					// moName, almCause, severity, moIp, lastTime);
+					// }
+					// }
+					// }
+					// 设置参数
+					params.addProperty(new ObjectProperty("data", jo));
+
+					// 响应动作，即向客户端发送ActionDialect
+					// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
+					this.response(token, Action.ALARMLIST, params);
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				// 设置参数
-				params.addProperty(new ObjectProperty("data", jo));
-
-				// 响应动作，即向客户端发送 ActionDialect
-				this.response(token, Action.ALARMLIST, params);
-				break;
+			} else {
+				this.reportHTTPError(token, Action.ALARMLIST);
 			}
-		} else {
-			JSONObject jo = new JSONObject();
+			break;
+		default:
+			Logger.w(AlarmListListener.class, "返回响应码：" + response.getStatus());
+			jo = new JSONObject();
 			try {
-				jo.put("status", 800);
+				jo.put("status", 900);
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+			// 设置参数
 			params.addProperty(new ObjectProperty("data", jo));
-			this.response(Action.ALARMLIST, params);
+
+			// 响应动作，即向客户端发送 ActionDialect
+			this.response(token, Action.ALARMLIST, params);
+			break;
 		}
+		// } else {
+		// JSONObject jo = new JSONObject();
+		// try {
+		// jo.put("status", 800);
+		// } catch (JSONException e) {
+		// e.printStackTrace();
+		// }
+		// params.addProperty(new ObjectProperty("data", jo));
+		// this.response(Action.ALARMLIST, params);
+		// }
 	}
 }

@@ -16,13 +16,12 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
-import smart.api.API;
 import smart.api.RequestContentCapsule;
-import smart.core.UserManager;
 import smart.mast.action.Action;
 
 /**
@@ -45,12 +44,15 @@ public final class AlarmDealListener extends AbstractListener {
 		// 获取请求参数
 		JSONObject json;
 		String token = null;
-		long almId = 0;
+		JSONArray almIdList = null;
 		String opType = null;
+		String username = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
+			System.out.println("操作参数："+json);
 			token = json.getString("token");
-			almId = json.getLong("almId");
+			username = json.getString("username");
+			almIdList = json.getJSONArray("almIdList");
 			opType = json.getString("opType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -59,22 +61,23 @@ public final class AlarmDealListener extends AbstractListener {
 		Properties params = new Properties();
 		if (token != null && !"".equals(token)) {
 
-			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMDEAL);
-
 			// 创建请求
-			Request request = this.getHttpClient().newRequest(url.toString());
+			Request request = null;
+			String s = almIdList.toString().substring(1).replace("]", "");
+			if ("almConfirm".equals(opType)) {
+				request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/confirm/"+s+"?DMSN=998&userID=9980000000000000&userName="+username);
+			} else if ("almDel".equals(opType)) {
+				request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/clear/"+s+"?DMSN=998&userID=9980000000000000&userName="+username);
+			}
 			request.method(HttpMethod.GET);
-			url = null;
 
 			// 填写数据内容
-			String username = UserManager.getInstance().getUsername(token);
+//			String username = UserManager.getInstance().getUsername(token);
 			long opTime = new Date().getTime();
 			DeferredContentProvider dcp = new DeferredContentProvider();
 			RequestContentCapsule capsule = new RequestContentCapsule();
 			capsule.append("username", username);
-			capsule.append("almId", almId);
+			capsule.append("almId", almIdList);
 			capsule.append("opTime", opTime);
 			capsule.append("opType", opType);
 			capsule.append("token", token);
@@ -105,9 +108,19 @@ public final class AlarmDealListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
-						if (jo.getInt("status") == 300) {
+//						if (jo.getInt("status") == 300) {
 //							AlarmManager.getInstance().alarmDeal(almId, opType, username, opTime);
+//						}
+						if ("成功".equals(jo.getString("result"))) {
+							jo.remove("result");
+							jo.put("status", 300);
+							jo.put("errorInfo", "");
+						} else {
+							jo.remove("result");
+							jo.put("status", 386);
+							jo.put("errorInfo", jo.get("msg"));
 						}
+						
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 

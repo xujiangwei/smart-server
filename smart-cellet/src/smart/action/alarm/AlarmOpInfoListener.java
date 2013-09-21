@@ -60,8 +60,7 @@ public final class AlarmOpInfoListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMOPINFO);
+			StringBuilder url = new StringBuilder(API.ALARMOPINFO);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

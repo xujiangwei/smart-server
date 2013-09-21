@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
-import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
 /**
@@ -42,7 +40,7 @@ public final class MessageListListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost()).append(API.MESSAGELIST);
+		StringBuilder url = new StringBuilder(API.MESSAGELIST);
 		// 获取参数
 		JSONObject json = null;
 		int pageSize = 12;

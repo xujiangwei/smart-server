@@ -64,8 +64,7 @@ public final class AlarmForwardListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMFORWARD);
+			StringBuilder url = new StringBuilder(API.ALARMFORWARD);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

@@ -71,8 +71,7 @@ public final class DealInfoListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.DEALINFO);
+			StringBuilder url = new StringBuilder(API.DEALINFO);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

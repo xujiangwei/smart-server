@@ -41,7 +41,7 @@ public final class LoginListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost()).append(API.LOGIN);
+		StringBuilder url = new StringBuilder(API.LOGIN);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -96,11 +96,12 @@ public final class LoginListener extends AbstractListener {
 				try {
 					jo = new JSONObject(content);
 					String token = "";
-//					if (!"".equals(jo.get("loginInfo"))) {
-//						long id = jo.getJSONObject("loginInfo").getLong(
-//								"user_id");
-//						token = jo.getJSONObject("loginInfo")
-//								.getString("token");
+					long id = 0;
+					if (!"".equals(jo.get("loginInfo"))) {
+						id = jo.getJSONObject("loginInfo").getLong(
+								"user_id");
+						token = jo.getJSONObject("loginInfo")
+								.getString("token");
 //						if (!UserManager.getInstance().isExist(username,
 //								password)) {
 //
@@ -112,9 +113,11 @@ public final class LoginListener extends AbstractListener {
 //							// 更新该用户的最近登录时间
 //							UserManager.getInstance().update(username);
 //						}
-//					}
+					}
 					jo.remove("loginInfo");
 					jo.put("token", token);
+					jo.put("userid", id);
+					jo.put("username", username);
 
 					// 设置参数
 					params.addProperty(new StringProperty("username", username));
