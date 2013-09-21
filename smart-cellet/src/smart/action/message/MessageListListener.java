@@ -35,7 +35,6 @@ public final class MessageListListener extends AbstractListener {
 
 	@Override
 	public void onAction(ActionDialect action) {
-
 		// 使用同步的方式进行请求
 		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。

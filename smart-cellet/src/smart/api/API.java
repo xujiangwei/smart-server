@@ -29,7 +29,7 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-	public final static String MESSAGELIST = "http://10.10.152.20:9080/itsm//noticem/listUnread.html?username=admin";
+	public final static String MESSAGELIST = "http://10.10.152.20:9080/itsm/noticem/listUnread.html?username=admin";
 	public final static String MESSAGEDETAIL = "/monitoring-system/messageDetail/requestMessageDetail";
 	public final static String MESSAGECONTACTS = "/monitoring-system/contacts/requestMessageContacts";
 	public final static String MESSAGESEND = "/monitoring-system/messageSend/messageSend";
