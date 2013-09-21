@@ -26,34 +26,25 @@ import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
 /**
- * 网络设备监听器
- * 
+ * 设备列表监听
  */
-public final class NetEquipmentListener extends AbstractListener {
+public class EquipmentListListener extends AbstractListener {
 
-	public NetEquipmentListener(Cellet cellet) {
+	public EquipmentListListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
-
 		// 使用同步的方式进行请求
 		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
 		// 因此，这里可以用同步的方式请求HTTP API
 
-		// URL
-		// StringBuilder url = new StringBuilder(this.getHost())
-		// .append(API.NETEQUIPMENT);
-
 		// 创建请求
-		Request request = this
-				.getHttpClient()
-				.newRequest(
-						"http://10.10.152.20:8080/itims/restws/model/core/mo/list/998/9980000000000000?motype=10");
+		Request request = this.getHttpClient().newRequest(
+						"http://10.10.152.20:8080/itims/restws/model/core/mo/list/998/9980000000000000");
 		request.method(HttpMethod.GET);
-		// url = null;
 
 		// 获取参数
 		JSONObject json = null;
@@ -64,6 +55,7 @@ public final class NetEquipmentListener extends AbstractListener {
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
+			System.out.println("参数：" + json);
 			pageSize = json.getInt("pageSize");
 			currentIndex = json.getInt("currentIndex");
 			orderBy = json.getString("orderBy");
@@ -107,12 +99,10 @@ public final class NetEquipmentListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-
 					JSONArray ja = new JSONArray();
 					System.out.println("结果：" + data);
 					if ("success".equals(data.getString("status"))) {
 						JSONObject vendor = new JSONObject();
-						vendor.put("0", 0);
 						vendor.put("微软", 1);
 						vendor.put("IBM", 2);
 						vendor.put("惠普", 3);
@@ -135,6 +125,7 @@ public final class NetEquipmentListener extends AbstractListener {
 						vendor.put("神州数码", 20);
 						vendor.put("AIX", 21);
 						vendor.put("Solaris", 22);
+						vendor.put("0", 0);
 
 						ja = data.getJSONArray("moList");
 						JSONArray jar = new JSONArray();
@@ -148,16 +139,27 @@ public final class NetEquipmentListener extends AbstractListener {
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
 								for (int k = 0; k < list.size(); k++) {
 									if (k == j) {
-										if ("vendor".equals(list.get(k))&&("".equals(ja.getJSONArray(i).get(j))||ja.getJSONArray(i).get(j)==null)) {
+										if ("vendor".equals(list.get(k))
+												&& ("".equals(ja
+														.getJSONArray(i).get(j)) || ja
+														.getJSONArray(i).get(j) == null)) {
 											job.put(list.get(k), "0");
 										} else {
-											job.put(list.get(k), ja.getJSONArray(i).get(j));
+											job.put(list.get(k), ja
+													.getJSONArray(i).get(j));
 										}
 									}
 								}
 							}
 							jo.put("moId", job.getLong("moId"));
-//							jo.put("vendorID", vendor.get(job.get("vendor").toString()));
+							if (job.get("vendor") == null
+									|| "null".equals(job.get("vendor"))
+									|| "null".equals(job.get("vendor"))
+									|| job.get("vendor").equals(null)) {
+								job.put("vendor", "0");
+							}
+							jo.put("vendorID",
+									vendor.getInt(job.get("vendor").toString()));
 
 							jo.put("typeCode", job.getLong("typeCode"));
 							jo.put("typeName",
@@ -172,13 +174,13 @@ public final class NetEquipmentListener extends AbstractListener {
 						System.out.println("jsonArray:" + jar.length() + jar);
 						data.remove("moList");
 						data.put("status", 300);
-						data.put("netEquipmentList", jar);
+						data.put("moList", jar);
 						data.put("errorInfo", "");
 					} else {
 						data.remove("moList");
-						data.put("status", 497);
-						data.put("netEquipmentList", "");
-						data.put("errorInfo", "获取网络设备列表失败");
+						data.put("status", 456);
+						data.put("moList", "");
+						data.put("errorInfo", "获取设备列表出错");
 					}
 
 					// 设置参数
@@ -189,14 +191,13 @@ public final class NetEquipmentListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.NETEQUIPMENT, params);
+				this.response(Action.DEVICE, params);
 			} else {
-				this.reportHTTPError(Action.NETEQUIPMENT);
+				this.reportHTTPError(Action.DEVICE);
 			}
 			break;
 		default:
-			Logger.w(NetEquipmentListener.class,
-					"返回响应码:" + response.getStatus());
+			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -208,7 +209,7 @@ public final class NetEquipmentListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.NETEQUIPMENT, params);
+			this.response(Action.DEVICE, params);
 			break;
 		}
 

@@ -55,8 +55,7 @@ public final class LogoutListener extends AbstractListener {
 				&& UserManager.getInstance().getUsername(token) != null) {
 
 			// 组装URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.LOGOUT);
+			StringBuilder url = new StringBuilder(API.LOGOUT);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

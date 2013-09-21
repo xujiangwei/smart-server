@@ -54,8 +54,7 @@ public final class AttentionListListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ATTENTIONLIST);
+			StringBuilder url = new StringBuilder(API.ATTENTIONLIST);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

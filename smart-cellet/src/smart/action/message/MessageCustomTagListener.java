@@ -38,8 +38,7 @@ public final class MessageCustomTagListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGECUSTOMTAGS);
+		StringBuilder url = new StringBuilder(API.MESSAGECUSTOMTAGS);
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 		url = null;

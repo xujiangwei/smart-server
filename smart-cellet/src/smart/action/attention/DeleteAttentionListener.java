@@ -42,8 +42,7 @@ public final class DeleteAttentionListener extends AbstractListener {
 		// 因此，这里可以使用同步方式请求API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.DELETEATTENTION);
+		StringBuilder url = new StringBuilder(API.DELETEATTENTION);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

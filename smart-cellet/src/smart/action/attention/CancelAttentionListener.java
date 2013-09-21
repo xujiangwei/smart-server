@@ -42,8 +42,7 @@ public final class CancelAttentionListener extends AbstractListener {
 		// 这里使用同步方式请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.CANCELATTENTION);
+		StringBuilder url = new StringBuilder(API.CANCELATTENTION);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

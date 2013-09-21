@@ -56,8 +56,7 @@ public final class AddAttentionListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ADDATTENTION);
+			StringBuilder url = new StringBuilder(API.ADDATTENTION);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

@@ -42,8 +42,7 @@ public final class MessageTopInfoListener extends AbstractListener {
 		// 因此，可以用同步的方法请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGETOPINFO);
+		StringBuilder url = new StringBuilder(API.MESSAGETOPINFO);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

@@ -41,8 +41,7 @@ public final class MessageMarkListener extends AbstractListener {
 		// 因此，可以用同步的方式请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGEMARK);
+		StringBuilder url = new StringBuilder(API.MESSAGEMARK);
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);
 		url = null;
