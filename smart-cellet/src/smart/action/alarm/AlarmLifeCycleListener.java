@@ -56,8 +56,7 @@ public final class AlarmLifeCycleListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMLIFECYCLE);
+			StringBuilder url = new StringBuilder(API.ALARMLIFECYCLE);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

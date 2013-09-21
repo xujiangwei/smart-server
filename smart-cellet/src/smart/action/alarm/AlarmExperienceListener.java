@@ -60,8 +60,7 @@ public final class AlarmExperienceListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMEXPERIENCE);
+			StringBuilder url = new StringBuilder(API.ALARMEXPERIENCE);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

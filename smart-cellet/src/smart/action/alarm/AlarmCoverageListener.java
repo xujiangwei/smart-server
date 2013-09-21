@@ -57,8 +57,7 @@ public final class AlarmCoverageListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMCOVERAGE);
+			StringBuilder url = new StringBuilder(API.ALARMCOVERAGE);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

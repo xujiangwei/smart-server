@@ -3,11 +3,6 @@ package smart.action;
 import java.util.Collection;
 import java.util.Iterator;
 
-import org.eclipse.jetty.client.HttpClient;
-
-import smart.SmartCellet;
-import smart.mast.action.ActionListener;
-
 import net.cellcloud.core.Cellet;
 import net.cellcloud.talk.dialect.ActionDialect;
 import net.cellcloud.talk.dialect.DialectEnumerator;
@@ -17,6 +12,10 @@ import net.cellcloud.util.LongProperty;
 import net.cellcloud.util.Properties;
 import net.cellcloud.util.PropertyReference;
 import net.cellcloud.util.StringProperty;
+
+import org.eclipse.jetty.client.HttpClient;
+
+import smart.mast.action.ActionListener;
 
 /*
  * 抽象监听器
@@ -57,12 +56,6 @@ public abstract class AbstractListener implements ActionListener {
 	 */
 	public void setHttpClient(HttpClient httpClient){
 		this.httpClient=httpClient;
-	}
-	
-	/*返回API的HTTP地址
-	 */
-	public String getHost(){
-		return SmartCellet.getInstance().getAPIHost();
 	}
 	
 	/*

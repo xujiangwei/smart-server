@@ -19,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
-import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
@@ -40,30 +39,28 @@ public final class EquipmentBasicListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
-		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.EQUIPMENTBASIC);
-
-		// 创建请求
-		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.GET);
-		url = null;
-
 		// 获取参数
 		JSONObject json = null;
 		long equipmentId = 0;
+		int rangeInHour = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			equipmentId = json.getLong("equipmentId");
+			equipmentId = json.getLong("moId");
+			rangeInHour = json.getInt("rangeInHour");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
+
+		// 创建请求
+		Request request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/data/perf/mo/998/"+equipmentId+"/40001/?rangeInHour="+rangeInHour);
+		request.method(HttpMethod.GET);
 
 		// 填写数据内容
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("equipmentId", equipmentId);
+		capsule.append("rangeInHour", rangeInHour);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -90,7 +87,7 @@ public final class EquipmentBasicListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					
+					System.out.println("detail: "+data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

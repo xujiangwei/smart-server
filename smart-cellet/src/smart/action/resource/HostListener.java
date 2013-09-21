@@ -19,7 +19,6 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
-import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
@@ -42,13 +41,13 @@ public final class HostListener extends AbstractListener {
 		// 因此，这里可以用同步的方式请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.HOST);
+//		StringBuilder url = new StringBuilder(this.getHost())
+//				.append(API.HOST);
 
 		// 创建请求
-		Request request = this.getHttpClient().newRequest(url.toString());
+		Request request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/model/core/mo/list/998/9980000000000000");
 		request.method(HttpMethod.GET);
-		url = null;
+//		url = null;
 
 		// 获取参数
 		JSONObject json = null;
@@ -59,6 +58,7 @@ public final class HostListener extends AbstractListener {
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
+			System.out.println("参数："+json);
 			pageSize = json.getInt("pageSize");
 			currentIndex = json.getInt("currentIndex");
 			orderBy = json.getString("orderBy");
@@ -102,7 +102,7 @@ public final class HostListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-
+System.out.println("结果："+data);
 					if(data != null && !"".equals(data)){
 						
 						
@@ -117,9 +117,9 @@ public final class HostListener extends AbstractListener {
 				
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.HOST, params);
+				this.response(Action.DEVICE, params);
 			} else {
-				this.reportHTTPError(Action.HOST);
+				this.reportHTTPError(Action.DEVICE);
 			}
 			break;
 		default:
@@ -135,7 +135,7 @@ public final class HostListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.HOST, params);
+			this.response(Action.DEVICE, params);
 			break;
 		}
 

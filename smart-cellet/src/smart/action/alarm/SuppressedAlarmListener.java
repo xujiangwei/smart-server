@@ -60,8 +60,7 @@ public final class SuppressedAlarmListener extends AbstractListener {
 		if (token != null && !"".equals(token)) {
 
 			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.SUPPRESSEDALARM);
+			StringBuilder url = new StringBuilder(API.SUPPRESSEDALARM);
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

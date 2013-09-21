@@ -30,6 +30,8 @@ import smart.action.attention.AttentionListListener;
 import smart.action.attention.AttentionListener;
 import smart.action.attention.CancelAttentionListener;
 import smart.action.attention.DeleteAttentionListener;
+import smart.action.ci.CiDetailListener;
+import smart.action.ci.CiListListener;
 import smart.action.message.MessageContactsListener;
 import smart.action.message.MessageCustomTagListener;
 import smart.action.message.MessageDeleteListener;
@@ -48,6 +50,7 @@ import smart.action.resource.DeleteEquipmentListener;
 import smart.action.resource.EquipmentAlarmListener;
 import smart.action.resource.EquipmentBasicListener;
 import smart.action.resource.EquipmentHealthStatusListener;
+import smart.action.resource.EquipmentListListener;
 import smart.action.resource.EquipmentMonitorStateListener;
 import smart.action.resource.EquipmentPerformanceListener;
 import smart.action.resource.EquipmentTopoListener;
@@ -56,8 +59,6 @@ import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
-import smart.action.ci.CiDetailListener;
-import smart.action.ci.CiListListener;
 import smart.action.time.CurrentTimeListener;
 import smart.mast.Root;
 import smart.mast.action.Action;
@@ -67,8 +68,6 @@ import smart.mast.core.SystemCategory;
 public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
-
-	private String apiHost = "http://10.10.152.20:9080";
 
 	private HttpClient httpClient;
 
@@ -80,12 +79,6 @@ public class SmartCellet extends Cellet {
 
 	public synchronized static SmartCellet getInstance() {
 		return SmartCellet.instance;
-	}
-
-	/**
-	 */
-	public String getAPIHost() {
-		return this.apiHost;
 	}
 
 	@Override
@@ -294,6 +287,11 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
 				messageFileUploadListener);
 
+		// 获取所有设备列表
+				EquipmentListListener equipmentList = new EquipmentListListener(this);
+				equipmentList.setHttpClient(this.httpClient);
+				dispatcher.addListener(Action.DEVICE, equipmentList);
+		
 		// 获取主机设备
 		HostListener host = new HostListener(this);
 		host.setHttpClient(this.httpClient);
@@ -308,7 +306,7 @@ public class SmartCellet extends Cellet {
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(
 				this);
 		eqptBasicListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTDETAIL, eqptBasicListener);
+		dispatcher.addListener(Action.EQUIPMENTBASIC, eqptBasicListener);
 
 		// 获取设备性能信息
 		EquipmentPerformanceListener eqptPerformance = new EquipmentPerformanceListener(

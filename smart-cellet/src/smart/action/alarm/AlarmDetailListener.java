@@ -1,6 +1,12 @@
 package smart.action.alarm;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Arrays;
+import java.util.Date;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -15,11 +21,11 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
-import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
@@ -55,14 +61,9 @@ public final class AlarmDetailListener extends AbstractListener {
 		Properties params = new Properties();
 		if (token != null && !"".equals(token)) {
 
-			// URL
-			StringBuilder url = new StringBuilder(this.getHost())
-					.append(API.ALARMDETAIL);
-
 			// 创建请求
-			Request request = this.getHttpClient().newRequest(url.toString());
+			Request request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/list/998/9980000000000000/"+almId);
 			request.method(HttpMethod.GET);
-			url = null;
 
 			// 填写数据内容
 			DeferredContentProvider dcp = new DeferredContentProvider();
@@ -96,6 +97,55 @@ public final class AlarmDetailListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
+						JSONArray ja = new JSONArray();
+						if ("成功".equals(jo.get("result"))) {
+							ja = jo.getJSONArray("almlist");
+							List<String> list = Arrays.asList("almId","moId","rootMoId","parentMoId","typeCode","almCause",
+									"isSuppressed","severity","extraInfo","almStatus","trend","occurTime","lastTime","count","detail",
+									"originalInfo","confirmTime","confirmUserId","confirmUser","moIp","moName","causeAlias","location");
+							JSONObject job = new JSONObject();
+							for (int i = 0; i < ja.length(); i++) {
+								for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
+									for (int k = 0; k < list.size(); k++) {
+										if (k == j) {
+											if ("almId".equals(list.get(k))||"moId".equals(list.get(k))||("confirmUserId".equals(list.get(k))&&!"".equals(ja.getJSONArray(i).getString(j)))){
+												job.put(list.get(k), Long.valueOf(ja.getJSONArray(i).getString(j)));
+											} else if ("occurTime".equals(list.get(k))||
+													"lastTime".equals(list.get(k))||("confirmTime".equals(list.get(k))&&!"".equals(ja.getJSONArray(i).get(j)))) {
+												DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+												Date date = null;
+												try {
+													date = df.parse(ja.getJSONArray(i).getString(j));
+													job.put(list.get(k), date.getTime());
+												} catch (ParseException e) {
+													e.printStackTrace();
+												}
+											} else if ("count".equals(list.get(k))||"severity".equals(list.get(k))) {
+												job.put(list.get(k), Integer.parseInt(ja.getJSONArray(i).getString(j)));
+											} else if (("confirmUserId".equals(list.get(k))||"confirmTime".equals(list.get(k)))&&"".equals(ja.getJSONArray(i).getString(j))){
+												job.put(list.get(k), 0);
+											} else {
+												job.put(list.get(k), ja.getJSONArray(i).get(j));
+											}
+										}
+									}
+								}
+							}
+							System.out.println("jsonObject:"+job);
+							jo.remove("result");
+							jo.remove("almlist");
+							jo.put("category", "baseInfo");
+							jo.put("almId", almId);
+							jo.put("status", 300);
+							jo.put("baseInfo", job);
+							jo.put("errorInfo", "");
+						} else {
+							jo.put("category", "baseInfo");
+							jo.put("almId", almId);
+							jo.put("status", 311);
+							jo.put("baseInfo", "");
+							jo.put("errorInfo", "找不到符合条件的相关告警详情");
+						}
 //						if (jo.get("baseInfo") != null && !"".equals(jo.get("baseInfo"))) {
 //							String moType = jo.getJSONObject("baseInfo").getString("moType");
 //							String location = jo.getJSONObject("baseInfo").getString("location");

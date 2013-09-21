@@ -41,8 +41,7 @@ public final class EquipmentAlarmListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API
 
 		// url
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.EQUIPMENTALARM);
+		StringBuilder url = new StringBuilder(API.EQUIPMENTALARM);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

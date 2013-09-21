@@ -41,8 +41,7 @@ public final class SendSnapshotListener extends AbstractListener {
 		// 因此，这里可以使用同步方式进行请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.SENDSNAPSHOT);
+		StringBuilder url = new StringBuilder(API.SENDSNAPSHOT);
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);

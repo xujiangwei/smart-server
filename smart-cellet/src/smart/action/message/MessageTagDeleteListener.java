@@ -42,8 +42,7 @@ public final class MessageTagDeleteListener extends AbstractListener {
 		// 因此，在这里可以用同步的方式请求HTTP API
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGETAGDELETE);
+		StringBuilder url = new StringBuilder(API.MESSAGETAGDELETE);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
