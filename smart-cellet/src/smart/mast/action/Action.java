@@ -89,6 +89,11 @@ public final class Action {
 
 	// 待办
 	public static final String INCIDENTLIST = "requestIncidentList";
+	public static final String INCIDENTDETAIL = "requestIncidentDetail";
+	
+	// 资产
+	public static final String CILIST = "requestCiList";
+	public static final String CIDETAIL = "requestCiDetail";
 	
 	private Action() {
 	}

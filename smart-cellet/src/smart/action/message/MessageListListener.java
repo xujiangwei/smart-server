@@ -42,46 +42,29 @@ public final class MessageListListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost())
-				.append(API.MESSAGELIST);
-		Request request = this.getHttpClient().newRequest(url.toString());
-
-		request.method(HttpMethod.GET);
-		url = null;
-
+		StringBuilder url = new StringBuilder(this.getHost()).append(API.MESSAGELIST);
 		// 获取参数
 		JSONObject json = null;
-		int pageSize = 0;
+		int pageSize = 12;
 		int currentIndex = 0;
-		int tagId = 0;
-		String orderBy = null;
-		String condition = null;
+
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			System.out.println("data  " + json);
 			Logger.i(this.getClass(), json.toString());
 			pageSize = json.getInt("pageSize");
 			currentIndex = json.getInt("currentIndex");
-			tagId = json.getInt("tagId");
-			orderBy = json.getString("orderBy");
-			condition = json.getString("condition");
+
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
-
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("pageSize", pageSize);
-		capsule.append("currentIndex", currentIndex);
-		capsule.append("tagId", tagId);
-		capsule.append("orderBy", orderBy);
-		capsule.append("condition", condition);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
-
+		url.append("&currentIndex=").append(currentIndex);
+		url.append("&pageSize=").append(pageSize);
+		
+		Request request = this.getHttpClient().newRequest(url.toString());
+		request.method(HttpMethod.GET);
+	
 		// 发送请求
 		ContentResponse response = null;
 		try {
@@ -102,6 +85,8 @@ public final class MessageListListener extends AbstractListener {
 			if (null != bytes) {
 				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
+				
+				System.out.println("从服务台获取的消息JSON为："+content);
 				try {
 					data = new JSONObject(content);
 

@@ -54,7 +54,10 @@ import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.HostListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
+import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
+import smart.action.ci.CiDetailListener;
+import smart.action.ci.CiListListener;
 import smart.action.time.CurrentTimeListener;
 import smart.mast.Root;
 import smart.mast.action.Action;
@@ -65,7 +68,7 @@ public class SmartCellet extends Cellet {
 
 	private static SmartCellet instance;
 
-	private String apiHost = "http://10.10.152.84:8080";
+	private String apiHost = "http://10.10.152.20:9080";
 
 	private HttpClient httpClient;
 
@@ -406,7 +409,6 @@ public class SmartCellet extends Cellet {
 		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
 		lifeCycle.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
-
 		// 获取压制的告警
 		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
 		suppressed.setHttpClient(this.httpClient);
@@ -423,11 +425,26 @@ public class SmartCellet extends Cellet {
 		nodeDec.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
 		
-		//待办
+		/** 待办*/
+		//获取故障列表
 		IncidentListListener  incidentList = new IncidentListListener(this);
-		
 		incidentList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTLIST, incidentList);
 		
+		//获取指定故障任务工单明细
+		IncidentDetailListener  incidentDetail = new IncidentDetailListener(this);
+		incidentDetail.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INCIDENTDETAIL, incidentDetail);
+		
+		/** 资产管理*/
+		//获取设备资产列表数据
+		CiListListener  ciListener = new CiListListener(this);
+		ciListener.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CILIST, ciListener);
+		
+		//获取指定设备资产详细信息
+		CiDetailListener  ciDetail = new CiDetailListener(this);
+		ciDetail.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.CIDETAIL, ciDetail);
 	}
 }
