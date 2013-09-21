@@ -42,7 +42,7 @@ public final class MessageListListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(this.getHost()).append(API.MESSAGELIST);
+		StringBuilder url = new StringBuilder(API.MESSAGELIST);
 		// 获取参数
 		JSONObject json = null;
 		int pageSize = 12;
