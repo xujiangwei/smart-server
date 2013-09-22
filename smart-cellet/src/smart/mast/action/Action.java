@@ -56,8 +56,9 @@ public final class Action {
 
 	// 资源设备
 	public final static String DEVICE = "requestDevice";
-	public final static String HOST = "requestHosts";
-	public final static String NETEQUIPMENT = "requestNetEquipment";
+	public final static String HOST = "requestHost";
+	public final static String NETEQUIPMENT = "requestNetEqpt";
+	public final static String DATABASE = "requestDatabase";
 
 	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";

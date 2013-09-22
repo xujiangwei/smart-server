@@ -26,7 +26,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
+import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -61,8 +65,14 @@ public final class AlarmDetailListener extends AbstractListener {
 		Properties params = new Properties();
 		if (token != null && !"".equals(token)) {
 
+			// URL
+			HostConfig config = new MonitorSystemHostConfig();
+			HostConfigContext context = new HostConfigContext(config);
+			StringBuilder url = new StringBuilder(context.getAPIHost())
+					.append("/").append(API.ALARMDETAIL).append("/").append(almId);
+
 			// 创建请求
-			Request request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/list/998/9980000000000000/"+almId);
+			Request request = this.getHttpClient().newRequest(url.toString());
 			request.method(HttpMethod.GET);
 
 			// 填写数据内容
@@ -100,29 +110,54 @@ public final class AlarmDetailListener extends AbstractListener {
 						JSONArray ja = new JSONArray();
 						if ("成功".equals(jo.get("result"))) {
 							ja = jo.getJSONArray("almlist");
-							List<String> list = Arrays.asList("almId","moId","rootMoId","parentMoId","typeCode","almCause",
-									"isSuppressed","severity","extraInfo","almStatus","trend","occurTime","lastTime","count","detail",
-									"originalInfo","confirmTime","confirmUserId","confirmUser","moIp","moName","causeAlias","location");
+							List<String> list = Arrays.asList("almId", "moId",
+									"rootMoId", "parentMoId", "typeCode",
+									"almCause", "isSuppressed", "severity",
+									"extraInfo", "almStatus", "trend",
+									"occurTime", "lastTime", "count", "detail",
+									"originalInfo", "confirmTime",
+									"confirmUserId", "confirmUser", "moIp",
+									"moName", "causeAlias", "location");
 							JSONObject job = new JSONObject();
 							for (int i = 0; i < ja.length(); i++) {
 								for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
 									for (int k = 0; k < list.size(); k++) {
 										if (k == j) {
-											if ("almId".equals(list.get(k))||"moId".equals(list.get(k))||("confirmUserId".equals(list.get(k))&&!"".equals(ja.getJSONArray(i).getString(j)))){
-												job.put(list.get(k), Long.valueOf(ja.getJSONArray(i).getString(j)));
-											} else if ("occurTime".equals(list.get(k))||
-													"lastTime".equals(list.get(k))||("confirmTime".equals(list.get(k))&&!"".equals(ja.getJSONArray(i).get(j)))) {
-												DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+											if ("almId".equals(list.get(k))
+													|| "moId".equals(list.get(k))
+													|| ("confirmUserId"
+															.equals(list.get(k)) && !""
+															.equals(ja.getJSONArray(i)
+																	.getString(j)))) {
+												job.put(list.get(k),
+														Long.valueOf(ja.getJSONArray(i)
+																.getString(j)));
+											} else if ("occurTime".equals(list.get(k))
+													|| "lastTime".equals(list.get(k))
+													|| ("confirmTime"
+															.equals(list.get(k)) && !""
+															.equals(ja.getJSONArray(i)
+																	.get(j)))) {
+												DateFormat df = new SimpleDateFormat(
+														"yyyy-MM-dd HH:mm:ss");
 												Date date = null;
 												try {
-													date = df.parse(ja.getJSONArray(i).getString(j));
+													date = df.parse(ja.getJSONArray(i)
+															.getString(j));
 													job.put(list.get(k), date.getTime());
 												} catch (ParseException e) {
 													e.printStackTrace();
 												}
-											} else if ("count".equals(list.get(k))||"severity".equals(list.get(k))) {
-												job.put(list.get(k), Integer.parseInt(ja.getJSONArray(i).getString(j)));
-											} else if (("confirmUserId".equals(list.get(k))||"confirmTime".equals(list.get(k)))&&"".equals(ja.getJSONArray(i).getString(j))){
+											} else if ("count".equals(list.get(k))
+													|| "severity".equals(list.get(k))) {
+												job.put(list.get(k),
+														Integer.parseInt(ja.getJSONArray(i)
+																.getString(j)));
+											} else if (("confirmUserId"
+													.equals(list.get(k)) || "confirmTime"
+													.equals(list.get(k)))
+													&& "".equals(ja.getJSONArray(i)
+															.getString(j))) {
 												job.put(list.get(k), 0);
 											} else {
 												job.put(list.get(k), ja.getJSONArray(i).get(j));
@@ -131,7 +166,7 @@ public final class AlarmDetailListener extends AbstractListener {
 									}
 								}
 							}
-							System.out.println("jsonObject:"+job);
+							System.out.println("jsonObject:" + job);
 							jo.remove("result");
 							jo.remove("almlist");
 							jo.put("category", "baseInfo");
@@ -146,21 +181,37 @@ public final class AlarmDetailListener extends AbstractListener {
 							jo.put("baseInfo", "");
 							jo.put("errorInfo", "找不到符合条件的相关告警详情");
 						}
-//						if (jo.get("baseInfo") != null && !"".equals(jo.get("baseInfo"))) {
-//							String moType = jo.getJSONObject("baseInfo").getString("moType");
-//							String location = jo.getJSONObject("baseInfo").getString("location");
-//							String detail = jo.getJSONObject("baseInfo").getString("detail");
-//							String almStatus = jo.getJSONObject("baseInfo").getString("almStatus");
-//							long occurTime = jo.getJSONObject("baseInfo").getLong("occurTime");
-//							String trend = jo.getJSONObject("baseInfo").getString("trend");
-//							int count = jo.getJSONObject("baseInfo").getInt("count");
-//							int upgradeCount = jo.getJSONObject("baseInfo").getInt("upgradeCount");
-//							String confirmUser = jo.getJSONObject("baseInfo").getString("confirmUser");
-//							long confirmTime = jo.getJSONObject("baseInfo").getLong("confirmTime");
-//							String delUser = jo.getJSONObject("baseInfo").getString("delUser");
-//							long delTime = jo.getJSONObject("baseInfo").getLong("delTime");
-//							AlarmManager.getInstance().signInDetail(almId, moType, location, detail, almStatus, occurTime, trend, count, upgradeCount, confirmUser, confirmTime, delUser, delTime);
-//						}
+						// if (jo.get("baseInfo") != null &&
+						// !"".equals(jo.get("baseInfo"))) {
+						// String moType =
+						// jo.getJSONObject("baseInfo").getString("moType");
+						// String location =
+						// jo.getJSONObject("baseInfo").getString("location");
+						// String detail =
+						// jo.getJSONObject("baseInfo").getString("detail");
+						// String almStatus =
+						// jo.getJSONObject("baseInfo").getString("almStatus");
+						// long occurTime =
+						// jo.getJSONObject("baseInfo").getLong("occurTime");
+						// String trend =
+						// jo.getJSONObject("baseInfo").getString("trend");
+						// int count =
+						// jo.getJSONObject("baseInfo").getInt("count");
+						// int upgradeCount =
+						// jo.getJSONObject("baseInfo").getInt("upgradeCount");
+						// String confirmUser =
+						// jo.getJSONObject("baseInfo").getString("confirmUser");
+						// long confirmTime =
+						// jo.getJSONObject("baseInfo").getLong("confirmTime");
+						// String delUser =
+						// jo.getJSONObject("baseInfo").getString("delUser");
+						// long delTime =
+						// jo.getJSONObject("baseInfo").getLong("delTime");
+						// AlarmManager.getInstance().signInDetail(almId,
+						// moType, location, detail, almStatus, occurTime,
+						// trend, count, upgradeCount, confirmUser, confirmTime,
+						// delUser, delTime);
+						// }
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 

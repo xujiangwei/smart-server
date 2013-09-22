@@ -29,22 +29,20 @@ import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
- * 网络设备监听器
- * 
+ * 获取数据库详情监听
  */
-public final class NetEquipmentListener extends AbstractListener {
+public class DataBaseListener extends AbstractListener {
 
-	public NetEquipmentListener(Cellet cellet) {
+	public DataBaseListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
-
 		// 使用同步的方式进行请求
-		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
-		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
-		// 因此，这里可以用同步的方式请求HTTP API
+		// 注意：因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
+		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
+		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// 获取参数
 		JSONObject json = null;
@@ -61,8 +59,8 @@ public final class NetEquipmentListener extends AbstractListener {
 		// URL
 		HostConfig  config=new MonitorSystemHostConfig();
 		HostConfigContext context=new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.NETEQUIPMENT)
-				.append("/").append(equipmentId).append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=").append(rangeInHour);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.DATABASE)
+				.append("/").append(equipmentId).append("/fUsedUtil?rangeInHour=").append(rangeInHour);
 		
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -128,8 +126,8 @@ public final class NetEquipmentListener extends AbstractListener {
 					} else {
 						data.remove("dataList");
 						data.put("data", "");
-						data.put("status", 603);
-						data.put("errorInfo", "未获取到网络设备相关kpi数据");
+						data.put("status", 602);
+						data.put("errorInfo", "未获取到数据库相关kpi数据");
 					}
 					System.out.println("detail: " + data);
 
@@ -143,9 +141,9 @@ public final class NetEquipmentListener extends AbstractListener {
 
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
-				this.response(Action.NETEQUIPMENT, params);
+				this.response(Action.DATABASE, params);
 			} else {
-				this.reportHTTPError(Action.NETEQUIPMENT);
+				this.reportHTTPError(Action.DATABASE);
 			}
 			break;
 		default:
@@ -162,10 +160,9 @@ public final class NetEquipmentListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.NETEQUIPMENT, params);
+			this.response(Action.DATABASE, params);
 			break;
 		}
-
 	}
 
 }
