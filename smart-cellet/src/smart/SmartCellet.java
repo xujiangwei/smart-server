@@ -46,7 +46,7 @@ import smart.action.message.MessageTagDeleteListener;
 import smart.action.message.MessageTagDisplayListener;
 import smart.action.message.MessageTagModifyListener;
 import smart.action.message.MessageTopInfoListener;
-import smart.action.resource.CPUListener;
+import smart.action.resource.CPUUsageListener;
 import smart.action.resource.DataBaseListener;
 import smart.action.resource.DeleteEquipmentListener;
 import smart.action.resource.EquipmentAlarmListener;
@@ -56,8 +56,8 @@ import smart.action.resource.EquipmentListListener;
 import smart.action.resource.EquipmentMonitorStateListener;
 import smart.action.resource.EquipmentPerformanceListener;
 import smart.action.resource.EquipmentTopoListener;
-import smart.action.resource.FileSystemListener;
-import smart.action.resource.MemoryListener;
+import smart.action.resource.FileSystemUsageListener;
+import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.IncidentDetailListener;
@@ -294,25 +294,24 @@ public class SmartCellet extends Cellet {
 		EquipmentListListener equipmentList = new EquipmentListListener(this);
 		equipmentList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DEVICE, equipmentList);
-		
+
 		// 获取数据库详细
 		DataBaseListener db = new DataBaseListener(this);
 		db.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DATABASE, db);
 
 		// 获取主机设备
-		CPUListener cpu = new CPUListener(this);
-		cpu.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, cpu);
+		CPUUsageListener cu = new CPUUsageListener(this);
+		cu.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, cu);
 
-		MemoryListener mem = new MemoryListener(this);
-		mem.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, mem);
+		MemoryUsageListener memu = new MemoryUsageListener(this);
+		memu.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, memu);
 
-		FileSystemListener filesys = new FileSystemListener(this);
-		filesys.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, filesys);
-
+		FileSystemUsageListener filesu = new FileSystemUsageListener(this);
+		filesu.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, filesu);
 
 		// 获取网络设备
 		NetEquipmentListener netEqpt = new NetEquipmentListener(this);
