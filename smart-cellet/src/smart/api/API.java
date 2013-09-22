@@ -60,14 +60,12 @@ public final class API {
 	public final static String EQUIPMENTTOPO = "http://10.10.152.26:8080/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
 	//待办
-	public final static String INCIDENTLIST = "http://10.10.152.20:9080/itsm/incidentm/listTodos.html?username=admin";
-	public final static String INCIDENTDETAIL = "http://10.10.152.20:9080/itsm/incidentm/loadById.html?username=admin";
+	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
+	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
 	
 	//资产
-//	http://10.10.152.84:8080/fvsd-branch/sacmm/listEquipments.html?username=admin&currentIndex=1&pageSize=15
-//	http://localhost:8080/fvsd-branch/sacmm/loadEquipmentById.html?username=admin&ciId=`
-	public final static String CILIST = "http://10.10.152.20:9080/itsm/sacmm/listEquipments.html?username=admin";
-	public final static String CIDETAIL = "http://10.10.152.20:9080/itsm/sacmm/loadEquipmentById.html?username=admin";
+	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
+	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
 	
 	private API() {
 	}

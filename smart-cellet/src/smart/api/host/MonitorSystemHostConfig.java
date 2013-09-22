@@ -1,0 +1,1 @@
+package smart.api.host;public class MonitorSystemHostConfig  implements HostConfig{	@Override	public String getHost() {		// TODO Auto-generated method stub		return null;	}	@Override	public String getProjectName() {		// TODO Auto-generated method stub		return null;	}	@Override	public String getAPIHost() {		// TODO Auto-generated method stub		return null;	}}
