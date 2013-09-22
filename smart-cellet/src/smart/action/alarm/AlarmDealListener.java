@@ -21,7 +21,11 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
+import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -61,14 +65,24 @@ public final class AlarmDealListener extends AbstractListener {
 		Properties params = new Properties();
 		if (token != null && !"".equals(token)) {
 
+			// URL
+			HostConfig config = new MonitorSystemHostConfig();
+			HostConfigContext context = new HostConfigContext(config);
+			
 			// 创建请求
 			Request request = null;
 			String s = almIdList.toString().substring(1).replace("]", "");
+			StringBuilder url = null;
 			if ("almConfirm".equals(opType)) {
-				request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/confirm/"+s+"?DMSN=998&userID=9980000000000000&userName="+username);
+				url = new StringBuilder(context.getAPIHost())
+				.append("/").append(API.ALARMDEAL).append("/confirm/").append(s)
+				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
 			} else if ("almDel".equals(opType)) {
-				request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/alm/external/clear/"+s+"?DMSN=998&userID=9980000000000000&userName="+username);
+				url = new StringBuilder(context.getAPIHost())
+				.append("/").append(API.ALARMDEAL).append("/clear/").append(s)
+				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
 			}
+			request = this.getHttpClient().newRequest(url.toString());
 			request.method(HttpMethod.GET);
 
 			// 填写数据内容

@@ -1,6 +1,9 @@
 package smart.action.resource;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -15,11 +18,16 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
+import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -51,8 +59,14 @@ public final class EquipmentBasicListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
+		// URL
+		HostConfig  config=new MonitorSystemHostConfig();
+		HostConfigContext context=new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.EQUIPMENTBASIC)
+				.append("/").append(equipmentId).append("/40001/?rangeInHour=").append(rangeInHour);
+		
 		// 创建请求
-		Request request = this.getHttpClient().newRequest("http://10.10.152.20:8080/itims/restws/data/perf/mo/998/"+equipmentId+"/40001/?rangeInHour="+rangeInHour);
+		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 
 		// 填写数据内容
@@ -88,9 +102,39 @@ public final class EquipmentBasicListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 					System.out.println("detail: "+data);
+					if ("success".equals(data.get("status"))) {
+						if (!"".equals(data.get("dataList"))&&data.get("dataList") != null) {
+							JSONArray ja = data.getJSONArray("dataList");
+							DateFormat df = new SimpleDateFormat(
+									"yyyy-MM-dd HH:mm:ss");
+							for (int i = 0; i < ja.length(); i++) {
+								JSONArray ja1 = ja.getJSONObject(i).getJSONArray("data");
+								JSONArray ja2 = new JSONArray();
+								for (int j = 0; j < ja1.length(); j++) {
+									JSONObject jo = new JSONObject();
+									jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+									jo.put("collectTime",
+											df.parse(
+													ja1.getJSONArray(j)
+															.getString(1))
+													.getTime());
+									ja2.put(jo);
+								}
+								ja.getJSONObject(i).remove("data");
+								ja.getJSONObject(i).put("data", ja2);
+							}
+						}
+						data.put("status", 300);
+						data.put("errorInfo", "");
+					} else {
+						data.put("errorInfo", "未获取到相关kpi数据");
+					}
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 				

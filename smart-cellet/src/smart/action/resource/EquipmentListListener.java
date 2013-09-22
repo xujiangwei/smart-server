@@ -14,7 +14,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONArray;
@@ -22,7 +21,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
-import smart.api.RequestContentCapsule;
+import smart.api.API;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -41,40 +43,15 @@ public class EquipmentListListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
 		// 因此，这里可以用同步的方式请求HTTP API
 
+		// URL
+		HostConfig config = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost())
+				.append("/").append(API.EQUIPMENTLIST);
+		
 		// 创建请求
-		Request request = this.getHttpClient().newRequest(
-						"http://10.10.152.20:8080/itims/restws/model/core/mo/list/998/9980000000000000");
+		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
-
-		// 获取参数
-		JSONObject json = null;
-		int pageSize = 0;
-		int currentIndex = 0;
-		String orderBy = null;
-		String condition = null;
-
-		try {
-			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("参数：" + json);
-			pageSize = json.getInt("pageSize");
-			currentIndex = json.getInt("currentIndex");
-			orderBy = json.getString("orderBy");
-			condition = json.getString("condition");
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
-
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("pageSize", pageSize);
-		capsule.append("currentIndex", currentIndex);
-		capsule.append("orderBy", orderBy);
-		capsule.append("condition", condition);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
 
 		// 发送请求
 		ContentResponse response = null;
@@ -125,7 +102,7 @@ public class EquipmentListListener extends AbstractListener {
 						vendor.put("神州数码", 20);
 						vendor.put("AIX", 21);
 						vendor.put("Solaris", 22);
-						vendor.put("0", 0);
+						vendor.put("未知", 0);
 
 						ja = data.getJSONArray("moList");
 						JSONArray jar = new JSONArray();
@@ -140,30 +117,22 @@ public class EquipmentListListener extends AbstractListener {
 								for (int k = 0; k < list.size(); k++) {
 									if (k == j) {
 										if ("vendor".equals(list.get(k))
-												&& ("".equals(ja
-														.getJSONArray(i).get(j)) || ja
-														.getJSONArray(i).get(j) == null)) {
-											job.put(list.get(k), "0");
+												&& ("".equals(ja.getJSONArray(i).get(j)) 
+												|| ja.getJSONArray(i).get(j) == null)
+												|| "null".equals(ja.getJSONArray(i).get(j))
+												|| ja.getJSONArray(i).get(j).equals(null)) {
+											job.put(list.get(k), "未知");
 										} else {
-											job.put(list.get(k), ja
-													.getJSONArray(i).get(j));
+											job.put(list.get(k), ja.getJSONArray(i).get(j));
 										}
 									}
 								}
 							}
-							jo.put("moId", job.getLong("moId"));
-							if (job.get("vendor") == null
-									|| "null".equals(job.get("vendor"))
-									|| "null".equals(job.get("vendor"))
-									|| job.get("vendor").equals(null)) {
-								job.put("vendor", "0");
-							}
-							jo.put("vendorID",
-									vendor.getInt(job.get("vendor").toString()));
-
+							jo.put("vendorID", vendor.getInt(job.get("vendor").toString()));
 							jo.put("typeCode", job.getLong("typeCode"));
-							jo.put("typeName",
-									job.getString("typePath").split(" > ")[1]);
+							jo.put("moId", job.getLong("moId"));
+							jo.put("moType", job.getString("typePath").split(" > ")[0]);
+							jo.put("typeName", job.getString("typePath").split(" > ")[1]);
 							job.remove("moId");
 							job.remove("vendor");
 							job.remove("typeName");
@@ -178,7 +147,7 @@ public class EquipmentListListener extends AbstractListener {
 						data.put("errorInfo", "");
 					} else {
 						data.remove("moList");
-						data.put("status", 456);
+						data.put("status", 601);
 						data.put("moList", "");
 						data.put("errorInfo", "获取设备列表出错");
 					}
