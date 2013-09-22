@@ -84,6 +84,7 @@ public class SmartCellet extends Cellet {
 
 	/**
 	 */
+	@Deprecated
 	public String getAPIHost() {
 		return this.apiHost;
 	}

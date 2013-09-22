@@ -6,6 +6,7 @@ import java.util.Iterator;
 import org.eclipse.jetty.client.HttpClient;
 
 import smart.SmartCellet;
+import smart.api.HostConfig;
 import smart.mast.action.ActionListener;
 
 import net.cellcloud.core.Cellet;
@@ -40,6 +41,7 @@ public abstract class AbstractListener implements ActionListener {
 	public String getSourceTag() {
 		return this.sourceTag;
 	}
+	
 
 	/*返回Cellet实例
 	 */
