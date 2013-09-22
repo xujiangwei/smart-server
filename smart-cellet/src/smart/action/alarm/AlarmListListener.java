@@ -29,6 +29,9 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -49,7 +52,9 @@ public final class AlarmListListener extends AbstractListener {
 		// 设置请求HTTP API方式
 
 		// URL
-		StringBuilder url = new StringBuilder(API.ALARMLIST);
+		HostConfig  config=new MonitorSystemHostConfig();
+		HostConfigContext context=new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.ALARMLIST);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

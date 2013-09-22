@@ -46,6 +46,8 @@ import smart.action.message.MessageTagDeleteListener;
 import smart.action.message.MessageTagDisplayListener;
 import smart.action.message.MessageTagModifyListener;
 import smart.action.message.MessageTopInfoListener;
+import smart.action.resource.CPUListener;
+import smart.action.resource.DataBaseListener;
 import smart.action.resource.DeleteEquipmentListener;
 import smart.action.resource.EquipmentAlarmListener;
 import smart.action.resource.EquipmentBasicListener;
@@ -54,7 +56,8 @@ import smart.action.resource.EquipmentListListener;
 import smart.action.resource.EquipmentMonitorStateListener;
 import smart.action.resource.EquipmentPerformanceListener;
 import smart.action.resource.EquipmentTopoListener;
-import smart.action.resource.HostListener;
+import smart.action.resource.FileSystemListener;
+import smart.action.resource.MemoryListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.IncidentDetailListener;
@@ -156,7 +159,7 @@ public class SmartCellet extends Cellet {
 		ConnectionCheckListener check = new ConnectionCheckListener(this);
 		check.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CONNECTIONCHECK, check);
-		
+
 		// 登录
 		LoginListener login = new LoginListener(this);
 		login.setHttpClient(this.httpClient);
@@ -288,14 +291,28 @@ public class SmartCellet extends Cellet {
 				messageFileUploadListener);
 
 		// 获取所有设备列表
-				EquipmentListListener equipmentList = new EquipmentListListener(this);
-				equipmentList.setHttpClient(this.httpClient);
-				dispatcher.addListener(Action.DEVICE, equipmentList);
+		EquipmentListListener equipmentList = new EquipmentListListener(this);
+		equipmentList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DEVICE, equipmentList);
 		
+		// 获取数据库详细
+		DataBaseListener db = new DataBaseListener(this);
+		db.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DATABASE, db);
+
 		// 获取主机设备
-		HostListener host = new HostListener(this);
-		host.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEVICE, host);
+		CPUListener cpu = new CPUListener(this);
+		cpu.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, cpu);
+
+		MemoryListener mem = new MemoryListener(this);
+		mem.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, mem);
+
+		FileSystemListener filesys = new FileSystemListener(this);
+		filesys.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, filesys);
+
 
 		// 获取网络设备
 		NetEquipmentListener netEqpt = new NetEquipmentListener(this);
@@ -321,7 +338,8 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.EQUIPMENTDETAIL, healthStatus);
 
 		// 删除设备
-		DeleteEquipmentListener equipmentDelete = new DeleteEquipmentListener(this);
+		DeleteEquipmentListener equipmentDelete = new DeleteEquipmentListener(
+				this);
 		equipmentDelete.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DELETEEQUIPMENT, equipmentDelete);
 
@@ -422,26 +440,26 @@ public class SmartCellet extends Cellet {
 		NodeDetectionListener nodeDec = new NodeDetectionListener(this);
 		nodeDec.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
-		
-		/** 待办*/
-		//获取故障列表
-		IncidentListListener  incidentList = new IncidentListListener(this);
+
+		/** 待办 */
+		// 获取故障列表
+		IncidentListListener incidentList = new IncidentListListener(this);
 		incidentList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTLIST, incidentList);
-		
-		//获取指定故障任务工单明细
-		IncidentDetailListener  incidentDetail = new IncidentDetailListener(this);
+
+		// 获取指定故障任务工单明细
+		IncidentDetailListener incidentDetail = new IncidentDetailListener(this);
 		incidentDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTDETAIL, incidentDetail);
-		
-		/** 资产管理*/
-		//获取设备资产列表数据
-		CiListListener  ciListener = new CiListListener(this);
+
+		/** 资产管理 */
+		// 获取设备资产列表数据
+		CiListListener ciListener = new CiListListener(this);
 		ciListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CILIST, ciListener);
-		
-		//获取指定设备资产详细信息
-		CiDetailListener  ciDetail = new CiDetailListener(this);
+
+		// 获取指定设备资产详细信息
+		CiDetailListener ciDetail = new CiDetailListener(this);
 		ciDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CIDETAIL, ciDetail);
 	}

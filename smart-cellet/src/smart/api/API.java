@@ -16,11 +16,11 @@ public final class API {
 	public static final String ATTENTIONLIST = "http://10.10.152.26:8080/monitoring-system/attentionList/reqAttentionList";
 
 	// 告警
-	public static final String ALARMDEAL = "/monitoring-system/deal/alarmDeal";
-	public static final String ALARMDETAIL = "/monitoring-system/baseInfo/reqAlarmBaseInfo";
+	public static final String ALARMDEAL = "restws/alm/external";
+	public static final String ALARMDETAIL = "restws/alm/external/list/998/9980000000000000";
 	public static final String ALARMFORWARD = "http://10.10.152.26:8080/monitoring-system/forward/alarmForward";
 	public static final String DEALINFO = "http://10.10.152.26:8080/monitoring-system/dealInfo/addDealInfo";
-	public static final String ALARMLIST = "http://10.10.152.20:8080/itims/restws/alm/external/list/998/9980000000000000/0";
+	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0";
 	public static final String ALARMCOVERAGE = "http://10.10.152.26:8080/monitoring-system/alarmCoverage/reqAlarmCoverage";
 	public static final String ALARMOPINFO = "http://10.10.152.26:8080/monitoring-system/alarmOpInfo/reqAlarmOpInfo";
 	public static final String ALARMEXPERIENCE = "http://10.10.152.26:8080/monitoring-system/alarmExperience/reqAlarmExperience";
@@ -46,10 +46,12 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.26:8080/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
+	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
+	public final static String DATABASE = "restws/data/perf/mo/998";
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
-	public final static String NETEQUIPMENT = "/monitoring-system/netEquipment/requestNetEquipment";
+	public final static String NETEQUIPMENT = "restws/data/perf/mo/998";
 
-	public final static String EQUIPMENTBASIC = "/monitoring-system/basic/requestEquipmentBasic";
+	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.26:8080/monitoring-system/performance/requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.26:8080/monitoring-system/health/requestEquipmentHealthStatus";
 
