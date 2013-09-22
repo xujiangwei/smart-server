@@ -51,6 +51,10 @@ public final class API {
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String NETEQUIPMENT = "restws/data/perf/mo/998";
 
+	public final static String CPUUSAGE="restws/data/perf/mo/998";
+	public final static String MEMORYUSAGE="restws/data/perf/mo/998";
+	public final static String FILESYSTEMUSAGE="restws/data/perf/mo/998";
+	
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.26:8080/monitoring-system/performance/requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.26:8080/monitoring-system/health/requestEquipmentHealthStatus";
