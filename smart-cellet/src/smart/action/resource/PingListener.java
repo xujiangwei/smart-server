@@ -7,12 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
-
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
@@ -22,6 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
@@ -30,9 +29,9 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class CPUUsageListener extends AbstractListener {
+public class PingListener extends AbstractListener {
 
-	public CPUUsageListener(Cellet cellet) {
+	public PingListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -57,11 +56,12 @@ public class CPUUsageListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 		// URL
+		// http://10.10.152.20:8080/itims/restws/data/perf/type/998/FPING/fAvgRestTime?rangeInHour=24&pmosn=998005517
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.CPU).append("/").append(moId)
-				.append("/fTotalCpu/?rangeInHour=").append(rangeInHour);
+				.append(API.PING).append("?").append("rangeInHour=")
+				.append(rangeInHour).append("&pmosn=").append(moId);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -100,7 +100,6 @@ public class CPUUsageListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-
 					if ("success".equals(data.get("status"))) {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
@@ -114,13 +113,12 @@ public class CPUUsageListener extends AbstractListener {
 
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONObject jo = new JSONObject();
-									jo.put("usage", Float.valueOf(ja1
-											.getJSONArray(j).getString(0)));
+									jo.put("PING延迟", ja1.getJSONArray(j).get(0));
 
 									jo.put("collectTime",
 											df.parse(
-													ja1.getJSONArray(j)
-															.getString(1))
+													ja1.getJSONArray(j).get(1)
+															.toString())
 													.getTime());
 
 									ja2.put(jo);
@@ -128,13 +126,10 @@ public class CPUUsageListener extends AbstractListener {
 								}
 								ja.getJSONObject(i).remove("data");
 								ja.getJSONObject(i).put("data", ja2);
-								ja.getJSONObject(i).put("data", ja2);
 								String s = ja.getJSONObject(i).getString(
 										"moPath");
-								ja.getJSONObject(i).put(
-										"name",
-										s.substring(s.indexOf("> ") + 1,
-												s.lastIndexOf("(")));
+								ja.getJSONObject(i).put("name",
+										s.split("> ")[2]);
 								ja.getJSONObject(i).remove("kpi");
 								ja.getJSONObject(i).remove("kpiName");
 								ja.getJSONObject(i).put("kpiName", ja2);
@@ -154,6 +149,7 @@ public class CPUUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
+					System.out.println("结果：" + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -164,9 +160,9 @@ public class CPUUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.CPU, params);
+				this.response(Action.PING, params);
 			} else {
-				this.reportHTTPError(Action.CPU);
+				this.reportHTTPError(Action.PING);
 			}
 			break;
 		default:
@@ -177,12 +173,12 @@ public class CPUUsageListener extends AbstractListener {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			System.out.println("结果：" + data);
+
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.CPU, params);
+			this.response(Action.PING, params);
 			break;
 		}
 	}
