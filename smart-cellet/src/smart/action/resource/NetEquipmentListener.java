@@ -115,6 +115,7 @@ public final class NetEquipmentListener extends AbstractListener {
 								String s = ja.getJSONObject(i).getString("moPath");
 								ja.getJSONObject(i).put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
 								ja.getJSONObject(i).remove("kpi");
+								ja.getJSONObject(i).put("mosn", Long.valueOf(ja.getJSONObject(i).getString("mosn")));
 							}
 							JSONObject jo = new JSONObject();
 							jo.put("dataList", ja);
