@@ -19,6 +19,9 @@ import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -40,7 +43,9 @@ public final class MessageListListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(API.MESSAGELIST);
+		HostConfig  config = new ServiceDeskHostConfig();
+		HostConfigContext context=new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.MESSAGELIST);
 		// 获取参数
 		JSONObject json = null;
 		int pageSize = 12;

@@ -16,11 +16,11 @@ public final class API {
 	public static final String ATTENTIONLIST = "http://10.10.152.26:8080/monitoring-system/attentionList/reqAttentionList";
 
 	// 告警
+	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0";
 	public static final String ALARMDEAL = "restws/alm/external";
 	public static final String ALARMDETAIL = "restws/alm/external/list/998/9980000000000000";
 	public static final String ALARMFORWARD = "http://10.10.152.26:8080/monitoring-system/forward/alarmForward";
 	public static final String DEALINFO = "http://10.10.152.26:8080/monitoring-system/dealInfo/addDealInfo";
-	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0";
 	public static final String ALARMCOVERAGE = "http://10.10.152.26:8080/monitoring-system/alarmCoverage/reqAlarmCoverage";
 	public static final String ALARMOPINFO = "http://10.10.152.26:8080/monitoring-system/alarmOpInfo/reqAlarmOpInfo";
 	public static final String ALARMEXPERIENCE = "http://10.10.152.26:8080/monitoring-system/alarmExperience/reqAlarmExperience";
@@ -29,7 +29,7 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "http://10.10.152.26:8080/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-	public final static String MESSAGELIST = "http://10.10.152.26:8080/itsm/incidentm/listTodos.html?username=admin/fvsd-branch/noticem/listUnread.html?username=admin";
+	public final static String MESSAGELIST = "noticem/listUnread.html?username=admin";
 	public final static String MESSAGEDETAIL = "http://10.10.152.26:8080/monitoring-system/messageDetail/requestMessageDetail";
 	public final static String MESSAGECONTACTS = "http://10.10.152.26:8080/monitoring-system/contacts/requestMessageContacts";
 	public final static String MESSAGESEND = "http://10.10.152.26:8080/monitoring-system/messageSend/messageSend";
@@ -41,21 +41,20 @@ public final class API {
 	public final static String MESSAGETAGDELETE = "http://10.10.152.26:8080/monitoring-system/messageTag2/messageTagDelete";
 	public final static String MESSAGETAGMODIFY = "http://10.10.152.26:8080/monitoring-system/messageTag3/messageTagModify";
 	public final static String MESSAGETAGDISPLAY = "http://10.10.152.26:8080/monitoring-system/messageTag4/messageTagDisplay";
-
 	public final static String MESSAGECUSTOMTAGS = "http://10.10.152.26:8080/monitoring-system/customTags/requestMessageCustomTags";
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.26:8080/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
 	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
 	public final static String DATABASE = "restws/data/perf/mo/998";
-	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String NETEQUIPMENT = "restws/data/perf/mo/998";
+	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
 
 	public final static String CPU = "restws/data/perf/mo/998";
 	public final static String MEMORY = "restws/data/perf/mo/998";
 	public final static String FILESYSTEM = "restws/data/perf/mo/998";
 
-	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
+	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.26:8080/monitoring-system/performance/requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.26:8080/monitoring-system/health/requestEquipmentHealthStatus";
 
