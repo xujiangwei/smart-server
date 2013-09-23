@@ -7,6 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
+
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
@@ -16,17 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
-import smart.api.host.ServiceDeskHostConfig;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 public class FileSystemUsageListener extends AbstractListener {
@@ -56,13 +57,11 @@ public class FileSystemUsageListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 		// URL
-		HostConfig serviceDeskConfig = new ServiceDeskHostConfig();
-		HostConfigContext context = new HostConfigContext(serviceDeskConfig);
+		HostConfig fileSysConfig = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(fileSysConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.MEMORYUSAGE).append("/").append(moId)
+				.append(API.FILESYSTEM).append("/").append(moId)
 				.append("/fUsedRatio/?rangeInHour=").append(rangeInHour);
-
-		System.out.println("url of request ci list is:" + url.toString());
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -133,8 +132,8 @@ public class FileSystemUsageListener extends AbstractListener {
 										"moPath");
 								ja.getJSONObject(i).put(
 										"name",
-										s.substring(s.indexOf("(") + 1,
-												s.lastIndexOf(")")));
+										s.substring(s.indexOf("> ") + 1,
+												s.lastIndexOf("(")));
 								ja.getJSONObject(i).remove("kpi");
 								ja.getJSONObject(i).remove("kpiName");
 								ja.getJSONObject(i).put("kpiName", ja2);
@@ -164,9 +163,9 @@ public class FileSystemUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.HOST, params);
+				this.response(Action.FILESYSTEM, params);
 			} else {
-				this.reportHTTPError(Action.HOST);
+				this.reportHTTPError(Action.FILESYSTEM);
 			}
 			break;
 		default:
@@ -182,7 +181,7 @@ public class FileSystemUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.HOST, params);
+			this.response(Action.FILESYSTEM, params);
 			break;
 		}
 	}
