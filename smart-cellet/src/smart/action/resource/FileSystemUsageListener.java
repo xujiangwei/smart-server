@@ -99,7 +99,6 @@ public class FileSystemUsageListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("结果：" + data);
 					if ("success".equals(data.get("status"))) {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
@@ -153,6 +152,7 @@ public class FileSystemUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
+					System.out.println("结果：" + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
