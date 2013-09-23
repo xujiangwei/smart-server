@@ -15,7 +15,7 @@ public final class Action {
 
 	// 服务器连接检测
 	public final static String CONNECTIONCHECK = "connectionCheck";
-	
+
 	public final static String TEST = "show.json";
 
 	public final static String NODEDETECTION = "nodeDetection";
@@ -60,6 +60,10 @@ public final class Action {
 	public final static String NETEQUIPMENT = "requestNetEqpt";
 	public final static String DATABASE = "requestDatabase";
 
+	public final static String CPU = "requestCPU";
+	public final static String MEMORY = "requestMemory";
+	public final static String FILESYSTEM = "requestFileSys";
+
 	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";
 	public final static String EQUIPMENTPERFORMANCE = "requestEquipmentPerformance";
@@ -91,11 +95,11 @@ public final class Action {
 	// 待办
 	public static final String INCIDENTLIST = "requestIncidentList";
 	public static final String INCIDENTDETAIL = "requestIncidentDetail";
-	
+
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";
-	
+
 	private Action() {
 	}
 }
