@@ -27,7 +27,7 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
-import smart.api.host.ServiceDeskHostConfig;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 public class CPUUsageListener extends AbstractListener {
@@ -57,13 +57,12 @@ public class CPUUsageListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 		// URL
-		HostConfig serviceDeskConfig = new ServiceDeskHostConfig();
-		HostConfigContext context = new HostConfigContext(serviceDeskConfig);
+		HostConfig cpuConfig = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.CPUUSAGE).append("/").append(moId)
+				.append(API.CPU).append("/").append(moId)
 				.append("/fTotalCpu/?rangeInHour=").append(rangeInHour);
 
-		System.out.println("url of request ci list is:" + url.toString());
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -134,8 +133,8 @@ public class CPUUsageListener extends AbstractListener {
 										"moPath");
 								ja.getJSONObject(i).put(
 										"name",
-										s.substring(s.indexOf("(") + 1,
-												s.lastIndexOf(")")));
+										s.substring(s.indexOf("> ") + 1,
+												s.lastIndexOf("(")));
 								ja.getJSONObject(i).remove("kpi");
 								ja.getJSONObject(i).remove("kpiName");
 								ja.getJSONObject(i).put("kpiName", ja2);
@@ -165,9 +164,9 @@ public class CPUUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.HOST, params);
+				this.response(Action.CPU, params);
 			} else {
-				this.reportHTTPError(Action.HOST);
+				this.reportHTTPError(Action.CPU);
 			}
 			break;
 		default:
@@ -183,7 +182,7 @@ public class CPUUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.HOST, params);
+			this.response(Action.CPU, params);
 			break;
 		}
 	}

@@ -51,10 +51,10 @@ public final class API {
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String NETEQUIPMENT = "restws/data/perf/mo/998";
 
-	public final static String CPUUSAGE="restws/data/perf/mo/998";
-	public final static String MEMORYUSAGE="restws/data/perf/mo/998";
-	public final static String FILESYSTEMUSAGE="restws/data/perf/mo/998";
-	
+	public final static String CPU = "restws/data/perf/mo/998";
+	public final static String MEMORY = "restws/data/perf/mo/998";
+	public final static String FILESYSTEM = "restws/data/perf/mo/998";
+
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.26:8080/monitoring-system/performance/requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.26:8080/monitoring-system/health/requestEquipmentHealthStatus";
@@ -65,14 +65,14 @@ public final class API {
 	public final static String SENDSNAPSHOT = "http://10.10.152.26:8080/monitoring-system/snapshot/equipmentSendSnapshot";
 	public final static String EQUIPMENTTOPO = "http://10.10.152.26:8080/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
-	//待办
+	// 待办
 	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
 	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
-	
-	//资产
+
+	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
-	
+
 	private API() {
 	}
 
