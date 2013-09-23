@@ -53,6 +53,7 @@ public final class API {
 	public final static String CPU = "restws/data/perf/mo/998";
 	public final static String MEMORY = "restws/data/perf/mo/998";
 	public final static String FILESYSTEM = "restws/data/perf/mo/998";
+	public final static String PING = "restws/data/perf/type/998/FPING/fAvgRestTime";
 
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.26:8080/monitoring-system/performance/requestEquipmentPerformance";

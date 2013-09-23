@@ -59,6 +59,7 @@ import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.FileSystemUsageListener;
 import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentListener;
+import smart.action.resource.PingListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
@@ -312,6 +313,10 @@ public class SmartCellet extends Cellet {
 		FileSystemUsageListener filesu = new FileSystemUsageListener(this);
 		filesu.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOST, filesu);
+
+		PingListener ping = new PingListener(this);
+		ping.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOST, ping);
 
 		// 获取网络设备
 		NetEquipmentListener netEqpt = new NetEquipmentListener(this);

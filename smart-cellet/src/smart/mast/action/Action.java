@@ -63,6 +63,7 @@ public final class Action {
 	public final static String CPU = "requestCPU";
 	public final static String MEMORY = "requestMemory";
 	public final static String FILESYSTEM = "requestFileSys";
+	public final static String PING = "requestPing";
 
 	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";
