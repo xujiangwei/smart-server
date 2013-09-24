@@ -95,24 +95,21 @@ public class DataBaseListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 							for (int i = 0; i < ja.length(); i++) {
-								JSONArray ja1 = ja.getJSONObject(i)
-										.getJSONArray("data");
+								JSONObject job = ja.getJSONObject(i);
+								JSONArray ja1 = job.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONObject jo = new JSONObject();
 									jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-									jo.put("collectTime",
-											df.parse(
-													ja1.getJSONArray(j)
-															.getString(1))
-													.getTime());
+									jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+													.getString(1)).getTime());
 									ja2.put(jo);
 								}
-								ja.getJSONObject(i).remove("data");
-								ja.getJSONObject(i).put("data", ja2);
-								String s = ja.getJSONObject(i).getString("moPath");
-								ja.getJSONObject(i).put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-								ja.getJSONObject(i).remove("kpi");
+								job.remove("data");
+								job.put("data", ja2);
+								String s = job.getString("moPath");
+								job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
+								job.remove("kpi");
 							}
 							JSONObject jo = new JSONObject();
 							jo.put("dataList", ja);

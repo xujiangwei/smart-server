@@ -52,9 +52,10 @@ public final class AlarmListListener extends AbstractListener {
 		// 设置请求HTTP API方式
 
 		// URL
-		HostConfig  config=new MonitorSystemHostConfig();
-		HostConfigContext context=new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.ALARMLIST);
+		HostConfig config = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.ALARMLIST);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -142,53 +143,30 @@ public final class AlarmListListener extends AbstractListener {
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
 								for (int k = 0; k < list.size(); k++) {
 									if (k == j) {
-										if ("almId".equals(list.get(k))
-												|| "moId".equals(list.get(k))
-												|| ("confirmUserId".equals(list
-														.get(k)) && !""
-														.equals(ja
-																.getJSONArray(i)
-																.getString(j)))) {
-											job.put(list.get(k), Long
-													.valueOf(ja.getJSONArray(i)
-															.getString(j)));
-										} else if ("occurTime".equals(list
-												.get(k))
-												|| "lastTime".equals(list
-														.get(k))
-												|| ("confirmTime".equals(list
-														.get(k)) && !""
-														.equals(ja
-																.getJSONArray(i)
-																.get(j)))) {
+										String key = list.get(k);
+										String value = ja.getJSONArray(i).getString(j);
+										if ("almId".equals(key)
+												|| "moId".equals(key)
+												|| ("confirmUserId".equals(key) && !""
+														.equals(value))) {
+											job.put(key, Long.valueOf(value));
+										} else if ("occurTime".equals(key)
+												|| "lastTime".equals(key)
+												|| ("confirmTime".equals(key) && !""
+														.equals(value))) {
 											DateFormat df = new SimpleDateFormat(
 													"yyyy-MM-dd HH:mm:ss");
 											Date date = null;
-											try {
-												date = df.parse(ja
-														.getJSONArray(i)
-														.getString(j));
-												job.put(list.get(k),
-														date.getTime());
-											} catch (ParseException e) {
-												e.printStackTrace();
-											}
-										} else if ("count".equals(list.get(k))
-												|| "severity".equals(list
-														.get(k))) {
-											job.put(list.get(k), Integer
-													.parseInt(ja
-															.getJSONArray(i)
-															.getString(j)));
-										} else if (("confirmUserId".equals(list
-												.get(k)) || "confirmTime"
-												.equals(list.get(k)))
-												&& "".equals(ja.getJSONArray(i)
-														.getString(j))) {
-											job.put(list.get(k), 0);
+											date = df.parse(value);
+											job.put(key, date.getTime());
+										} else if ("count".equals(key)
+												|| "severity".equals(key)) {
+											job.put(key, Integer.parseInt(value));
+										} else if (("confirmUserId".equals(key) || "confirmTime"
+												.equals(key)) && "".equals(value)) {
+											job.put(key, 0);
 										} else {
-											job.put(list.get(k), ja
-													.getJSONArray(i).get(j));
+											job.put(key, value);
 										}
 									}
 								}
@@ -237,6 +215,8 @@ public final class AlarmListListener extends AbstractListener {
 					this.response(token, Action.ALARMLIST, params);
 
 				} catch (JSONException e) {
+					e.printStackTrace();
+				} catch (ParseException e) {
 					e.printStackTrace();
 				}
 			} else {
