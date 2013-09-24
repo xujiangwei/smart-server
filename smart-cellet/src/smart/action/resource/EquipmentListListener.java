@@ -46,9 +46,9 @@ public class EquipmentListListener extends AbstractListener {
 		// URL
 		HostConfig config = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost())
-				.append("/").append(API.EQUIPMENTLIST);
-		
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.EQUIPMENTLIST);
+
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -116,14 +116,15 @@ public class EquipmentListListener extends AbstractListener {
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
 								for (int k = 0; k < list.size(); k++) {
 									if (k == j) {
-										if ("vendor".equals(list.get(k))
-												&& ("".equals(ja.getJSONArray(i).get(j)) 
-												|| ja.getJSONArray(i).get(j) == null)
-												|| "null".equals(ja.getJSONArray(i).get(j))
-												|| ja.getJSONArray(i).get(j).equals(null)) {
-											job.put(list.get(k), "未知");
+										String key = list.get(k);
+										Object value = ja.getJSONArray(i).get(j);
+										if ("vendor".equals(key)
+												&& ("".equals(value) || value == null)
+												|| "null".equals(value)
+												|| value.equals(null)) {
+											job.put(key, "未知");
 										} else {
-											job.put(list.get(k), ja.getJSONArray(i).get(j));
+											job.put(key, value);
 										}
 									}
 								}
