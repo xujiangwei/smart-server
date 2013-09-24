@@ -119,11 +119,15 @@ public class CPUUsageListener extends AbstractListener {
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
-									jo.put("usage", Float.valueOf(jsonData1
-											.getString(0)));
-									jo.put("collectTime",
-											df.parse(jsonData1.getString(1))
-													.getTime());
+
+									if (!"".equals(jsonData1.getString(0))
+											&& null != jsonData1.getString(0)) {
+										jo.put("usage", Float.valueOf(jsonData1
+												.getString(0)));
+										jo.put("collectTime",
+												df.parse(jsonData1.getString(1))
+														.getTime());
+									}
 									ja2.put(jo);
 								}
 
