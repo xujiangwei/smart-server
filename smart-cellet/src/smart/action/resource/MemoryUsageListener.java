@@ -79,6 +79,7 @@ public class MemoryUsageListener extends AbstractListener {
 
 		// 发送请求
 		ContentResponse response = null;
+
 		try {
 			response = request.send();
 		} catch (InterruptedException e1) {
@@ -91,54 +92,56 @@ public class MemoryUsageListener extends AbstractListener {
 
 		Properties params = new Properties();
 		JSONObject data = null;
+
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
+
 			if (null != bytes) {
 
 				// 获取从Web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
+
 				try {
 					data = new JSONObject(content);
+
 					if ("success".equals(data.get("status"))) {
+
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
+
 							for (int i = 0; i < ja.length(); i++) {
-								JSONArray ja1 = ja.getJSONObject(i)
-										.getJSONArray("data");
+								JSONObject jsonData = ja.getJSONObject(i);
+								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
 								for (int j = 0; j < ja1.length(); j++) {
+									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
-									jo.put("usage", Float.valueOf(ja1
-											.getJSONArray(j).getString(0)));
-
+									jo.put("usage", Float.valueOf(jsonData1
+											.getString(0)));
 									jo.put("collectTime",
-											df.parse(
-													ja1.getJSONArray(j)
-															.getString(1))
+											df.parse(jsonData1.getString(1))
 													.getTime());
 
 									ja2.put(jo);
 
 								}
-								ja.getJSONObject(i).remove("data");
-								ja.getJSONObject(i).put("data", ja2);
-								ja.getJSONObject(i).put("data", ja2);
-								String s = ja.getJSONObject(i).getString(
-										"moPath");
-								ja.getJSONObject(i).put(
+								jsonData.remove("data");
+								jsonData.put("data", ja2);
+								String s = jsonData.getString("moPath");
+								jsonData.put(
 										"name",
 										s.substring(s.indexOf("> ") + 1,
 												s.lastIndexOf("(")));
-								ja.getJSONObject(i).remove("kpi");
-								ja.getJSONObject(i).remove("kpiName");
-								ja.getJSONObject(i).put("kpiName", ja2);
-								ja.getJSONObject(i).remove("mosn");
-								ja.getJSONObject(i).put("mosn", ja2);
+								jsonData.remove("kpi");
+								jsonData.remove("kpiName");
+								jsonData.put("kpiName", ja2);
+								jsonData.remove("mosn");
+								jsonData.put("mosn", ja2);
 							}
 							JSONObject jo = new JSONObject();
 							jo.put("dataList", ja);
@@ -171,6 +174,7 @@ public class MemoryUsageListener extends AbstractListener {
 			break;
 		default:
 			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
