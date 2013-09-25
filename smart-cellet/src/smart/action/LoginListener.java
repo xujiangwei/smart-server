@@ -1,26 +1,14 @@
 package smart.action;
 
-import java.nio.charset.Charset;
-import java.util.concurrent.ExecutionException;
-import java.util.concurrent.TimeoutException;
-
-import net.cellcloud.common.Logger;
 import net.cellcloud.core.Cellet;
 import net.cellcloud.talk.dialect.ActionDialect;
 import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
 import net.cellcloud.util.StringProperty;
 
-import org.eclipse.jetty.client.api.ContentResponse;
-import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
-import org.eclipse.jetty.http.HttpMethod;
-import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import smart.api.API;
-import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
 /**
@@ -41,12 +29,12 @@ public final class LoginListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		StringBuilder url = new StringBuilder(API.LOGIN);
-
-		// 创建请求
-		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.POST);
-		url = null;
+//		StringBuilder url = new StringBuilder(API.LOGIN);
+//
+//		// 创建请求
+//		Request request = this.getHttpClient().newRequest(url.toString());
+//		request.method(HttpMethod.POST);
+//		url = null;
 
 		// 获取用户名和密码
 		JSONObject json;
@@ -62,95 +50,115 @@ public final class LoginListener extends AbstractListener {
 
 		Properties params = new Properties();
 
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
-
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("username", username);
-		capsule.append("password", password);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
-
-		// 发送请求
-		ContentResponse response = null;
-		try {
-			response = request.send();
-		} catch (InterruptedException e1) {
-			e1.printStackTrace();
-		} catch (TimeoutException e1) {
-			e1.printStackTrace();
-		} catch (ExecutionException e1) {
-			e1.printStackTrace();
-		}
-
+		UserManager um = new UserManager();
 		JSONObject jo = null;
-		switch (response.getStatus()) {
-		case HttpStatus.OK_200:
-			byte[] bytes = response.getContent();
-			if (null != bytes) {
-
-				// 获取从 Web 服务器上返回的数据
-				String content = new String(bytes, Charset.forName("UTF-8"));
-
-				try {
-					jo = new JSONObject(content);
-					String token = "";
-					long id = 0;
-					if (!"".equals(jo.get("loginInfo"))) {
-						id = jo.getJSONObject("loginInfo").getLong(
-								"user_id");
-						token = jo.getJSONObject("loginInfo")
-								.getString("token");
-//						if (!UserManager.getInstance().isExist(username,
-//								password)) {
-//
-//							// 将登录成功后的返回对象保存到用户管理器
-//							UserManager.getInstance().signIn(id, username,
-//									password, token);
-//
-//						} else {
-//							// 更新该用户的最近登录时间
-//							UserManager.getInstance().update(username);
-//						}
-					}
-					jo.remove("loginInfo");
-					jo.put("token", token);
-					jo.put("userid", id);
-					jo.put("username", username);
-
-					// 设置参数
-					params.addProperty(new StringProperty("username", username));
-					params.addProperty(new ObjectProperty("data", jo));
-
-					// 响应动作，即向客户端发送 ActionDialect
-					// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
-					this.response(username, Action.LOGIN, params);
-
-				} catch (JSONException e) {
-					e.printStackTrace();
-				}
-			} else {
-				this.reportHTTPError(username, Action.LOGIN);
-			}
-
-			break;
-		default:
-			Logger.w(LoginListener.class, "返回响应码：" + response.getStatus());
-			jo = new JSONObject();
-			try {
-				jo.put("status", 900);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-
-			// 设置参数
-			params.addProperty(new ObjectProperty("data", jo));
-
-			// 响应动作，即向客户端发送 ActionDialect
-			// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
-			this.response(username, Action.LOGIN, params);
-			break;
+		try {
+			if (um.getUser(username, password) != null && !"".equals(um.getUser(username, password))) {
+				jo = new JSONObject(um.getUser(username, password));
+				jo.remove("password");
+				System.out.println(jo);
+			} 
+			jo.put("status", um.getStatus(username, password));
+		} catch (JSONException e) {
+			e.printStackTrace();
 		}
+
+		// 设置参数
+		params.addProperty(new StringProperty("username", username));
+		params.addProperty(new ObjectProperty("data", jo));
+
+		// 响应动作，即向客户端发送 ActionDialect
+		// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
+		this.response(username, Action.LOGIN, params);
+//		// 填写数据内容
+//		DeferredContentProvider dcp = new DeferredContentProvider();
+//
+//		RequestContentCapsule capsule = new RequestContentCapsule();
+//		capsule.append("username", username);
+//		capsule.append("password", password);
+//		dcp.offer(capsule.toBuffer());
+//		dcp.close();
+//		request.content(dcp);
+//
+//		// 发送请求
+//		ContentResponse response = null;
+//		try {
+//			response = request.send();
+//		} catch (InterruptedException e1) {
+//			e1.printStackTrace();
+//		} catch (TimeoutException e1) {
+//			e1.printStackTrace();
+//		} catch (ExecutionException e1) {
+//			e1.printStackTrace();
+//		}
+//
+//		JSONObject jo = null;
+//		switch (response.getStatus()) {
+//		case HttpStatus.OK_200:
+//			byte[] bytes = response.getContent();
+//			if (null != bytes) {
+//
+//				// 获取从 Web 服务器上返回的数据
+//				String content = new String(bytes, Charset.forName("UTF-8"));
+//
+//				try {
+//					jo = new JSONObject(content);
+//					String token = "";
+//					long id = 0;
+//					if (!"".equals(jo.get("loginInfo"))) {
+//						id = jo.getJSONObject("loginInfo").getLong(
+//								"user_id");
+//						token = jo.getJSONObject("loginInfo")
+//								.getString("token");
+////						if (!UserManager.getInstance().isExist(username,
+////								password)) {
+////
+////							// 将登录成功后的返回对象保存到用户管理器
+////							UserManager.getInstance().signIn(id, username,
+////									password, token);
+////
+////						} else {
+////							// 更新该用户的最近登录时间
+////							UserManager.getInstance().update(username);
+////						}
+//					}
+//					jo.remove("loginInfo");
+//					jo.put("token", token);
+//					jo.put("userid", id);
+//					jo.put("username", username);
+//
+//					// 设置参数
+//					params.addProperty(new StringProperty("username", username));
+//					params.addProperty(new ObjectProperty("data", jo));
+//
+//					// 响应动作，即向客户端发送 ActionDialect
+//					// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
+//					this.response(username, Action.LOGIN, params);
+//
+//				} catch (JSONException e) {
+//					e.printStackTrace();
+//				}
+//			} else {
+//				this.reportHTTPError(username, Action.LOGIN);
+//			}
+//
+//			break;
+//		default:
+//			Logger.w(LoginListener.class, "返回响应码：" + response.getStatus());
+//			jo = new JSONObject();
+//			try {
+//				jo.put("status", 900);
+//			} catch (JSONException e) {
+//				e.printStackTrace();
+//			}
+//
+//			// 设置参数
+//			params.addProperty(new ObjectProperty("data", jo));
+//
+//			// 响应动作，即向客户端发送 ActionDialect
+//			// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
+//			this.response(username, Action.LOGIN, params);
+//			break;
+//		}
 	}
 }
