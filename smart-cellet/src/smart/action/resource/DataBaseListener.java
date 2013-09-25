@@ -98,12 +98,29 @@ public class DataBaseListener extends AbstractListener {
 								JSONObject job = ja.getJSONObject(i);
 								JSONArray ja1 = job.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
-								for (int j = 0; j < ja1.length(); j++) {
-									JSONObject jo = new JSONObject();
-									jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-									jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-													.getString(1)).getTime());
-									ja2.put(jo);
+								if (ja1.length() < rangeInHour*60) {
+									for (int j = 0; j < ja1.length(); j++) {
+										JSONObject jo = new JSONObject();
+										jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+												.getString(1)).getTime());
+										ja2.put(jo);
+									}
+									for (int k = 0; k < rangeInHour*60-ja1.length(); k++) {
+										JSONObject jo = new JSONObject();
+										jo.put("usage", Float.valueOf(ja1.getJSONArray(ja1.length()-1).getString(0)));
+										jo.put("collectTime", df.parse(ja1.getJSONArray(ja1.length()-1)
+												.getString(1)).getTime()+60000*(k+1));
+										ja2.put(jo);
+									}
+								} else {
+									for (int j = 0; j < rangeInHour*60; j++) {
+										JSONObject jo = new JSONObject();
+										jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+												.getString(1)).getTime());
+										ja2.put(jo);
+									}
 								}
 								job.remove("data");
 								job.put("data", ja2);
@@ -121,7 +138,6 @@ public class DataBaseListener extends AbstractListener {
 							data.put("errorInfo", "");
 						}
 					} else {
-						data.remove("dataList");
 						data.put("data", "");
 						data.put("status", 602);
 						data.put("errorInfo", "未获取到数据库相关kpi数据");
