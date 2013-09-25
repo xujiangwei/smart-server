@@ -130,7 +130,7 @@ public class EquipmentListListener extends AbstractListener {
 								}
 							}
 							jo.put("vendorID", vendor.getInt(job.get("vendor").toString()));
-							jo.put("typeCode", job.getLong("typeCode"));
+							jo.put("typeCode", Long.valueOf(job.getString("typeCode").substring(0, 4)));
 							jo.put("moId", job.getLong("moId"));
 							jo.put("moType", job.getString("typePath").split(" > ")[0]);
 							jo.put("typeName", job.getString("typePath").split(" > ")[1]);
@@ -141,7 +141,7 @@ public class EquipmentListListener extends AbstractListener {
 
 							jar.put(jo);
 						}
-						System.out.println("jsonArray:" + jar.length() + jar);
+						System.out.println("jsonArray" + jar.length()+": "+ jar);
 						data.remove("moList");
 						data.put("status", 300);
 						data.put("moList", jar);

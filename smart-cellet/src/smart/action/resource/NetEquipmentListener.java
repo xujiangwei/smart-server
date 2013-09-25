@@ -96,40 +96,62 @@ public final class NetEquipmentListener extends AbstractListener {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
-							for (int i = 0; i < ja.length(); i++) {
-								JSONObject job = ja.getJSONObject(i);
-								JSONArray ja1 = job.getJSONArray("data");
-								JSONArray ja2 = new JSONArray();
-								for (int j = 0; j < ja1.length(); j++) {
-									JSONObject jo = new JSONObject();
-									jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-									jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-													.getString(1)).getTime());
-									ja2.put(jo);
+							JSONObject jsob = new JSONObject();
+							JSONArray jay = new JSONArray();
+							if (ja.length()>30) {
+								for (int i = ja.length()-1; i > ja.length()-21; i--) {
+									JSONObject job = ja.getJSONObject(i);
+									JSONArray ja1 = job.getJSONArray("data");
+									JSONArray ja2 = new JSONArray();
+									for (int j = 0; j < ja1.length(); j++) {
+										JSONObject jo = new JSONObject();
+										jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+														.getString(1)).getTime());
+										ja2.put(jo);
+									}
+									job.remove("data");
+									job.put("data", ja2);
+									String s = job.getString("moPath");
+									job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
+									job.remove("kpi");
+									job.put("mosn", Long.valueOf(job.getString("mosn")));
+									jay.put(job);
 								}
-								job.remove("data");
-								job.put("data", ja2);
-								String s = job.getString("moPath");
-								job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-								job.remove("kpi");
-								job.put("mosn", Long.valueOf(job.getString("mosn")));
+							} else {
+								for (int i = 0; i < ja.length(); i++) {
+									JSONObject job = ja.getJSONObject(i);
+									JSONArray ja1 = job.getJSONArray("data");
+									JSONArray ja2 = new JSONArray();
+									for (int j = 0; j < ja1.length(); j++) {
+										JSONObject jo = new JSONObject();
+										jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+												.getString(1)).getTime());
+										ja2.put(jo);
+									}
+									job.remove("data");
+									job.put("data", ja2);
+									String s = job.getString("moPath");
+									job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
+									job.remove("kpi");
+									job.put("mosn", Long.valueOf(job.getString("mosn")));
+									jay.put(job);
+								}
 							}
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", equipmentId);
+							jsob.put("dataList", jay);
+							jsob.put("resourceId", equipmentId);
 							
 							data.remove("dataList");
-							data.put("data", jo);
+							data.put("data", jsob);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
 					} else {
-						data.remove("dataList");
 						data.put("data", "");
 						data.put("status", 603);
-						data.put("errorInfo", "未获取到网络设备相关kpi数据");
 					}
-					System.out.println("detail: " + data);
+					System.out.println("网络设备detail: " + data);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
