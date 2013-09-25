@@ -94,29 +94,35 @@ public final class NetEquipmentListener extends AbstractListener {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
 							JSONArray ja = data.getJSONArray("dataList");
+							System.out.println("数据总长度："+ja.length());
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 							JSONObject jsob = new JSONObject();
 							JSONArray jay = new JSONArray();
-							if (ja.length()>30) {
-								for (int i = ja.length()-1; i > ja.length()-21; i--) {
-									JSONObject job = ja.getJSONObject(i);
-									JSONArray ja1 = job.getJSONArray("data");
-									JSONArray ja2 = new JSONArray();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONObject jo = new JSONObject();
-										jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-														.getString(1)).getTime());
-										ja2.put(jo);
+							if (ja.length()>32) {
+								for (int m = 0; m <5; m++) {
+									for (int i = 0; i < ja.length(); i++){
+										JSONObject job = ja.getJSONObject(i);
+										if (job.get("mosn").equals(ja.getJSONObject(m).get("mosn"))) {
+											JSONArray ja1 = job.getJSONArray("data");
+											JSONArray ja2 = new JSONArray();
+											for (int j = 0; j < ja1.length(); j++) {
+												JSONObject jo = new JSONObject();
+												jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+												jo.put("collectTime", df.parse(ja1.getJSONArray(j)
+																.getString(1)).getTime());
+												ja2.put(jo);
+											}
+											JSONObject job1 = new JSONObject();
+											job1.put("data", ja2);
+											job1.put("moPath", job.getString("moPath"));
+											job1.put("kpiName", job.getString("kpiName"));
+											String s = job.getString("moPath");
+											job1.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
+											job1.put("mosn", Long.valueOf(job.getString("mosn")));
+											jay.put(job1);
+										}
 									}
-									job.remove("data");
-									job.put("data", ja2);
-									String s = job.getString("moPath");
-									job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-									job.remove("kpi");
-									job.put("mosn", Long.valueOf(job.getString("mosn")));
-									jay.put(job);
 								}
 							} else {
 								for (int i = 0; i < ja.length(); i++) {
