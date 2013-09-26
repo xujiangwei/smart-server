@@ -117,16 +117,20 @@ public class PingListener extends AbstractListener {
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
-
-									if (!"".equals(jsonData1.get(0))
-											&& null != jsonData1.get(0)) {
-										jo.put("PING延迟", jsonData1.get(0));
-										jo.put("collectTime",
-												df.parse(
-														jsonData1.get(1)
-																.toString())
-														.getTime());
+									if (null == jsonData1.get(0)
+											|| "".equals(jsonData1.get(0))
+											|| "null".equals(jsonData1.get(0))
+											|| (jsonData1.get(0)).equals(null)) {
+										jo.put("PING延迟", 0);
+									} else {
+										jo.put("PING延迟", Float
+												.valueOf((String) jsonData1
+														.get(0)));
 									}
+									jo.put("collectTime",
+											df.parse(
+													jsonData1.get(1).toString())
+													.getTime());
 									ja2.put(jo);
 								}
 

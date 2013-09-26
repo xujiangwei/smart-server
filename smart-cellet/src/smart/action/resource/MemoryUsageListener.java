@@ -122,14 +122,21 @@ public class MemoryUsageListener extends AbstractListener {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
 
-									if (!"".equals(jsonData1.getString(0))
-											&& null != jsonData1.getString(0)) {
+									if (null == jsonData1.getString(0)
+											|| "".equals(jsonData1.getString(0))
+											|| "null".equals(jsonData1
+													.getString(0))
+											|| (jsonData1.getString(0))
+													.equals(null)) {
+										jo.put("usage", 0);
+
+									} else {
 										jo.put("usage", Float.valueOf(jsonData1
 												.getString(0)));
-										jo.put("collectTime",
-												df.parse(jsonData1.getString(1))
-														.getTime());
 									}
+									jo.put("collectTime",
+											df.parse(jsonData1.getString(1))
+													.getTime());
 									ja2.put(jo);
 
 								}
