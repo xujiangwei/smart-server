@@ -138,13 +138,15 @@ public final class AlarmListListener extends AbstractListener {
 								"lastTime", "count", "detail", "originalInfo",
 								"confirmTime", "confirmUserId", "confirmUser",
 								"moIp", "moName", "causeAlias", "location");
-						for (int i = 0; i < ja.length(); i++) {
+						if (ja.length() > 16){
+						for (int i = 0; i < 16; i++) {
 							JSONObject job = new JSONObject();
+							
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
 								for (int k = 0; k < list.size(); k++) {
 									if (k == j) {
 										String key = list.get(k);
-										String value = ja.getJSONArray(i).getString(j);
+										String value = ja.getJSONArray(i).get(j).toString();
 										if ("almId".equals(key)
 												|| "moId".equals(key)
 												|| ("confirmUserId".equals(key) && !""
@@ -172,6 +174,7 @@ public final class AlarmListListener extends AbstractListener {
 								}
 							}
 							jar.put(job);
+						}
 						}
 						System.out.println("jsonArray:" + jar.length() + jar);
 						jo.remove("result");
