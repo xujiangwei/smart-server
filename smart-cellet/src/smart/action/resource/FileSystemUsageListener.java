@@ -28,6 +28,7 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.HostManager;
 import smart.mast.action.Action;
 
 public class FileSystemUsageListener extends AbstractListener {
@@ -50,7 +51,6 @@ public class FileSystemUsageListener extends AbstractListener {
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("参数：" + json);
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
 		} catch (JSONException e1) {
@@ -116,39 +116,40 @@ public class FileSystemUsageListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
+								long filesysid=jsonData.getLong("mosn");
+								
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
 
-									if (null == jsonData1.getString(0)
-											|| "".equals(jsonData1.getString(0))
-											|| "null".equals(jsonData1
-													.getString(0))
-											|| (jsonData1.getString(0))
-													.equals(null)) {
+									if (null == jsonData1.get(0)
+											|| "".equals(jsonData1.get(0))
+											|| "null".equals(jsonData1.get(0))
+											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("usage", 0);
 									} else {
-										jo.put("usage", Float.valueOf(jsonData1
-												.getString(0)));
+										jo.put("usage", Float
+												.valueOf((String) jsonData1
+														.get(0)));
 									}
 									jo.put("collectTime",
-											df.parse(jsonData1.getString(1))
+											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
+									
+									double usage=Double.valueOf((String) jsonData1.get(0));
+									long timestamp=df.parse((String) jsonData1.get(1))
+											.getTime();
+									
+									HostManager hm=HostManager.getInstance();
+									hm.addFileSystemUsages(filesysid, usage, timestamp);
 								}
 
 								jsonData.remove("data");
 								jsonData.put("data", ja2);
 								String s = jsonData.getString("moPath");
-								jsonData.put(
-										"name",
-										s.substring(s.indexOf("> ") + 1,
-												s.lastIndexOf("(")));
+								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
-								jsonData.remove("kpiName");
-								jsonData.put("kpiName", ja2);
-								jsonData.remove("mosn");
-								jsonData.put("mosn", ja2);
 							}
 
 							JSONObject jo = new JSONObject();
@@ -181,7 +182,8 @@ public class FileSystemUsageListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(FileSystemUsageListener.class,
+					"返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
