@@ -18,6 +18,7 @@ import smart.bean.Progress;
 import smart.bean.ProgressDetection;
 import smart.dao.AbstraceDao;
 import smart.dao.HostDao;
+import smart.util.DButil;
 
 /**
  * 主机 DAO 实现。
@@ -35,7 +36,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取主机ID列表
 	 */
 	public List<Long> getHostIdList() {
-		String sql = "select id from t_host";
+		String sql = "select host_id from t_host";
 		List<Long> list = new ArrayList<Long>(20);
 		try {
 			super.doStart();
@@ -47,11 +48,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 
 		return list;
@@ -78,11 +75,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 
 		return host;
@@ -106,21 +99,17 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 
 	}
 
 	/**
-	 * 获取指定ID的CPU列表
+	 * 获取指定主机ID的CPU列表
 	 */
 	public List<CPU> getCPUsById(long id) {
-		String sql = "select * from t_cpu where cpu_hostid=?";
+		String sql = "select * from t_cpu where cpu_id in (select host_cpu_cpuid from t_host_cpu where host_cpu_hostid=?)";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -140,18 +129,14 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 
 		return list;
 	}
 
 	/**
-	 * 获取指定ID的CPU
+	 * 获取指定CPU ID的CPU
 	 */
 	public CPU getCPUById(long id) {
 		String sql = "select * from t_cpu where cpu_id=?";
@@ -172,51 +157,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return cpu;
 	}
 
 	/**
-	 * 获取指定时间戳的CPU利用率
-	 */
-	public CPUPerc getCPUPercById(long id, long timestamp) {
-		String sql = "select * from t_cpu_prec where prec_cpuid=? and prec_timestamp=?";
-		CPUPerc cp = null;
-		try {
-			super.doStart();
-			pstmt = super.conn.prepareStatement(sql);
-			pstmt.setLong(1, id);
-			pstmt.setLong(2, timestamp);
-			rs = pstmt.executeQuery();
-			while (rs.next()) {
-				cp = new CPUPerc(rs.getLong("prec_timestamp"));
-				cp.setIdle(rs.getDouble("prec_idle"));
-				cp.setNice(rs.getDouble("prec_nice"));
-				cp.setSys(rs.getDouble("prec_sys"));
-				cp.setUser(rs.getDouble("prec_user"));
-				cp.setWait(rs.getDouble("prec_wait"));
-				cp.setCombined(rs.getDouble("prec_combined"));
-				cp.setTimestamp(rs.getLong("prec_timestamp"));
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
-		}
-		return cp;
-	}
-
-	/**
-	 * 返回指定CPU id的CPU利用率列表
+	 * 获取指定CPU ID的CPU利用率列表
 	 */
 	public List<CPUPerc> getPercsById(long id) {
 		String sql = "select * from t_cpu_prec where prec_cpuid=?";
@@ -241,13 +188,39 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
+	}
+
+	/**
+	 * 获取指定CPU ID和时间戳的CPU利用率
+	 */
+	public CPUPerc getCPUPercById(long id, long timestamp) {
+		String sql = "select * from t_cpu_prec where prec_cpuid=? and prec_timestamp=?";
+		CPUPerc cp = null;
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, id);
+			pstmt.setLong(2, timestamp);
+			rs = pstmt.executeQuery();
+			while (rs.next()) {
+				cp = new CPUPerc(rs.getLong("prec_timestamp"));
+				cp.setIdle(rs.getDouble("prec_idle"));
+				cp.setNice(rs.getDouble("prec_nice"));
+				cp.setSys(rs.getDouble("prec_sys"));
+				cp.setUser(rs.getDouble("prec_user"));
+				cp.setWait(rs.getDouble("prec_wait"));
+				cp.setCombined(rs.getDouble("prec_combined"));
+				cp.setTimestamp(rs.getLong("prec_timestamp"));
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+		return cp;
 	}
 
 	/**
@@ -268,11 +241,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return memory;
 	}
@@ -303,17 +272,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 	}
 
 	/**
-	 * 获取指定时间戳的内存监测信息
+	 * 获取指定内存ID和时间戳的内存监测信息
 	 */
 	public MemoryDetection getMemoryDetecById(long id, long timestamp) {
 		String sql = "select * from t_mem_usage where memusage_memid=? and memusage_timestamp=?";
@@ -338,11 +303,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return memDetec;
 	}
@@ -351,7 +312,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的文件系统列表
 	 */
 	public List<FileSystem> getFileSystemsById(long id) {
-		String sql = "select * from t_filesystem where filesys_hostid=?";
+		String sql = "select * from t_filesystem where filesys_id in (select host_filesys_filesysid from t_host_filesys where host_filesys_hostid=? )";
 		List<FileSystem> list = new ArrayList<FileSystem>(20);
 		try {
 			super.doStart();
@@ -373,18 +334,14 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 
 	}
 
 	/**
-	 * 获取指定ID的文件系统
+	 * 获取指定文件系统ID的文件系统
 	 */
 	public FileSystem getFileSystemById(long id) {
 		String sql = "select * from t_filesystem where filesys_id=?";
@@ -408,11 +365,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return fs;
 	}
@@ -450,11 +403,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 	}
@@ -490,20 +439,16 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return fsu;
 	}
 
 	/**
-	 * 获取指定ID的网络接口列表
+	 * 获取指定主机ID的网络接口列表
 	 */
 	public List<NetInterface> getNetInterfacesById(long id) {
-		String sql = "select * from t_netinterface where netif_hostid=?";
+		String sql = "select * from t_netinterface where netif_id in (select host_netif_netifid from t_host_netif where host_netif_hostid=?)";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
 			super.doStart();
@@ -529,18 +474,14 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 
 	}
 
 	/**
-	 * 获取指定ID的网络接口
+	 * 获取指定网络接口ID的网络接口
 	 */
 	public NetInterface getNetInterfaceById(long id) {
 		String sql = "select * from t_netinterface where netif_id=?";
@@ -567,11 +508,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return nif;
 
@@ -615,17 +552,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 	}
 
 	/**
-	 * 获取指定时间戳的网络接口状态
+	 * 获取指定网络接口 ID和时间戳的网络接口状态
 	 */
 	public NetInterfaceStat getInterfaceStatById(long id, long timestamp) {
 		String sql = "select * from t_netif_status where netifstat_netifid=? and netifstat_timestamp=?";
@@ -660,20 +593,16 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return nis;
 	}
 
 	/**
-	 * 获取指定ID的进程
+	 * 获取指定主机ID的进程
 	 */
 	public List<Progress> getProgressesById(long id) {
-		String sql = "select * from t_progress where prog_hostid=?";
+		String sql = "select * from t_progress where prog_id in (select host_prog_progid from t_host_prog where host_prog_hostid=? )";
 		List<Progress> list = new ArrayList<Progress>(20);
 		try {
 			super.doStart();
@@ -691,17 +620,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 	}
 
 	/**
-	 * 获取指定ID的进程
+	 * 获取指定进程ID的进程
 	 */
 	public Progress getProgressById(long id) {
 		String sql = "select * from t_progress where prog_id=?";
@@ -720,11 +645,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return pro;
 	}
@@ -756,11 +677,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return list;
 	}
@@ -769,7 +686,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的进程监测信息
 	 */
 	public ProgressDetection getProgressDetecById(long id, long timestamp) {
-		String sql = "select * from dprousage where progusage_progid=? and progusage_=?";
+		String sql = "select * from t_prog_usage where progusage_progid=1101 and progusage_timestamp=45656465465435";
 		ProgressDetection prod = null;
 		try {
 			super.doStart();
@@ -791,11 +708,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 		return prod;
 	}
@@ -812,13 +725,89 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			try {
-				super.doStop();
-			} catch (Exception e) {
-				e.printStackTrace();
-			}
+			DButil.close(pstmt, null);
 		}
 
+	}
+
+	/**
+	 * 更新指定CPU ID的CPU利用率
+	 */
+	public void addCPUPrecsById(long cpuid, double percent, long timestamp) {
+		String sql = "insert into t_cpu_prec (prec_cpuid,prec_combined,prec_timestamp)values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, cpuid);
+			pstmt.setDouble(2, percent);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+	}
+
+	/**
+	 * 更新指定内存ID的内存监测数据
+	 */
+	public void addMemoryDetecById(long memid, double usedPercent,
+			long timestamp) {
+		String sql = "insert into t_mem_usage (memusage_memid,memusage_usedPercent,memusage_timestamp) values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, memid);
+			pstmt.setDouble(2, usedPercent);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+	}
+
+	/**
+	 * 更新指定文件系统ID的文件系统利用率
+	 */
+	public void addFileSystemUsages(long filesysid, double usage, long timestamp) {
+		String sql = "insert into t_filesys_usage (filesysusage_filesysid,filesysusage_usePercent,filesysusage_timestamp) values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, filesysid);
+			pstmt.setDouble(2, usage);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
+
+	}
+
+	/**
+	 * 更新指定主机的PING信息
+	 */
+	public void addPingInfo(long hostid, double pingDelay, long timestamp) {
+		String sql = "insert into t_pinginfo (pinginfo_hostid,pinginfo_delay,pinginfo_timestamp) values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, hostid);
+			pstmt.setDouble(2, pingDelay);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
+
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.close(pstmt, null);
+		}
 	}
 
 }
