@@ -27,6 +27,7 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.HostManager;
 import smart.mast.action.Action;
 
 public class PingListener extends AbstractListener {
@@ -49,14 +50,12 @@ public class PingListener extends AbstractListener {
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("参数：" + json);
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 		// URL
-		// http://10.10.152.20:8080/itims/restws/data/perf/type/998/FPING/fAvgRestTime?rangeInHour=24&pmosn=998005517
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
@@ -114,6 +113,9 @@ public class PingListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
+								double pingDelay = 0;
+								long timestamp = 0;
+
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
@@ -122,16 +124,29 @@ public class PingListener extends AbstractListener {
 											|| "null".equals(jsonData1.get(0))
 											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("PING延迟", 0);
+										pingDelay = 0;
+										timestamp = df.parse(
+												(String) jsonData1.get(1))
+												.getTime();
 									} else {
 										jo.put("PING延迟", Float
 												.valueOf((String) jsonData1
 														.get(0)));
+										pingDelay = Double
+												.valueOf((String) jsonData1
+														.get(0));
+										timestamp = df.parse(
+												(String) jsonData1.get(1))
+												.getTime();
 									}
 									jo.put("collectTime",
-											df.parse(
-													jsonData1.get(1).toString())
+											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
+
+									HostManager hm = HostManager.getInstance();
+									hm.addPingInfo(moId, pingDelay, timestamp);
+
 								}
 
 								jsonData.remove("data");
@@ -139,10 +154,6 @@ public class PingListener extends AbstractListener {
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[2]);
 								jsonData.remove("kpi");
-								jsonData.remove("kpiName");
-								jsonData.put("kpiName", ja2);
-								jsonData.remove("mosn");
-								jsonData.put("mosn", ja2);
 							}
 
 							JSONObject jo = new JSONObject();
@@ -175,7 +186,7 @@ public class PingListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(PingListener.class, "返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();

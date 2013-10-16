@@ -28,6 +28,8 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.HostManager;
+import smart.core.NetEquipmentManager;
 import smart.mast.action.Action;
 
 public class MemoryUsageListener extends AbstractListener {
@@ -47,12 +49,13 @@ public class MemoryUsageListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
+		String eqType = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("参数：" + json);
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
+			eqType = json.getString("eqType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -73,6 +76,7 @@ public class MemoryUsageListener extends AbstractListener {
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("moId", moId);
 		capsule.append("rangeInHour", rangeInHour);
+		capsule.append("eqType", eqType);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -118,40 +122,54 @@ public class MemoryUsageListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
+								long memid = jsonData.getLong("mosn");
+
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
 
-									if (null == jsonData1.getString(0)
-											|| "".equals(jsonData1.getString(0))
-											|| "null".equals(jsonData1
-													.getString(0))
-											|| (jsonData1.getString(0))
-													.equals(null)) {
+									if (null == jsonData1.get(0)
+											|| "".equals(jsonData1.get(0))
+											|| "null".equals(jsonData1.get(0))
+											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("usage", 0);
 
 									} else {
-										jo.put("usage", Float.valueOf(jsonData1
-												.getString(0)));
+										jo.put("usage", Float
+												.valueOf((String) jsonData1
+														.get(0)));
 									}
 									jo.put("collectTime",
-											df.parse(jsonData1.getString(1))
+											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
+
+									Double usedPercent = Double
+											.valueOf((String) jsonData1.get(0));
+									long timestamp = df.parse(
+											(String) jsonData1.get(1))
+											.getTime();
+
+									if (eqType.equals("主机")) {
+										HostManager hm = HostManager
+												.getInstance();
+										hm.addMemoryDetecById(memid,
+												usedPercent, timestamp);
+									}
+									if (eqType.equals("网络设备")) {
+										NetEquipmentManager nem = NetEquipmentManager
+												.getInstance();
+										nem.addMemoryDetecById(memid,
+												usedPercent, timestamp);
+
+									}
 
 								}
 								jsonData.remove("data");
 								jsonData.put("data", ja2);
 								String s = jsonData.getString("moPath");
-								jsonData.put(
-										"name",
-										s.substring(s.indexOf("> ") + 1,
-												s.lastIndexOf("(")));
+								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
-								jsonData.remove("kpiName");
-								jsonData.put("kpiName", ja2);
-								jsonData.remove("mosn");
-								jsonData.put("mosn", ja2);
 							}
 							JSONObject jo = new JSONObject();
 							jo.put("dataList", ja);
@@ -183,7 +201,7 @@ public class MemoryUsageListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(MemoryUsageListener.class, "返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
