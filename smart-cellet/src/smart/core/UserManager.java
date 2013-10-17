@@ -27,11 +27,10 @@ public final class UserManager {
 	}
 
 	// 签入
-	public void signIn(long id, String name, String passwordMD5, String token) {
+	public void signIn(long id, String name, String passwordMD5) {
 		User user = new User(id);
 		user.setName(name);
 		user.setPwd(passwordMD5);
-		user.setToken(token);
 		user.setLastLogin((new Date()).getTime());
 		userDao.saveUser(user);
 	}
@@ -49,11 +48,6 @@ public final class UserManager {
 			b = true;
 		}
 		return b;
-	}
-
-	// 根据用户token获取用户名
-	public String getUsername(String token) {
-		return userDao.getName(token);
 	}
 
 }

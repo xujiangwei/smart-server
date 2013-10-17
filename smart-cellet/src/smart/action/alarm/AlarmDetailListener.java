@@ -109,7 +109,7 @@ public final class AlarmDetailListener extends AbstractListener {
 						jo = new JSONObject(content);
 
 						JSONArray ja = new JSONArray();
-						if ("成功".equals(jo.get("result"))) {
+						if (jo.has("result")&&"成功".equals(jo.get("result"))) {
 							ja = jo.getJSONArray("almlist");
 							List<String> list = Arrays.asList("almId", "moId",
 									"rootMoId", "parentMoId", "typeCode",
@@ -168,37 +168,7 @@ public final class AlarmDetailListener extends AbstractListener {
 							jo.put("baseInfo", "");
 							jo.put("errorInfo", "找不到符合条件的相关告警详情");
 						}
-						// if (jo.get("baseInfo") != null &&
-						// !"".equals(jo.get("baseInfo"))) {
-						// String moType =
-						// jo.getJSONObject("baseInfo").getString("moType");
-						// String location =
-						// jo.getJSONObject("baseInfo").getString("location");
-						// String detail =
-						// jo.getJSONObject("baseInfo").getString("detail");
-						// String almStatus =
-						// jo.getJSONObject("baseInfo").getString("almStatus");
-						// long occurTime =
-						// jo.getJSONObject("baseInfo").getLong("occurTime");
-						// String trend =
-						// jo.getJSONObject("baseInfo").getString("trend");
-						// int count =
-						// jo.getJSONObject("baseInfo").getInt("count");
-						// int upgradeCount =
-						// jo.getJSONObject("baseInfo").getInt("upgradeCount");
-						// String confirmUser =
-						// jo.getJSONObject("baseInfo").getString("confirmUser");
-						// long confirmTime =
-						// jo.getJSONObject("baseInfo").getLong("confirmTime");
-						// String delUser =
-						// jo.getJSONObject("baseInfo").getString("delUser");
-						// long delTime =
-						// jo.getJSONObject("baseInfo").getLong("delTime");
-						// AlarmManager.getInstance().signInDetail(almId,
-						// moType, location, detail, almStatus, occurTime,
-						// trend, count, upgradeCount, confirmUser, confirmTime,
-						// delUser, delTime);
-						// }
+						
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 
