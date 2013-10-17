@@ -12,7 +12,7 @@ import java.sql.Statement;
  */
 public class DButil {
 	// 定义连接数据库的URL字符串
-	private static final String URL = "jdbc:mariadb://127.0.0.1:3308/resource";
+	private static final String URL = "jdbc:mariadb://172.25.25.222:3308/resource";
 	// 连接数据库的用户名
 	private static final String USER = "root";
 	// 连接数据库的密码
@@ -39,8 +39,8 @@ public class DButil {
 		if (conn == null) {
 			try {
 				conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			} catch (SQLException e) {
-				throw new RuntimeException("数据库连接失败！", e);
+			} catch (Exception e) {
+			} finally {
 			}
 		}
 		return conn;

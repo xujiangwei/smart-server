@@ -36,25 +36,39 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		}  finally {
-			DButil.close(pstmt, rs);
-		}
+		} 
 		return b;
 	}
 
 	@Override
 	public void saveAlarmList(Alarm alarm) {
-		String sql = "insert into t_alarm (ta_moId, ta_almId, ta_moName, ta_almCause, ta_severity, ta_moIp, ta_lastTime) values (?,?,?,?,?,?,?)";
+		String sql = "insert into t_alarm values (?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?,?)";
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
-			pstmt.setLong(1, alarm.getMoId());
-			pstmt.setLong(2, alarm.getId());
-			pstmt.setString(3, alarm.getMoName());
-			pstmt.setString(4, alarm.getAlmCause());
-			pstmt.setInt(5, alarm.getSeverity());
-			pstmt.setString(6, alarm.getMoIp());
-			pstmt.setLong(7, alarm.getLastTime());
+			pstmt.setLong(1, alarm.getId());
+			pstmt.setLong(2, alarm.getMoId());
+			pstmt.setLong(3, alarm.getRootMoId());
+			pstmt.setLong(4, alarm.getParentMoId());
+			pstmt.setString(5, alarm.getTypecode());
+			pstmt.setString(6, alarm.getAlmCause());
+			pstmt.setString(7, alarm.getIsSuppressed());
+			pstmt.setInt(8, alarm.getSeverity());
+			pstmt.setString(9, alarm.getExtraInfo());
+			pstmt.setString(10, alarm.getAlmStatus());
+			pstmt.setString(11, alarm.getTrend());
+			pstmt.setLong(12, alarm.getOccurTime());
+			pstmt.setLong(13, alarm.getLastTime());
+			pstmt.setInt(14, alarm.getCount());
+			pstmt.setString(15, alarm.getDetail());
+			pstmt.setString(16, alarm.getOriginalInfo());
+			pstmt.setLong(17, alarm.getConfirmTime());
+			pstmt.setLong(18, alarm.getConfirmUserId());
+			pstmt.setString(19, alarm.getConfirmUser());
+			pstmt.setString(20, alarm.getMoIp());
+			pstmt.setString(21, alarm.getMoName());
+			pstmt.setString(22, alarm.getCauseAlias());
+			pstmt.setString(23, alarm.getLocation());
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -62,35 +76,6 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 			DButil.close(pstmt, null);
 		}
 
-	}
-
-	@Override
-	public void saveAlarmDetail(Alarm alarm) {
-		String sql = "update t_alarm set ta_motype = ?,ta_location = ?,ta_detail = ?," +
-				"ta_almStatus = ?,ta_occurtime = ?,ta_trend = ?,ta_count = ?,ta_upgradeCount = ?," +
-				"ta_confirmUser = ?,ta_confirmTime = ?,ta_delUser = ?,ta_delTime = ? where ta_almId = ?";
-		try {
-			super.doStart();
-			pstmt = super.conn.prepareStatement(sql);
-			pstmt.setString(1, alarm.getMoType());
-			pstmt.setString(2, alarm.getLocation());
-			pstmt.setString(3, alarm.getDetail());
-			pstmt.setString(4, alarm.getAlmStatus());
-			pstmt.setLong(5, alarm.getOccurTime());
-			pstmt.setString(6, alarm.getTrend());
-			pstmt.setInt(7, alarm.getCount());
-			pstmt.setInt(8, alarm.getUpgradeCount());
-			pstmt.setString(9, alarm.getConfirmUser());
-			pstmt.setLong(10, alarm.getConfirmTime());
-			pstmt.setString(11, alarm.getDelUser());
-			pstmt.setLong(12, alarm.getDelTime());
-			pstmt.setLong(13, alarm.getId());
-			pstmt.executeUpdate();
-		} catch (Exception e) {
-			e.printStackTrace();
-		} finally {
-			DButil.close(pstmt, null);
-		}
 	}
 
 	@Override
@@ -137,16 +122,17 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 	}
 
 	@Override
-	public void alarmConfirm(long almId, String username, long dealTime) {
-		String sql = "update t_alarm set ta_almStatus = ?,ta_confirmUser = ?," +
-				"ta_confirmTime=? where ta_almId = ?";
+	public void alarmConfirm(long almId, String username, long userId, long dealTime) {
+		String sql = "update t_alarm set ta_alarmstatus = ?,ta_confirm_user = ?," +
+				"ta_confirm_time = ?,ta_confirm_userid = ? where ta_almId = ?";
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			pstmt.setString(1, "确认");
 			pstmt.setString(2, username);
 			pstmt.setLong(3, dealTime);
-			pstmt.setLong(4, almId);
+			pstmt.setLong(4, userId);
+			pstmt.setLong(5, almId);
 			pstmt.executeUpdate();
 		} catch (Exception e) {
 			e.printStackTrace();

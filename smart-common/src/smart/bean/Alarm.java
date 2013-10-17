@@ -10,23 +10,27 @@ public class Alarm extends AbstractEntity {
 	private static final long serialVersionUID = -2693847734573986143L;
 
 	private long moId;
-	private String moName;
-	private int severity;
-	private String moIp;
+	private long rootMoId;
+	private long parentMoId;
+	private String typecode;
 	private String almCause;
+	private String isSuppressed;
+	private int severity;
+	private String extraInfo;
 	private String almStatus;
-	private long lastTime;
-	private String moType;
-	private String location;
-	private String detail;
-	private long occurTime;
 	private String trend;
+	private long occurTime;
+	private long lastTime;
 	private int count;
-	private int upgradeCount;
-	private String confirmUser;
+	private String detail;
+	private String originalInfo;
 	private long confirmTime;
-	private String delUser;
-	private long delTime;
+	private long confirmUserId;
+	private String confirmUser;
+	private String moIp;
+	private String moName;
+	private String causeAlias;
+	private String location;
 	
 	public Alarm(long almId) {
 		super(almId);
@@ -40,28 +44,28 @@ public class Alarm extends AbstractEntity {
 		this.moId = moId;
 	}
 
-	public String getMoName() {
-		return moName;
+	public long getRootMoId() {
+		return rootMoId;
 	}
 
-	public void setMoName(String moName) {
-		this.moName = moName;
+	public void setRootMoId(long rootMoId) {
+		this.rootMoId = rootMoId;
 	}
 
-	public int getSeverity() {
-		return severity;
+	public long getParentMoId() {
+		return parentMoId;
 	}
 
-	public void setSeverity(int severity) {
-		this.severity = severity;
+	public void setParentMoId(long parentMoId) {
+		this.parentMoId = parentMoId;
 	}
 
-	public String getMoIp() {
-		return moIp;
+	public String getTypecode() {
+		return typecode;
 	}
 
-	public void setMoIp(String moIp) {
-		this.moIp = moIp;
+	public void setTypecode(String typecode) {
+		this.typecode = typecode;
 	}
 
 	public String getAlmCause() {
@@ -72,52 +76,36 @@ public class Alarm extends AbstractEntity {
 		this.almCause = almCause;
 	}
 
+	public String getIsSuppressed() {
+		return isSuppressed;
+	}
+
+	public void setIsSuppressed(String isSuppressed) {
+		this.isSuppressed = isSuppressed;
+	}
+
+	public int getSeverity() {
+		return severity;
+	}
+
+	public void setSeverity(int severity) {
+		this.severity = severity;
+	}
+
+	public String getExtraInfo() {
+		return extraInfo;
+	}
+
+	public void setExtraInfo(String extraInfo) {
+		this.extraInfo = extraInfo;
+	}
+
 	public String getAlmStatus() {
 		return almStatus;
 	}
 
 	public void setAlmStatus(String almStatus) {
 		this.almStatus = almStatus;
-	}
-
-	public long getLastTime() {
-		return lastTime;
-	}
-
-	public void setLastTime(long lastTime) {
-		this.lastTime = lastTime;
-	}
-
-	public String getMoType() {
-		return moType;
-	}
-
-	public void setMoType(String moType) {
-		this.moType = moType;
-	}
-
-	public String getLocation() {
-		return location;
-	}
-
-	public void setLocation(String location) {
-		this.location = location;
-	}
-
-	public String getDetail() {
-		return detail;
-	}
-
-	public void setDetail(String detail) {
-		this.detail = detail;
-	}
-
-	public long getOccurTime() {
-		return occurTime;
-	}
-
-	public void setOccurTime(long occurTime) {
-		this.occurTime = occurTime;
 	}
 
 	public String getTrend() {
@@ -128,6 +116,22 @@ public class Alarm extends AbstractEntity {
 		this.trend = trend;
 	}
 
+	public long getOccurTime() {
+		return occurTime;
+	}
+
+	public void setOccurTime(long occurTime) {
+		this.occurTime = occurTime;
+	}
+
+	public long getLastTime() {
+		return lastTime;
+	}
+
+	public void setLastTime(long lastTime) {
+		this.lastTime = lastTime;
+	}
+
 	public int getCount() {
 		return count;
 	}
@@ -136,20 +140,20 @@ public class Alarm extends AbstractEntity {
 		this.count = count;
 	}
 
-	public int getUpgradeCount() {
-		return upgradeCount;
+	public String getDetail() {
+		return detail;
 	}
 
-	public void setUpgradeCount(int upgradeCount) {
-		this.upgradeCount = upgradeCount;
+	public void setDetail(String detail) {
+		this.detail = detail;
 	}
 
-	public String getConfirmUser() {
-		return confirmUser;
+	public String getOriginalInfo() {
+		return originalInfo;
 	}
 
-	public void setConfirmUser(String confirmUser) {
-		this.confirmUser = confirmUser;
+	public void setOriginalInfo(String originalInfo) {
+		this.originalInfo = originalInfo;
 	}
 
 	public long getConfirmTime() {
@@ -160,20 +164,52 @@ public class Alarm extends AbstractEntity {
 		this.confirmTime = confirmTime;
 	}
 
-	public String getDelUser() {
-		return delUser;
+	public long getConfirmUserId() {
+		return confirmUserId;
 	}
 
-	public void setDelUser(String delUser) {
-		this.delUser = delUser;
+	public void setConfirmUserId(long confirmUserId) {
+		this.confirmUserId = confirmUserId;
 	}
 
-	public long getDelTime() {
-		return delTime;
+	public String getConfirmUser() {
+		return confirmUser;
 	}
 
-	public void setDelTime(long delTime) {
-		this.delTime = delTime;
+	public void setConfirmUser(String confirmUser) {
+		this.confirmUser = confirmUser;
+	}
+
+	public String getMoIp() {
+		return moIp;
+	}
+
+	public void setMoIp(String moIp) {
+		this.moIp = moIp;
+	}
+
+	public String getMoName() {
+		return moName;
+	}
+
+	public void setMoName(String moName) {
+		this.moName = moName;
+	}
+
+	public String getCauseAlias() {
+		return causeAlias;
+	}
+
+	public void setCauseAlias(String causeAlias) {
+		this.causeAlias = causeAlias;
+	}
+
+	public String getLocation() {
+		return location;
+	}
+
+	public void setLocation(String location) {
+		this.location = location;
 	}
 
 }
