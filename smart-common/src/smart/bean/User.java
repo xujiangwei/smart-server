@@ -14,7 +14,6 @@ public class User extends AbstractEntity {
 
 	private String name;
 	private String pwd;
-	private String token;
 	private long lastLogin;
 	
 	public User(long id) {
@@ -35,14 +34,6 @@ public class User extends AbstractEntity {
 
 	public String getName() {
 		return this.name;
-	}
-
-	public String getToken() {
-		return token;
-	}
-
-	public void setToken(String token) {
-		this.token = token;
 	}
 
 	public long getLastLogin() {

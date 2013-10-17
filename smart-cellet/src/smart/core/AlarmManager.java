@@ -1,5 +1,8 @@
 package smart.core;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import smart.bean.Alarm;
 import smart.bean.AlarmCoverage;
 import smart.dao.AlarmDao;
@@ -11,7 +14,7 @@ import smart.dao.impl.AlarmDaoImpl;
 public class AlarmManager {
 
 	// 创建单例
-	private static AlarmManager instance = new AlarmManager();
+	private static final AlarmManager instance = new AlarmManager();
 	private AlarmDao alarmDao;
 
 	private AlarmManager() {
@@ -28,37 +31,45 @@ public class AlarmManager {
 	}
 	
 	// 签入告警列表
-	public void signInList(long moId, long almId, String moName,
-			String almCause, int severity, String moIp, long lastTime) {
-		Alarm alarm = new Alarm(almId);
-		alarm.setMoId(moId);
-		alarm.setMoName(moName);
-		alarm.setAlmCause(almCause);
-		alarm.setSeverity(severity);
-		alarm.setMoIp(moIp);
-		alarm.setLastTime(lastTime);
-		alarmDao.saveAlarmList(alarm);
+	public void signInList(JSONObject jo) {
+		Alarm alarm = null;
+		try {
+			alarm = new Alarm(jo.getLong("almId"));
+			alarm.setMoId(jo.getLong("moId"));
+			alarm.setRootMoId(jo.getLong("rootMoId"));
+			alarm.setParentMoId(jo.getLong("parentMoId"));
+			alarm.setTypecode(jo.getString("typeCode"));
+			alarm.setAlmCause(jo.getString("almCause"));
+			alarm.setIsSuppressed(jo.getString("isSuppressed"));
+			alarm.setSeverity(jo.getInt("severity"));
+			alarm.setExtraInfo(jo.getString("extraInfo"));
+			alarm.setAlmStatus(jo.getString("almStatus"));
+			alarm.setTrend(jo.getString("trend"));
+			alarm.setOccurTime(jo.getLong("occurTime"));
+			alarm.setLastTime(jo.getLong("lastTime"));
+			alarm.setCount(jo.getInt("count"));
+			alarm.setDetail(jo.getString("detail"));
+			alarm.setOriginalInfo(jo.getString("originalInfo"));
+			alarm.setConfirmTime(jo.getLong("confirmTime"));
+			alarm.setConfirmUserId(jo.getLong("confirmUserId"));
+			alarm.setConfirmUser(jo.getString("confirmUser"));
+			alarm.setMoIp(jo.getString("moIp"));
+			alarm.setMoName(jo.getString("moName"));
+			alarm.setCauseAlias(jo.getString("causeAlias"));
+			alarm.setLocation(jo.getString("location"));
+			alarmDao.saveAlarmList(alarm);
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
-
-	// 签入告警详细
-	public void signInDetail(long almId, String moType, String location,
-			String detail, String almStatus, long occurTime, String trend,
-			int count, int upgradeCount, String confirmUser, long confirmTime,
-			String delUser, long delTime) {
-		Alarm alarm = new Alarm(almId);
-		alarm.setMoType(moType);
-		alarm.setLocation(location);
-		alarm.setDetail(detail);
-		alarm.setAlmStatus(almStatus);
-		alarm.setOccurTime(occurTime);
-		alarm.setTrend(trend);
-		alarm.setCount(count);
-		alarm.setUpgradeCount(upgradeCount);
-		alarm.setConfirmUser(confirmUser);
-		alarm.setConfirmTime(confirmTime);
-		alarm.setDelUser(delUser);
-		alarm.setDelTime(delTime);
-		alarmDao.saveAlarmDetail(alarm);
+	
+	// 告警处理
+	public void alarmDeal(long almId, String opType, String username, long userId, long dealTime) {
+		if ("almConfirm".equals(opType)) {
+			alarmDao.alarmConfirm(almId, username, userId, dealTime);
+		} else if ("almDel".equals(opType)) {
+			alarmDao.alarmDelete(almId);
+		}
 	}
 
 	// 判断告警影响范围中是否已存在此受影响设备信息
@@ -77,12 +88,4 @@ public class AlarmManager {
 		alarmDao.saveAlarmCoverage(ac);
 	}
 	
-	// 告警处理
-	public void alarmDeal(long almId, String opType, String username, long dealTime) {
-		if ("almConfirm".equals(opType)) {
-			alarmDao.alarmConfirm(almId, username, dealTime);
-		} else if ("almDel".equals(opType)) {
-			alarmDao.alarmDelete(almId);
-		}
-	}
 }

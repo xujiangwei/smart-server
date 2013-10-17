@@ -22,12 +22,6 @@ public interface AlarmDao {
 	public void saveAlarmList(Alarm alarm);
 	
 	/**
-	 * 保存告警详情
-	 * @param detail
-	 */
-	public void saveAlarmDetail(Alarm alarm);
-	
-	/**
 	 * 保存告警影响范围
 	 * @param coverage
 	 */
@@ -45,9 +39,10 @@ public interface AlarmDao {
 	 * 告警确认操作
 	 * @param almId
 	 * @param username
+	 * @param userId
 	 * @param dealTime
 	 */
-	public void alarmConfirm(long almId, String username, long dealTime);
+	public void alarmConfirm(long almId, String username, long userId, long dealTime);
 	
 	/**
 	 * 告警删除操作

@@ -19,12 +19,12 @@ public interface UserDao {
 	 */
 	public void updateUser(String name);
 	
-	/**
-	 * 获取用户名
-	 * @param token
-	 * @return
-	 */
-	public String getName(String token);
+//	/**
+//	 * 获取用户名
+//	 * @param token
+//	 * @return
+//	 */
+//	public String getName(String token);
 	
 	/**
 	 * 获取指定用户
@@ -34,10 +34,10 @@ public interface UserDao {
 	 */
 	public User getUser(String username, String password);
 	
-	/**
-	 * 获取指定用户
-	 * @param token
-	 * @return
-	 */
-	public User getUser(String token);
+//	/**
+//	 * 获取指定用户
+//	 * @param token
+//	 * @return
+//	 */
+//	public User getUser(String token);
 }
