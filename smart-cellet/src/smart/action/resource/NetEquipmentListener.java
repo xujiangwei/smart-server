@@ -59,11 +59,13 @@ public final class NetEquipmentListener extends AbstractListener {
 		}
 
 		// URL
-		HostConfig  config=new MonitorSystemHostConfig();
-		HostConfigContext context=new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.NETEQUIPMENT)
-				.append("/").append(equipmentId).append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=").append(rangeInHour);
-		
+		HostConfig config = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.NETEQUIPMENT).append("/").append(equipmentId)
+				.append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=")
+				.append(rangeInHour);
+
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -90,69 +92,65 @@ public final class NetEquipmentListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					if ("success".equals(data.get("status"))) {
-						if (!"".equals(data.get("dataList"))
-								&& data.get("dataList") != null) {
-							JSONArray ja = data.getJSONArray("dataList");
-							System.out.println("数据总长度："+ja.length());
-							DateFormat df = new SimpleDateFormat(
-									"yyyy-MM-dd HH:mm:ss");
-							JSONObject jsob = new JSONObject();
-							JSONArray jay = new JSONArray();
-							if (ja.length()>32) {
-								for (int m = 0; m <5; m++) {
-									for (int i = 0; i < ja.length(); i++){
-										JSONObject job = ja.getJSONObject(i);
-										if (job.get("mosn").equals(ja.getJSONObject(m).get("mosn"))) {
-											JSONArray ja1 = job.getJSONArray("data");
-											JSONArray ja2 = new JSONArray();
-											for (int j = 0; j < ja1.length(); j++) {
-												JSONObject jo = new JSONObject();
-												jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-												jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-																.getString(1)).getTime());
-												ja2.put(jo);
-											}
-											JSONObject job1 = new JSONObject();
-											job1.put("data", ja2);
-											job1.put("moPath", job.getString("moPath"));
-											job1.put("kpiName", job.getString("kpiName"));
-											String s = job.getString("moPath");
-											job1.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-											job1.put("mosn", Long.valueOf(job.getString("mosn")));
-											jay.put(job1);
-										}
-									}
-								}
-							} else {
-								for (int i = 0; i < ja.length(); i++) {
-									JSONObject job = ja.getJSONObject(i);
+					if ("success".equals(data.get("status"))
+							&& (!"".equals(data.get("dataList"))
+									&& data.get("dataList") != null
+									&& !"null".equals(data.get("dataList")) && !data
+									.get("dataList").equals(null))) {
+						JSONArray ja = data.getJSONArray("dataList");
+						System.out.println("数据总长度：" + ja.length());
+						DateFormat df = new SimpleDateFormat(
+								"yyyy-MM-dd HH:mm:ss");
+						JSONObject jsob = new JSONObject();
+						JSONArray jay = new JSONArray();
+						int k = 0;
+						if (ja.length() > 32) {
+							k = 32;
+						} else {
+							k = ja.length();
+						}
+						for (int m = 0; m < 5; m++) {
+							for (int i = 0; i < k; i++) {
+								JSONObject job = ja.getJSONObject(i);
+								if (job.get("mosn").equals(
+										ja.getJSONObject(m).get("mosn"))) {
 									JSONArray ja1 = job.getJSONArray("data");
 									JSONArray ja2 = new JSONArray();
 									for (int j = 0; j < ja1.length(); j++) {
 										JSONObject jo = new JSONObject();
-										jo.put("value", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-												.getString(1)).getTime());
+										jo.put("value",
+												Float.valueOf(ja1.getJSONArray(
+														j).getString(0)));
+										jo.put("collectTime",
+												df.parse(
+														ja1.getJSONArray(j)
+																.getString(1))
+														.getTime());
 										ja2.put(jo);
 									}
-									job.remove("data");
-									job.put("data", ja2);
+									JSONObject job1 = new JSONObject();
+									job1.put("data", ja2);
+									job1.put("moPath", job.getString("moPath"));
+									job1.put("kpiName",
+											job.getString("kpiName"));
 									String s = job.getString("moPath");
-									job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
-									job.remove("kpi");
-									job.put("mosn", Long.valueOf(job.getString("mosn")));
-									jay.put(job);
+									job1.put(
+											"name",
+											s.substring(s.indexOf("(") + 1,
+													s.lastIndexOf(")")));
+									job1.put("mosn",
+											Long.valueOf(job.getString("mosn")));
+									jay.put(job1);
 								}
 							}
-							jsob.put("dataList", jay);
-							jsob.put("resourceId", equipmentId);
-							
-							data.remove("dataList");
-							data.put("data", jsob);
-							data.put("status", 300);
-							data.put("errorInfo", "");
 						}
+						jsob.put("dataList", jay);
+						jsob.put("resourceId", equipmentId);
+
+						data.remove("dataList");
+						data.put("data", jsob);
+						data.put("status", 300);
+						data.put("errorInfo", "");
 					} else {
 						data.put("data", "");
 						data.put("status", 603);

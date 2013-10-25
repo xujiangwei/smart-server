@@ -16,7 +16,6 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -26,7 +25,9 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.AlarmManager;
 import smart.mast.action.Action;
+import smart.util.DButil;
 
 /**
  * 告警处理监听
@@ -48,15 +49,17 @@ public final class AlarmDealListener extends AbstractListener {
 		// 获取请求参数
 		JSONObject json;
 		String token = null;
-		JSONArray almIdList = null;
+		long almId = 0;
 		String opType = null;
 		String username = null;
+		long userId = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			System.out.println("操作参数："+json);
 			token = json.getString("token");
 			username = json.getString("username");
-			almIdList = json.getJSONArray("almIdList");
+			userId = json.getLong("userId");
+			almId = json.getLong("almId");
 			opType = json.getString("opType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -71,15 +74,15 @@ public final class AlarmDealListener extends AbstractListener {
 			
 			// 创建请求
 			Request request = null;
-			String s = almIdList.toString().substring(1).replace("]", "");
+//			String s = almIdList.toString().substring(1).replace("]", "");
 			StringBuilder url = null;
 			if ("almConfirm".equals(opType)) {
 				url = new StringBuilder(context.getAPIHost())
-				.append("/").append(API.ALARMDEAL).append("/confirm/").append(s)
+				.append("/").append(API.ALARMDEAL).append("/confirm/").append(almId)
 				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
 			} else if ("almDel".equals(opType)) {
 				url = new StringBuilder(context.getAPIHost())
-				.append("/").append(API.ALARMDEAL).append("/clear/").append(s)
+				.append("/").append(API.ALARMDEAL).append("/clear/").append(almId)
 				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
 			}
 			request = this.getHttpClient().newRequest(url.toString());
@@ -91,7 +94,7 @@ public final class AlarmDealListener extends AbstractListener {
 			DeferredContentProvider dcp = new DeferredContentProvider();
 			RequestContentCapsule capsule = new RequestContentCapsule();
 			capsule.append("username", username);
-			capsule.append("almId", almIdList);
+			capsule.append("almId", almId);
 			capsule.append("opTime", opTime);
 			capsule.append("opType", opType);
 			capsule.append("token", token);
@@ -122,10 +125,11 @@ public final class AlarmDealListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 
-//						if (jo.getInt("status") == 300) {
-//							AlarmManager.getInstance().alarmDeal(almId, opType, username, opTime);
-//						}
 						if ("成功".equals(jo.getString("result"))) {
+							if (DButil.getInstance().getConnection() != null) {
+								AlarmManager.getInstance().alarmDeal(almId,
+										opType, username, userId, opTime);
+							}
 							jo.remove("result");
 							jo.put("status", 300);
 							jo.put("errorInfo", "");
@@ -145,7 +149,7 @@ public final class AlarmDealListener extends AbstractListener {
 						e.printStackTrace();
 					}
 				} else {
-					this.reportHTTPError(token, Action.ALARMDEAL);
+					this.reportHTTPError(Action.ALARMDEAL);
 				}
 				break;
 			default:
@@ -163,7 +167,7 @@ public final class AlarmDealListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送 ActionDialect
 				// 参数 tracker 是一次动作的追踪标识，这里使用操作类型。
-				this.response(token, Action.ALARMDEAL, params);
+				this.response(Action.ALARMDEAL, params);
 				break;
 			}
 		} else {

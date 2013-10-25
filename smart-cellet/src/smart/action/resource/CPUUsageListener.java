@@ -28,6 +28,7 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.CPUManager;
 import smart.mast.action.Action;
 
 public class CPUUsageListener extends AbstractListener {
@@ -47,15 +48,18 @@ public class CPUUsageListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
+		String eqType = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("参数：" + json);
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
+			eqType = json.getString("eqType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
+
+		System.out.println("参数1: " + moId + "  参数2： " + rangeInHour);
 		// URL
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
@@ -73,6 +77,7 @@ public class CPUUsageListener extends AbstractListener {
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("moId", moId);
 		capsule.append("rangeInHour", rangeInHour);
+		capsule.append("eqType", eqType);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -116,38 +121,46 @@ public class CPUUsageListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
+								long cpuid = jsonData.getLong("mosn");
+								long timestamp = 0;
+								double usedPercent = 0;
+
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
 
-									if (null == jsonData1.getString(0)
-											|| "".equals(jsonData1.getString(0))
-											|| "null".equals(jsonData1
-													.getString(0))
+									if (null == jsonData1.get(0)
+											|| "".equals(jsonData1.get(0))
+											|| "null".equals(jsonData1.get(0))
 											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("usage", 0);
 									} else {
-										jo.put("usage", Float.valueOf(jsonData1
-												.getString(0)));
+										jo.put("usage", Float
+												.valueOf((String) jsonData1
+														.get(0)));
 									}
 									jo.put("collectTime",
-											df.parse(jsonData1.getString(1))
+											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
+
+									usedPercent = Double
+											.valueOf((String) jsonData1.get(0));
+
+									timestamp = df.parse(
+											(String) jsonData1.get(1))
+											.getTime();
+									
+									CPUManager cpum=CPUManager.getInstance();
+									cpum.addCPUPrecsById(cpuid, usedPercent, timestamp);
+
 								}
 
 								jsonData.remove("data");
 								jsonData.put("data", ja2);
 								String s = jsonData.getString("moPath");
-								jsonData.put(
-										"name",
-										s.substring(s.indexOf("> ") + 1,
-												s.lastIndexOf("(")));
+								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
-								jsonData.remove("kpiName");
-								jsonData.put("kpiName", ja2);
-								jsonData.remove("mosn");
-								jsonData.put("mosn", ja2);
 							}
 
 							JSONObject jo = new JSONObject();
@@ -163,6 +176,7 @@ public class CPUUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
+					System.out.println("结果：" + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -179,7 +193,7 @@ public class CPUUsageListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(CPUUsageListener.class, "返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
@@ -187,7 +201,7 @@ public class CPUUsageListener extends AbstractListener {
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
-			System.out.println("结果：" + data);
+
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", data));
 

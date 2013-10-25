@@ -88,9 +88,8 @@ public class DataBaseListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					if ("success".equals(data.get("status"))) {
-						if (!"".equals(data.get("dataList"))
-								&& data.get("dataList") != null) {
+					if ("success".equals(data.get("status"))&&(!"".equals(data.get("dataList"))
+								&& data.get("dataList") != null)) {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
@@ -136,7 +135,6 @@ public class DataBaseListener extends AbstractListener {
 							data.put("data", jo);
 							data.put("status", 300);
 							data.put("errorInfo", "");
-						}
 					} else {
 						data.put("data", "");
 						data.put("status", 602);

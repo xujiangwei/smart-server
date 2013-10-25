@@ -3,10 +3,7 @@ package smart.bean;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
-import net.cellcloud.util.SlidingWindowExecutor;
-import net.cellcloud.util.SlidingWindowTask;
 import smart.dao.HostDao;
 import smart.dao.NetEquipmentDao;
 import smart.dao.impl.HostDaoImpl;
@@ -21,8 +18,6 @@ import smart.entity.Entity;
 public final class BeanFactory {
 
 	private static final BeanFactory instance = new BeanFactory();
-	private SlidingWindowExecutor swe = SlidingWindowExecutor
-			.newSlidingWindowThreadPool(20);
 	private List<Host> list = new ArrayList<Host>(20);
 	private List<NetEquipment> list1 = new ArrayList<NetEquipment>(20);
 	private HostDao hostDao;
@@ -67,8 +62,6 @@ public final class BeanFactory {
 	 * @return
 	 */
 	public List<Host> getHostList() {
-		swe.execute(new SlidingWindowTask(swe) {
-			public void run() {
 				List<Host> hList = hostDao.getHostList();
 				if (hList != null && hList.size() > 0) {
 					for (int i = 0; i < hList.size(); i++) {
@@ -168,27 +161,11 @@ public final class BeanFactory {
 						list.add(host);
 					}
 				}
-			}
-		});
 		// 等待子线程全部结束
 		try {
 			Thread.sleep(500);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
-
-		// 关闭所有子线程，不关的话主线程会一直阻塞
-		swe.shutdown();
-		try {
-			// 等待线程终止
-			if (!swe.awaitTermination(60, TimeUnit.SECONDS)) {
-				swe.shutdownNow();
-				if (!swe.awaitTermination(60, TimeUnit.SECONDS))
-					System.err.println("Pool did not terminate");
-			}
-		} catch (InterruptedException ie) {
-			swe.shutdownNow();
-			Thread.currentThread().interrupt();
 		}
 
 		if (list != null && list.size() > 0) {
@@ -429,8 +406,6 @@ public final class BeanFactory {
 	 * @return
 	 */
 	public List<NetEquipment> getNetEquipmentsList() {
-		swe.execute(new SlidingWindowTask(swe) {
-			public void run() {
 				List<NetEquipment> sList = netEqptDao.getNetEqptsList();
 				if (sList != null && sList.size() > 0) {
 					for (int i = 0; i < sList.size(); i++) {
@@ -499,8 +474,6 @@ public final class BeanFactory {
 					}
 				}
 
-			}
-		});
 		// 等待子线程全部结束
 		try {
 			Thread.sleep(500);
@@ -509,18 +482,6 @@ public final class BeanFactory {
 		}
 
 		// 关闭所有子线程，不关的话主线程会一直阻塞
-		swe.shutdown();
-		try {
-			// 等待线程终止
-			if (!swe.awaitTermination(60, TimeUnit.SECONDS)) {
-				swe.shutdownNow();
-				if (!swe.awaitTermination(60, TimeUnit.SECONDS))
-					System.err.println("Pool did not terminate");
-			}
-		} catch (InterruptedException ie) {
-			swe.shutdownNow();
-			Thread.currentThread().interrupt();
-		}
 		return list1;
 
 	}

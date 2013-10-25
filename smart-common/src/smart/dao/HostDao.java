@@ -71,7 +71,7 @@ public interface HostDao {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercById(long time, long timestamp);
+	public CPUPerc getCPUPercById(long id, long timestamp);
 
 	/**
 	 * 返回指定 主机ID的内存
@@ -193,16 +193,39 @@ public interface HostDao {
 	 */
 	public NetInterfaceStat getInterfaceStatById(long id, long timestamp);
 
-	// public void updateCPUsById(long id);
-	//
-	// public void updateCPUPrecsById(long id);
-	//
-	// public void updateMemoryDetecById(long id);
-	//
+	/**
+	 * 更新指定CPU ID的CPU利用率
+	 * 
+	 * @param id
+	 */
+	public void addCPUPrecsById(long cpuid, double percent, long timestamp);
+
+	/**
+	 * 更新指定内存ID的内存监测数据
+	 * 
+	 * @param id
+	 */
+	public void addMemoryDetecById(long memid, double usedPercent,
+			long timestamp);
+
+	/**
+	 * 更新指定文件系统ID的文件系统利用率
+	 * 
+	 * @param id
+	 */
+	public void addFileSystemUsages(long filesysid, double usage, long timestamp);
+
+	/**
+	 * 更新指定主机的PING信息
+	 * 
+	 * @param hostid
+	 * @param pingDelay
+	 * @param timestamp
+	 */
+	public void addPingInfo(long hostid, double pingDelay, long timestamp);
+
+//	public void addNetInterfaceStatus(long hostId,double )
 	// public void updateProgressDetection(long id);
-	//
-	// public void updateFileSystemUsages(long id);
-	//
 	// public void updateInterfaceStatsById(long id);
 
 	/**

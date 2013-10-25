@@ -127,4 +127,19 @@ public interface NetEquipmentDao {
 	 */
 	public NetInterfaceStat getNetEqptInterfaceStatById(long id, long timestamp);
 
+	/**
+	 * 更新指定CPU ID的CPU利用率
+	 * 
+	 * @param id
+	 */
+	public void addCPUPrecsById(long cpuid, double percent, long timestamp);
+
+	/**
+	 * 更新指定内存ID的内存监测数据
+	 * 
+	 * @param id
+	 */
+	public void addMemoryDetecById(long memid, double usedPercent,
+			long timestamp);
+
 }

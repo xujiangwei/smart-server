@@ -203,9 +203,9 @@ public class SmartCellet extends Cellet {
 		addAttention.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ADDATTENTION, addAttention);
 
-		AttentionListListener al2 = new AttentionListListener(this);
-		al2.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ADDATTENTION, al2);
+//		AttentionListListener al2 = new AttentionListListener(this);
+//		al2.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ADDATTENTION, al2);
 
 		// 获取消息
 		MessageListListener messageList = new MessageListListener(this);

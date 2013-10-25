@@ -32,7 +32,9 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.core.AlarmManager;
 import smart.mast.action.Action;
+import smart.util.DButil;
 
 /**
  * 告警列表监听
@@ -103,7 +105,6 @@ public final class AlarmListListener extends AbstractListener {
 		}
 
 		Properties params = new Properties();
-		// if (token != null && !"".equals(token)) {
 
 		// 发送请求
 		ContentResponse response = null;
@@ -138,6 +139,7 @@ public final class AlarmListListener extends AbstractListener {
 								"lastTime", "count", "detail", "originalInfo",
 								"confirmTime", "confirmUserId", "confirmUser",
 								"moIp", "moName", "causeAlias", "location");
+<<<<<<< HEAD
 						if (ja.length() > 18){
 						for (int i = 0; i < 18; i++) {
 							JSONObject job = new JSONObject();
@@ -169,14 +171,65 @@ public final class AlarmListListener extends AbstractListener {
 											job.put(key, 0);
 										} else {
 											job.put(key, value);
+=======
+						if (ja.length() > 18) {
+							for (int i = 0; i < 18; i++) {
+								JSONObject job = new JSONObject();
+
+								for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
+									for (int k = 0; k < list.size(); k++) {
+										if (k == j) {
+											String key = list.get(k);
+											String value = ja.getJSONArray(i)
+													.get(j).toString();
+											if ("almId".equals(key)
+													|| "moId".equals(key)
+													|| ("confirmUserId"
+															.equals(key) && (!""
+															.equals(value)))) {
+												job.put(key,
+														Long.valueOf(value));
+											} else if ("occurTime".equals(key)
+													|| "lastTime".equals(key)
+													|| ("confirmTime"
+															.equals(key) && !""
+															.equals(value))) {
+												DateFormat df = new SimpleDateFormat(
+														"yyyy-MM-dd HH:mm:ss");
+												Date date = null;
+												date = df.parse(value);
+												job.put(key, date.getTime());
+											} else if ("count".equals(key)
+													|| "severity".equals(key)) {
+												job.put(key,
+														Integer.parseInt(value));
+											} else if (("confirmUserId"
+													.equals(key) || "confirmTime"
+													.equals(key))
+													&& "".equals(value)) {
+												job.put(key, 0);
+											} else {
+												job.put(key, value);
+											}
+>>>>>>> refs/remotes/upstream/master
 										}
 									}
 								}
+								jar.put(job);
+								if (DButil.getInstance().getConnection() != null) {
+									boolean b = AlarmManager.getInstance().isExist(job.getLong("almId"));
+									if (!b){
+										AlarmManager.getInstance().signInList(job);
+									}
+								}
 							}
-							jar.put(job);
 						}
+<<<<<<< HEAD
 						}
 						System.out.println("jsonArray:" + jar.length() + jar);
+=======
+						System.out.println("jsonArray" + jar.length()+": " + jar);
+>>>>>>> refs/remotes/upstream/master
 						jo.remove("result");
 						jo.remove("almlist");
 						jo.put("almList", jar);
@@ -189,33 +242,13 @@ public final class AlarmListListener extends AbstractListener {
 						jo.put("status", 301);
 						jo.put("errorInfo", "找不到符合条件的相关告警列表");
 					}
-					// if
-					// (!"".equals(jo.get("alarmListInfo"))&&!"".equals(jo.getJSONObject("alarmListInfo").get("almList")))
-					// {
-					// JSONArray ja =
-					// jo.getJSONObject("alarmListInfo").getJSONArray("almList");
-					// for (int i = 0; i < ja.length(); i++) {
-					// long moId = ja.getJSONObject(i).getLong("moId");
-					// long almId = ja.getJSONObject(i).getLong("almId");
-					// String moName = ja.getJSONObject(i).getString("moName");
-					// String almCause =
-					// ja.getJSONObject(i).getString("almCause");
-					// int severity = ja.getJSONObject(i).getInt("severity");
-					// String moIp = ja.getJSONObject(i).getString("moIp");
-					// long lastTime = ja.getJSONObject(i).getLong("lastTime");
-					// boolean b = AlarmManager.getInstance().isExist(almId);
-					// if (!b) {
-					// AlarmManager.getInstance().signInList(moId, almId,
-					// moName, almCause, severity, moIp, lastTime);
-					// }
-					// }
-					// }
+					
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
 					// 响应动作，即向客户端发送ActionDialect
 					// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
-					this.response(token, Action.ALARMLIST, params);
+					this.response(Action.ALARMLIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -223,7 +256,7 @@ public final class AlarmListListener extends AbstractListener {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(token, Action.ALARMLIST);
+				this.reportHTTPError(Action.ALARMLIST);
 			}
 			break;
 		default:
@@ -238,18 +271,8 @@ public final class AlarmListListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(token, Action.ALARMLIST, params);
+			this.response(Action.ALARMLIST, params);
 			break;
 		}
-		// } else {
-		// JSONObject jo = new JSONObject();
-		// try {
-		// jo.put("status", 800);
-		// } catch (JSONException e) {
-		// e.printStackTrace();
-		// }
-		// params.addProperty(new ObjectProperty("data", jo));
-		// this.response(Action.ALARMLIST, params);
-		// }
 	}
 }

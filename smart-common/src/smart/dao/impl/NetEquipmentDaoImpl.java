@@ -14,6 +14,7 @@ import smart.bean.NetInterface;
 import smart.bean.NetInterfaceStat;
 import smart.dao.AbstraceDao;
 import smart.dao.NetEquipmentDao;
+import smart.util.DButil;
 
 /**
  * 交换机DAO实现
@@ -42,6 +43,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -63,6 +66,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return netEqpt;
 	}
@@ -86,6 +91,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -112,6 +119,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 
 		return list;
@@ -138,6 +147,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cpu;
 	}
@@ -167,6 +178,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -195,6 +208,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cp;
 	}
@@ -216,6 +231,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memory;
 	}
@@ -245,6 +262,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -274,6 +293,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memDetec;
 	}
@@ -307,6 +328,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 
@@ -339,6 +362,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nif;
 
@@ -381,6 +406,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -420,10 +447,52 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nis;
 	}
 
+	/**
+	 * 更新指定CPU ID的CPU利用率
+	 */
+	public void addCPUPrecsById(long cpuid, double percent, long timestamp) {
+		String sql = "insert into t_cpu_prec (prec_cpuid,prec_combined,prec_timestamp) values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, cpuid);
+			pstmt.setDouble(2, percent);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
 
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, null);
+		}
+
+	}
+
+	/**
+	 * 更新指定内存ID的内存监测数据
+	 */
+	public void addMemoryDetecById(long memid, double usedPercent,
+			long timestamp) {
+		String sql = "insert into t_mem_usage (memusage_memid,memusage_usedPercent,memusage_timestamp) values (?,?,?)";
+		try {
+			super.doStart();
+			pstmt = super.conn.prepareStatement(sql);
+			pstmt.setLong(1, memid);
+			pstmt.setDouble(2, usedPercent);
+			pstmt.setLong(3, timestamp);
+			pstmt.executeUpdate();
+		} catch (Exception e) {
+			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, null);
+		}
+
+	}
 
 }

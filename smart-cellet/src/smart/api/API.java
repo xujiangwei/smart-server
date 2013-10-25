@@ -3,7 +3,7 @@ package smart.api;
 public final class API {
 
 	// 登录
-	public final static String LOGIN = "http://10.10.152.20:8081/monitoring-system/user/login";
+	public final static String LOGIN = "restws/right/auth/user/login/101";
 
 	// 注销
 	public static final String LOGOUT = "http://10.10.152.20:8081/monitoring-system/out/logout";
