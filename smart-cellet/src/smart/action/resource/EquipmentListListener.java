@@ -114,8 +114,8 @@ public class EquipmentListListener extends AbstractListener {
 								"typeName", "vendor", "model", "mgrStatus",
 								"almStatus");
 						int m = 0;
-						if (ja.length() > 40) {
-							m = 40;
+						if (ja.length() > 20) {
+							m = 20;
 						} else {
 							m = ja.length();
 						}
@@ -148,7 +148,7 @@ public class EquipmentListListener extends AbstractListener {
 							job.remove("typeName");
 							jo.put("base_info", job);
 
-							if (DButil.getConnection() != null) {
+							if (DButil.getInstance().getConnection() != null) {
 								long id = jo.getLong("moId");
 								if (!EquipmentManager.getInstance().isExist(id)) {
 									EquipmentManager.getInstance().storeEquipment(jo);
