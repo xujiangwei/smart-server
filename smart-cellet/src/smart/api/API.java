@@ -68,7 +68,8 @@ public final class API {
 	// 待办
 	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
 	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
-
+	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
+	public final static String INCIDENTRELATEDCIS = "incidentm/getCisById.html?username=admin";
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";

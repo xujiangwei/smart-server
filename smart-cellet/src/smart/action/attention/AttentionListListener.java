@@ -120,7 +120,7 @@ public final class AttentionListListener extends AbstractListener {
 				params.addProperty(new ObjectProperty("data", jo));
 
 				// 响应动作，即向客户端发送ActionDialect
-				this.response(token, Action.ATTENTIONLIST, params);
+				this.response(Action.ATTENTIONLIST, params);
 				break;
 			}
 		} else {

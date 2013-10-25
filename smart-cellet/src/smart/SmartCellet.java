@@ -63,6 +63,8 @@ import smart.action.resource.PingListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
+import smart.action.task.IncidentProcessListener;
+import smart.action.task.IncidentRelatedCiListener;
 import smart.action.time.CurrentTimeListener;
 import smart.mast.Root;
 import smart.mast.action.Action;
@@ -455,6 +457,16 @@ public class SmartCellet extends Cellet {
 		IncidentDetailListener incidentDetail = new IncidentDetailListener(this);
 		incidentDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTDETAIL, incidentDetail);
+		
+		// 故障任务单处理
+		IncidentProcessListener incidentProcess = new IncidentProcessListener(this);
+		incidentProcess.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INCIDENTPROCESS, incidentProcess);
+		
+		// 故障关联配置项
+		IncidentRelatedCiListener relatedCis = new IncidentRelatedCiListener(this);
+		relatedCis.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INCIDENTRELATEDCIS, relatedCis);
 
 		/** 资产管理 */
 		// 获取设备资产列表数据
