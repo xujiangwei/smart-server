@@ -37,7 +37,6 @@ public final class IncidentProcessListener extends AbstractListener {
 	public IncidentProcessListener(Cellet cellet) {
 		super(cellet);
 	}
-
 	
 	@Override
 	public void onAction(ActionDialect action) {
