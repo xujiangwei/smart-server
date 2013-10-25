@@ -21,6 +21,9 @@ import org.json.JSONObject;
 
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.MonitorSystemHostConfig;
 import smart.core.UserManager;
 import smart.mast.action.Action;
 import smart.util.DButil;
@@ -48,7 +51,7 @@ public final class LoginListener extends AbstractListener {
 		String password = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("登录参数："+json);
+			System.out.println("登录参数：" + json);
 			username = json.getString("username");
 			password = json.getString("password");
 		} catch (JSONException e1) {
@@ -56,16 +59,19 @@ public final class LoginListener extends AbstractListener {
 		}
 
 		// URL
-		StringBuilder url = new StringBuilder(API.LOGIN).append("/").append(username)
+		HostConfig config = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.LOGIN).append("/").append(username)
 				.append("?password=").append(password);
 
-		System.out.println("访问的Url："+url.toString());
-		
+		System.out.println("访问的Url：" + url.toString());
+
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 		url = null;
-		
+
 		Properties params = new Properties();
 
 		// 填写数据内容
@@ -105,24 +111,24 @@ public final class LoginListener extends AbstractListener {
 						jo.put("status", 300);
 						JSONObject j = jo.getJSONObject("userInfo");
 						j.put("userID", Long.valueOf(j.getString("userID")));
-						if (DButil.getConnection() != null) {
-							
+						if (DButil.getInstance().getConnection() != null) {
+
 							if (!UserManager.getInstance().isExist(username,
 									password)) {
 								long id = jo.getJSONObject("userInfo").getLong(
 										"userID");
-								
+
 								// 将登录成功后的返回对象保存到用户管理器
 								UserManager.getInstance().signIn(id, username,
 										password);
-								
+
 							} else {
 								// 更新该用户的最近登录时间
 								UserManager.getInstance().update(username);
 							}
 						}
 					}
-					System.out.println("返回的登录信息："+jo);
+					System.out.println("返回的登录信息：" + jo);
 					// 设置参数
 					params.addProperty(new StringProperty("username", username));
 					params.addProperty(new ObjectProperty("data", jo));

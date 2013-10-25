@@ -44,7 +44,7 @@ public final class AddAttentionListener extends AbstractListener {
 
 			JSONObject jo = new JSONObject();
 			try {
-				if (DButil.getConnection() != null) {
+				if (DButil.getInstance().getConnection() != null) {
 					boolean b = AttentionManager.getInstance().addAttention(
 							userId, moId);
 					if (b) {
@@ -67,7 +67,7 @@ public final class AddAttentionListener extends AbstractListener {
 
 			// 响应动作,即向客户端发送ActionDialect
 			// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
-			this.response(token, Action.ADDATTENTION, params);
+			this.response(Action.ADDATTENTION, params);
 		}
 	}
 }

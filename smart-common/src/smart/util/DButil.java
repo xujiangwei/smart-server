@@ -6,11 +6,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 
+import net.cellcloud.util.SlidingWindowExecutor;
+
 /**
  * 提供mariadb的数据库的连接，资源关闭
  * 
  */
 public class DButil {
+
+	private static final DButil instance = new DButil();
 	// 定义连接数据库的URL字符串
 	private static final String URL = "jdbc:mariadb://172.25.25.222:3308/resource";
 	// 连接数据库的用户名
@@ -20,6 +24,14 @@ public class DButil {
 
 	// 数据库的连接对象
 	private static Connection conn;
+
+	private SlidingWindowExecutor swe = SlidingWindowExecutor
+			.newSlidingWindowThreadPool(4);
+
+	public static DButil getInstance() {
+		return DButil.instance;
+	}
+
 	// 使用静态块注册数据库的驱动类
 	static {
 		try {
@@ -34,15 +46,19 @@ public class DButil {
 	 * 
 	 * @return
 	 */
-	public static Connection getConnection() {
-
-		if (conn == null) {
-			try {
-				conn = DriverManager.getConnection(URL, USER, PASSWORD);
-			} catch (Exception e) {
-			} finally {
+	public Connection getConnection() {
+		swe.execute(new Runnable() {
+			@Override
+			public void run() {
+				if (conn == null) {
+					try {
+						conn = DriverManager.getConnection(URL, USER, PASSWORD);
+					} catch (Exception e) {
+					}
+				}
 			}
-		}
+
+		});
 		return conn;
 	}
 
@@ -54,7 +70,7 @@ public class DButil {
 	 * @param ts
 	 *            查询的结果集
 	 */
-	public static void close(Statement stmt, ResultSet rs) {
+	public void close(Statement stmt, ResultSet rs) {
 		try {
 			if (stmt != null) {
 				stmt.close();
@@ -69,9 +85,10 @@ public class DButil {
 
 	/**
 	 * 关闭数据库的连接
+	 * 
 	 * @param conn
 	 */
-	public static void close(Connection conn) {
+	public void close(Connection conn) {
 		if (conn != null) {
 			try {
 				conn.close();
@@ -84,7 +101,7 @@ public class DButil {
 
 	public static void main(String[] args) {
 		// 测试连接
-		System.out.println(getConnection());
+		System.out.println(instance.getConnection());
 	}
 
 }

@@ -42,7 +42,7 @@ public class EquipmentDaoImpl extends AbstraceDao implements EquipmentDao {
 		} catch (Exception e1) {
 			e1.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -63,7 +63,7 @@ public class EquipmentDaoImpl extends AbstraceDao implements EquipmentDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		
 		return b;

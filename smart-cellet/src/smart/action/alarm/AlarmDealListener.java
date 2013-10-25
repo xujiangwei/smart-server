@@ -126,7 +126,7 @@ public final class AlarmDealListener extends AbstractListener {
 						jo = new JSONObject(content);
 
 						if ("成功".equals(jo.getString("result"))) {
-							if (DButil.getConnection() != null) {
+							if (DButil.getInstance().getConnection() != null) {
 								AlarmManager.getInstance().alarmDeal(almId,
 										opType, username, userId, opTime);
 							}
@@ -149,7 +149,7 @@ public final class AlarmDealListener extends AbstractListener {
 						e.printStackTrace();
 					}
 				} else {
-					this.reportHTTPError(token, Action.ALARMDEAL);
+					this.reportHTTPError(Action.ALARMDEAL);
 				}
 				break;
 			default:
@@ -167,7 +167,7 @@ public final class AlarmDealListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送 ActionDialect
 				// 参数 tracker 是一次动作的追踪标识，这里使用操作类型。
-				this.response(token, Action.ALARMDEAL, params);
+				this.response(Action.ALARMDEAL, params);
 				break;
 			}
 		} else {

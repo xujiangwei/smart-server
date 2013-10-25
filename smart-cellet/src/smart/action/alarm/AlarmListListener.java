@@ -182,7 +182,7 @@ public final class AlarmListListener extends AbstractListener {
 									}
 								}
 								jar.put(job);
-								if (DButil.getConnection() != null) {
+								if (DButil.getInstance().getConnection() != null) {
 									boolean b = AlarmManager.getInstance().isExist(job.getLong("almId"));
 									if (!b){
 										AlarmManager.getInstance().signInList(job);
@@ -209,7 +209,7 @@ public final class AlarmListListener extends AbstractListener {
 
 					// 响应动作，即向客户端发送ActionDialect
 					// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
-					this.response(token, Action.ALARMLIST, params);
+					this.response(Action.ALARMLIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -217,7 +217,7 @@ public final class AlarmListListener extends AbstractListener {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(token, Action.ALARMLIST);
+				this.reportHTTPError(Action.ALARMLIST);
 			}
 			break;
 		default:
@@ -232,7 +232,7 @@ public final class AlarmListListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(token, Action.ALARMLIST, params);
+			this.response(Action.ALARMLIST, params);
 			break;
 		}
 	}

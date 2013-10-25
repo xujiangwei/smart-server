@@ -36,19 +36,19 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取主机ID列表
 	 */
 	public List<Long> getHostIdList() {
-		String sql = "select host_id from t_host";
+		String sql = "select te_id from t_equipment where te_moType="+"主机";
 		List<Long> list = new ArrayList<Long>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				list.add(rs.getLong("host_id"));
+				list.add(rs.getLong("te_id"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 
 		return list;
@@ -61,7 +61,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		// 从 super 获取数据库连接
 		// 查询数据
 		// 关闭连接
-		String sql = "select * from t_host where host_id=?";
+		String sql = "select * from t_equipment where te_id=?";
 		Host host = null;
 		try {
 			super.doStart();
@@ -69,13 +69,13 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 			pstmt.setLong(1, id);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				host = new Host(rs.getLong("host_id"));
-				host.setName(rs.getString("host_name"));
+				host = new Host(rs.getLong("te_id"));
+				host.setName(rs.getString("te_moName"));
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 
 		return host;
@@ -85,21 +85,21 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取主机列表
 	 */
 	public List<Host> getHostList() {
-		String sql = "select * from  t_host";
+		String sql = "select * from  t_equipment where te_moType="+"主机";
 		List<Host> list = new ArrayList<Host>(20);
 		try {
 			super.doStart();
 			pstmt = super.conn.prepareStatement(sql);
 			rs = pstmt.executeQuery();
 			while (rs.next()) {
-				Host host = new Host(rs.getLong("host_id"));
-				host.setName(rs.getString("host_name"));
+				Host host = new Host(rs.getLong("te_id"));
+				host.setName(rs.getString("te_moName"));
 				list.add(host);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 
@@ -109,7 +109,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的CPU列表
 	 */
 	public List<CPU> getCPUsById(long id) {
-		String sql = "select * from t_cpu where cpu_id in (select host_cpu_cpuid from t_host_cpu where host_cpu_hostid=?)";
+		String sql = "select * from t_cpu where cpu_eqptid =?";
 		List<CPU> list = new ArrayList<CPU>(3);
 		try {
 			super.doStart();
@@ -129,7 +129,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 
 		return list;
@@ -157,7 +157,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cpu;
 	}
@@ -188,7 +188,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -218,7 +218,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cp;
 	}
@@ -227,7 +227,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的内存
 	 */
 	public Memory getMemoryById(long id) {
-		String sql = "select * from t_memory where mem_hostid=?";
+		String sql = "select * from t_memory where mem_eqptid=?";
 		Memory memory = null;
 		try {
 			super.doStart();
@@ -241,7 +241,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memory;
 	}
@@ -272,7 +272,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -303,7 +303,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memDetec;
 	}
@@ -312,7 +312,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的文件系统列表
 	 */
 	public List<FileSystem> getFileSystemsById(long id) {
-		String sql = "select * from t_filesystem where filesys_id in (select host_filesys_filesysid from t_host_filesys where host_filesys_hostid=? )";
+		String sql = "select * from t_filesystem where filesys_eqptid =?";
 		List<FileSystem> list = new ArrayList<FileSystem>(20);
 		try {
 			super.doStart();
@@ -334,7 +334,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 
@@ -365,7 +365,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return fs;
 	}
@@ -403,7 +403,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -439,7 +439,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return fsu;
 	}
@@ -448,7 +448,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的网络接口列表
 	 */
 	public List<NetInterface> getNetInterfacesById(long id) {
-		String sql = "select * from t_netinterface where netif_id in (select host_netif_netifid from t_host_netif where host_netif_hostid=?)";
+		String sql = "select * from t_netinterface where netif_eqptid =?";
 		List<NetInterface> list = new ArrayList<NetInterface>(20);
 		try {
 			super.doStart();
@@ -474,7 +474,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 
@@ -508,7 +508,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nif;
 
@@ -552,7 +552,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -593,7 +593,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nis;
 	}
@@ -602,7 +602,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定主机ID的进程
 	 */
 	public List<Progress> getProgressesById(long id) {
-		String sql = "select * from t_progress where prog_id in (select host_prog_progid from t_host_prog where host_prog_hostid=? )";
+		String sql = "select * from t_progress where prog_eqptid=?";
 		List<Progress> list = new ArrayList<Progress>(20);
 		try {
 			super.doStart();
@@ -620,7 +620,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -645,7 +645,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return pro;
 	}
@@ -677,7 +677,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -686,7 +686,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 	 * 获取指定时间戳的进程监测信息
 	 */
 	public ProgressDetection getProgressDetecById(long id, long timestamp) {
-		String sql = "select * from t_prog_usage where progusage_progid=1101 and progusage_timestamp=45656465465435";
+		String sql = "select * from t_prog_usage where progusage_progid=? and progusage_timestamp=?";
 		ProgressDetection prod = null;
 		try {
 			super.doStart();
@@ -708,7 +708,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return prod;
 	}
@@ -725,7 +725,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 
 	}
@@ -745,7 +745,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -765,7 +765,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -785,7 +785,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 
 	}
@@ -806,7 +806,7 @@ public class HostDaoImpl extends AbstraceDao implements HostDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 

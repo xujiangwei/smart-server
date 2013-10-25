@@ -71,7 +71,7 @@ public interface HostDao {
 	 * @param time
 	 * @return
 	 */
-	public CPUPerc getCPUPercById(long time, long timestamp);
+	public CPUPerc getCPUPercById(long id, long timestamp);
 
 	/**
 	 * 返回指定 主机ID的内存

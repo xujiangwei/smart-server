@@ -57,6 +57,8 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		}finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return user;
 	}
@@ -97,7 +99,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -113,7 +115,7 @@ public class UserDaoImpl extends AbstraceDao implements UserDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 

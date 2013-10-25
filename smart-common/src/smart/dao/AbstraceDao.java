@@ -1,10 +1,8 @@
 package smart.dao;
 
-
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.Statement;
-
 
 import smart.util.DButil;
 import smart.util.component.AbstractLifeCycle;
@@ -16,18 +14,17 @@ public abstract class AbstraceDao extends AbstractLifeCycle {
 	protected Statement stmt;
 	protected ResultSet rs;
 	protected Connection conn;
-	
+
 	public AbstraceDao() {
 	}
-	
 
 	@Override
 	protected void doStart() throws Exception {
-		conn=DButil.getConnection();
+		conn = DButil.getInstance().getConnection();
 	}
 
 	@Override
 	protected void doStop() throws Exception {
-		DButil.close(stmt, rs);
+		DButil.getInstance().close(stmt, rs);
 	}
 }
