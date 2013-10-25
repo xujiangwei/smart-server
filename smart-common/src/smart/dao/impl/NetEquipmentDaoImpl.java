@@ -43,6 +43,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -64,6 +66,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return netEqpt;
 	}
@@ -87,6 +91,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -113,6 +119,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 
 		return list;
@@ -139,6 +147,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cpu;
 	}
@@ -168,6 +178,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -196,6 +208,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return cp;
 	}
@@ -217,6 +231,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memory;
 	}
@@ -246,6 +262,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -275,6 +293,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return memDetec;
 	}
@@ -308,6 +328,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 
@@ -340,6 +362,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nif;
 
@@ -382,6 +406,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -421,6 +447,8 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return nis;
 	}
@@ -441,7 +469,7 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 
 	}
@@ -462,7 +490,7 @@ public class NetEquipmentDaoImpl extends AbstraceDao implements NetEquipmentDao 
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 
 	}

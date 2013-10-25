@@ -36,7 +36,9 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-		} 
+		} finally {
+			DButil.getInstance().close(pstmt, rs);
+		}
 		return b;
 	}
 
@@ -73,7 +75,7 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 
 	}
@@ -95,7 +97,7 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -116,7 +118,7 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		}  finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return b;
 	}
@@ -137,7 +139,7 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -152,7 +154,7 @@ public class AlarmDaoImpl extends AbstraceDao implements AlarmDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 

@@ -41,7 +41,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return pri;
 	}
@@ -61,7 +61,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -85,7 +85,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -111,7 +111,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return b;
 	}
@@ -152,7 +152,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 	
@@ -171,7 +171,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, rs);
+			DButil.getInstance().close(pstmt, rs);
 		}
 		return list;
 	}
@@ -191,7 +191,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 	
@@ -214,7 +214,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
@@ -237,7 +237,7 @@ public class AttentionDaoImpl extends AbstraceDao implements AttentionDao {
 		} catch (Exception e) {
 			e.printStackTrace();
 		} finally {
-			DButil.close(pstmt, null);
+			DButil.getInstance().close(pstmt, null);
 		}
 	}
 
