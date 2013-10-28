@@ -28,7 +28,7 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
-import smart.core.CPUManager;
+import smart.core.HostManager;
 import smart.mast.action.Action;
 
 public class CPUUsageListener extends AbstractListener {
@@ -151,8 +151,8 @@ public class CPUUsageListener extends AbstractListener {
 											(String) jsonData1.get(1))
 											.getTime();
 									
-									CPUManager cpum=CPUManager.getInstance();
-									cpum.addCPUPrecsById(cpuid, usedPercent, timestamp);
+									HostManager hm=HostManager.getInstance();
+									hm.addCPUPrecsById(cpuid, usedPercent, timestamp);
 
 								}
 
