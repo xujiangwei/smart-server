@@ -96,6 +96,8 @@ public final class Action {
 	// 待办
 	public static final String INCIDENTLIST = "requestIncidentList";
 	public static final String INCIDENTDETAIL = "requestIncidentDetail";
+	public static final String INCIDENTPROCESS = "sendIncidentProcessResult";
+	public static final String INCIDENTRELATEDCIS = "requestIncidentRelatedCis";
 
 	// 资产
 	public static final String CILIST = "requestCiList";
