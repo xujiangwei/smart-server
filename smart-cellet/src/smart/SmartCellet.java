@@ -30,6 +30,7 @@ import smart.action.attention.AttentionListListener;
 import smart.action.attention.AttentionListener;
 import smart.action.attention.CancelAttentionListener;
 import smart.action.attention.DeleteAttentionListener;
+import smart.action.ci.BusinessSystemListListener;
 import smart.action.ci.CiDetailListener;
 import smart.action.ci.CiListListener;
 import smart.action.message.MessageContactsListener;
@@ -61,10 +62,13 @@ import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentListener;
 import smart.action.resource.PingListener;
 import smart.action.resource.SendSnapshotListener;
+import smart.action.task.BpiListListener;
+import smart.action.task.IncidentCategoryListListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
 import smart.action.task.IncidentProcessListener;
-import smart.action.task.IncidentRelatedCiListener;
+import smart.action.task.OperationListListener;
+import smart.action.task.UserListListener;
 import smart.action.time.CurrentTimeListener;
 import smart.mast.Root;
 import smart.mast.action.Action;
@@ -447,7 +451,7 @@ public class SmartCellet extends Cellet {
 		nodeDec.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
 
-		/** 待办 */
+		/************** 待办 *************/
 		// 获取故障列表
 		IncidentListListener incidentList = new IncidentListListener(this);
 		incidentList.setHttpClient(this.httpClient);
@@ -458,23 +462,41 @@ public class SmartCellet extends Cellet {
 		incidentDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTDETAIL, incidentDetail);
 		
+		// 获取任务操作项
+		OperationListListener operationList = new OperationListListener(this);
+		operationList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.LISTOPERATION, operationList);
+		
 		// 故障任务单处理
-
 		IncidentProcessListener incidentProcess = new IncidentProcessListener(this);
 		incidentProcess.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INCIDENTPROCESS, incidentProcess);
-
-		// 故障关联配置项
-		IncidentRelatedCiListener relatedCis = new IncidentRelatedCiListener(this);
-		relatedCis.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.INCIDENTRELATEDCIS, relatedCis);
-
-
-		/** 资产管理 */
+		
+		// 获取故障类型
+		IncidentCategoryListListener incidentCategory = new IncidentCategoryListListener(this);
+		incidentCategory.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INCIDENTCATEGORY, incidentCategory);
+		
+		// 获取所有流程工单列表
+		BpiListListener bpiList = new BpiListListener(this);
+		bpiList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.BPILIST, bpiList);
+		
+		// 获取用户列表
+		UserListListener userList = new UserListListener(this);
+		userList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.COMMONUSERLIST, userList);
+		
+		/*************** 资产管理 **************/
 		// 获取设备资产列表数据
 		CiListListener ciListener = new CiListListener(this);
 		ciListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CILIST, ciListener);
+		
+		// 获取所有业务系统列表
+		BusinessSystemListListener bizSystemList = new BusinessSystemListListener(this);
+		bizSystemList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.BIZSYSTEMLIST, bizSystemList);
 
 		// 获取指定设备资产详细信息
 		CiDetailListener ciDetail = new CiDetailListener(this);

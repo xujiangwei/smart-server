@@ -1,14 +1,8 @@
-package smart.action.task;
+package smart.action.ci;
 
 import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
-
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
@@ -17,29 +11,29 @@ import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
+import smart.action.task.IncidentListListener;
 import smart.api.API;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
+public class BusinessSystemListListener extends AbstractListener {
 
-/** 
-* @Description :  故障工单处理并保存操作
-* @author      :  dwg
-* @date        :  Oct 22, 2013 11:07:11 AM 
-*  
-*/
-public final class IncidentRelatedCiListener extends AbstractListener {
-
-
-	public IncidentRelatedCiListener(Cellet cellet) {
+	public BusinessSystemListListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
+		
+
 
 		// 使用同步方式进行请求。
 		// 因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
@@ -49,7 +43,7 @@ public final class IncidentRelatedCiListener extends AbstractListener {
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INCIDENTRELATEDCIS);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.BPILIST);
 		JSONObject json = null;
 		String bpiId=null;
 		try {
@@ -59,7 +53,6 @@ public final class IncidentRelatedCiListener extends AbstractListener {
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		
 		url.append("&bpiId=").append(bpiId);
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -88,19 +81,17 @@ public final class IncidentRelatedCiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					jo = new JSONObject(content);
-					System.out.println("响应工单保存数据的返回值为：:" + jo);
-
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
 					// 响应动作，即向客户端发送 ActionDialect
-					this.response(Action.INCIDENTRELATEDCIS, params);
+					this.response(Action.BPILIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.INCIDENTRELATEDCIS);
+				this.reportHTTPError(Action.BPILIST);
 			}
 
 			break;
@@ -118,9 +109,12 @@ public final class IncidentRelatedCiListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.INCIDENTRELATEDCIS, params);
+			this.response(Action.BPILIST, params);
 			break;
 		}
+	
+			
+	
 	}
 
 }
