@@ -96,13 +96,15 @@ public final class Action {
 	// 待办
 	public static final String INCIDENTLIST = "requestIncidentList";
 	public static final String INCIDENTDETAIL = "requestIncidentDetail";
+	public static final String LISTOPERATION = "requestOperationList";
 	public static final String INCIDENTPROCESS = "sendIncidentProcessResult";
-	public static final String INCIDENTRELATEDCIS = "requestIncidentRelatedCis";
-
+	public static final String INCIDENTCATEGORY= "requestIncidentCategory";
+	public static final String COMMONUSERLIST= "requestUserList";
+	public static final String BPILIST= "requestBizSystemList"; 
+	
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";
-
-	private Action() {
-	}
+	public static final String BIZSYSTEMLIST = "requestBizSystemList";
+	
 }

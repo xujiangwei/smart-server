@@ -68,12 +68,19 @@ public final class API {
 	// 待办
 	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
 	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
+	public final static String LISTOPERATION =  "incidentm/listIncidentOperation.html?username=admin";
 	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
-	public final static String INCIDENTRELATEDCIS = "incidentm/getCisById.html?username=admin";
+	public final static String INCIDENTCATEGORY = "incidentm/getIncidentCategoryById.html?username=admin";
+	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
+	public final static String BPILIST = "sacmm/getBizSystemList.html?username=admin";
 
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
+	public final static String BIZSYSTEMLIST = "sacmm/getBizSystemList.html?username=admin";
+	
+	
+	
 
 	private API() {
 	}
