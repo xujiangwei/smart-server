@@ -47,12 +47,14 @@ public class IncidentCategoryListListener extends AbstractListener{
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			bpiId=json.getString("incidentId");
+			System.out.println("-------"+bpiId);
 			
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
 		
 		url.append("&bpiId=").append(bpiId);
+		System.out.println("--------------"+url.toString());
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -78,6 +80,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 			if (null != bytes) {
 				// 获取从 Web 服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
+				System.out.println(content);
 				try {
 					jo = new JSONObject(content);
 					System.out.println("响应工单保存数据的返回值为：:" + jo);
