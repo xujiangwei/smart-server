@@ -71,7 +71,6 @@ public class IncidentCategoryListListener extends AbstractListener{
 		} catch (ExecutionException e1) {
 			e1.printStackTrace();
 		}
-		
 		JSONObject jo = null;
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:

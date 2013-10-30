@@ -78,9 +78,6 @@ public final class API {
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
 	public final static String BIZSYSTEMLIST = "sacmm/getBizSystemList.html?username=admin";
-	
-	
-	
 
 	private API() {
 	}
