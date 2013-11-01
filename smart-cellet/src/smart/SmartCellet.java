@@ -27,7 +27,6 @@ import smart.action.alarm.DealInfoListener;
 import smart.action.alarm.SuppressedAlarmListener;
 import smart.action.attention.AddAttentionListener;
 import smart.action.attention.AttentionListListener;
-import smart.action.attention.AttentionListener;
 import smart.action.attention.CancelAttentionListener;
 import smart.action.attention.DeleteAttentionListener;
 import smart.action.ci.BusinessSystemListListener;
@@ -171,11 +170,6 @@ public class SmartCellet extends Cellet {
 		LoginListener login = new LoginListener(this);
 		login.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.LOGIN, login);
-
-		// 获取首页关注
-		AttentionListener attention = new AttentionListener(this);
-		attention.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ATTENTION, attention);
 
 		// 获取关注列表
 		AttentionListListener attentionList = new AttentionListListener(this);
