@@ -71,8 +71,9 @@ public final class API {
 	public final static String LISTOPERATION =  "incidentm/listIncidentOperation.html?username=admin";
 	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
 	public final static String INCIDENTCATEGORY = "incidentm/getIncidentCategoryById.html?username=admin";
-	public final static String COMMONUSERLIST = "userm/getUserList.html";
-	public final static String BPILIST = "sacmm/getBizSystemList.html?username=admin";
+	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
+	public final static String BPILIST = "incidentm/getBpiList.html?username=admin";
+	
 
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";

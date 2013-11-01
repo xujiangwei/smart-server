@@ -100,7 +100,7 @@ public final class Action {
 	public static final String INCIDENTPROCESS = "sendIncidentProcessResult";
 	public static final String INCIDENTCATEGORY= "requestIncidentCategory";
 	public static final String COMMONUSERLIST= "requestUserList";
-	public static final String BPILIST= "requestBizSystemList"; 
+	public static final String BPILIST= "requestBpiList"; 
 	
 	// 资产
 	public static final String CILIST = "requestCiList";

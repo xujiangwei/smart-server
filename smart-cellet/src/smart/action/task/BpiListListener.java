@@ -46,11 +46,12 @@ public class BpiListListener extends AbstractListener {
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			bpiId=json.getString("incidentId");
-			
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
 		url.append("&bpiId=").append(bpiId);
+		System.out.println("===流程列表URL：======"+url.toString());
+		
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -78,6 +79,7 @@ public class BpiListListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					jo = new JSONObject(content);
+					System.out.println("=======所有的流程工单列表为：======="+jo.toString());
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
