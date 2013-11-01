@@ -14,17 +14,13 @@ import smart.action.ConnectionCheckListener;
 import smart.action.LoginListener;
 import smart.action.LogoutListener;
 import smart.action.NodeDetectionListener;
-import smart.action.alarm.AlarmCoverageListener;
+import smart.action.alarm.AddAlarmOpInfoListener;
 import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
-import smart.action.alarm.AlarmDistributionListener;
 import smart.action.alarm.AlarmExperienceListener;
 import smart.action.alarm.AlarmForwardListener;
-import smart.action.alarm.AlarmLifeCycleListener;
 import smart.action.alarm.AlarmListListener;
 import smart.action.alarm.AlarmOpInfoListener;
-import smart.action.alarm.DealInfoListener;
-import smart.action.alarm.SuppressedAlarmListener;
 import smart.action.attention.AddAttentionListener;
 import smart.action.attention.AttentionListListener;
 import smart.action.attention.CancelAttentionListener;
@@ -400,9 +396,9 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.ALARMFORWARD, alarmForward);
 
 		// 添加告警处理信息
-		DealInfoListener dealInfo = new DealInfoListener(this);
+		AddAlarmOpInfoListener dealInfo = new AddAlarmOpInfoListener(this);
 		dealInfo.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DEALINFO, dealInfo);
+		dispatcher.addListener(Action.ADDALARMOPINFO, dealInfo);
 
 		// 获取告警列表
 		AlarmListListener alarmList = new AlarmListListener(this);
@@ -421,24 +417,24 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
 
 		// 获取告警影响范围
-		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
-		alarmCoverage.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
+//		AlarmCoverageListener alarmCoverage = new AlarmCoverageListener(this);
+//		alarmCoverage.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, alarmCoverage);
 
 		// 获取告警生命周期
-		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
-		lifeCycle.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
+//		AlarmLifeCycleListener lifeCycle = new AlarmLifeCycleListener(this);
+//		lifeCycle.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, lifeCycle);
 		// 获取压制的告警
-		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
-		suppressed.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
+//		SuppressedAlarmListener suppressed = new SuppressedAlarmListener(this);
+//		suppressed.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, suppressed);
 
 		// 获取告警分布
-		AlarmDistributionListener distribution = new AlarmDistributionListener(
-				this);
-		distribution.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ALARMDETAIL, distribution);
+//		AlarmDistributionListener distribution = new AlarmDistributionListener(
+//				this);
+//		distribution.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.ALARMDETAIL, distribution);
 
 		// 节点监测
 		NodeDetectionListener nodeDec = new NodeDetectionListener(this);

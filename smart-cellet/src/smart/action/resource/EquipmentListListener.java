@@ -110,7 +110,7 @@ public class EquipmentListListener extends AbstractListener {
 						ja = data.getJSONArray("moList");
 						JSONArray jar = new JSONArray();
 						List<String> list = Arrays.asList("moId", "typePath",
-								"moIp", "moName", "alias", "typeCode",
+								"moIp", "moName", "alias", "moType",
 								"typeName", "vendor", "model", "mgrStatus",
 								"almStatus");
 						int m = 0;
@@ -139,9 +139,9 @@ public class EquipmentListListener extends AbstractListener {
 								}
 							}
 							jo.put("vendorID", vendor.getInt(job.get("vendor").toString()));
-							jo.put("typeCode", Long.valueOf(job.getString("typeCode").substring(0, 4)));
+							jo.put("typeCode", Long.valueOf(job.getString("moType").substring(0, 4)));
 							jo.put("moId", job.getLong("moId"));
-							jo.put("moType", job.getString("typePath").split(" > ")[0]);
+							jo.put("moSort", job.getString("typePath").split(" > ")[0]);
 							jo.put("typeName", job.getString("typePath").split(" > ")[1]);
 							job.remove("moId");
 //							job.remove("vendor");

@@ -9,14 +9,15 @@ public final class API {
 	public static final String LOGOUT = "http://10.10.152.20:8081/monitoring-system/out/logout";
 
 	// 告警
-	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0";
+	public static final String ALARMLIST = "restws/alm/external/list/101/2013071712351482/0";
 	public static final String ALARMDEAL = "restws/alm/external";
-	public static final String ALARMDETAIL = "restws/alm/external/list/998/9980000000000000";
+	public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
+	public static final String ALARMOPINFO = "restws/alm/external/deal";
+	public static final String ALARMEXPERIENCE = "restws/alm/external/exp/get?DMSN=101&userID=";
+	
 	public static final String ALARMFORWARD = "http://10.10.152.20:8081/monitoring-system/forward/alarmForward";
 	public static final String DEALINFO = "http://10.10.152.20:8081/monitoring-system/dealInfo/addDealInfo";
 	public static final String ALARMCOVERAGE = "http://10.10.152.20:8081/monitoring-system/alarmCoverage/reqAlarmCoverage";
-	public static final String ALARMOPINFO = "http://10.10.152.20:8081/monitoring-system/alarmOpInfo/reqAlarmOpInfo";
-	public static final String ALARMEXPERIENCE = "http://10.10.152.20:8081/monitoring-system/alarmExperience/reqAlarmExperience";
 	public static final String ALARMLIFECYCLE = "http://10.10.152.20:8081/monitoring-system/alarmLifeCycle/reqAlarmLifeCycle";
 	public static final String SUPPRESSEDALARM = "http://10.10.152.20:8081/monitoring-system/suppressed/reqSuppressedAlarm";
 	public static final String ALARMDISTRIBUTION = "http://10.10.152.20:8081/monitoring-system/distribution/reqAlarmDistribution";
@@ -67,7 +68,6 @@ public final class API {
 	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
 	public final static String BPILIST = "incidentm/getBpiList.html?username=admin";
 	
-
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
