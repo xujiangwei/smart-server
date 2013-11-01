@@ -79,11 +79,11 @@ public final class AlarmDealListener extends AbstractListener {
 			if ("almConfirm".equals(opType)) {
 				url = new StringBuilder(context.getAPIHost())
 				.append("/").append(API.ALARMDEAL).append("/confirm/").append(almId)
-				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
+				.append("?DMSN=998&userID=").append(almId).append("&userName=").append(username);
 			} else if ("almDel".equals(opType)) {
 				url = new StringBuilder(context.getAPIHost())
 				.append("/").append(API.ALARMDEAL).append("/clear/").append(almId)
-				.append("?DMSN=998&userID=9980000000000000&userName=").append(username);
+				.append("?DMSN=998&userID=").append(almId).append("&userName=").append(username);
 			}
 			request = this.getHttpClient().newRequest(url.toString());
 			request.method(HttpMethod.GET);

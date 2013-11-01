@@ -8,13 +8,6 @@ public final class API {
 	// 注销
 	public static final String LOGOUT = "http://10.10.152.20:8081/monitoring-system/out/logout";
 
-	// 首页关注
-	public static final String ATTENTION = "http://10.10.152.20:8081/monitoring-system/attention/reqAttention";
-	public static final String CANCELATTENTION = "http://10.10.152.20:8081/monitoring-system/cancel/cancelAttention";
-	public static final String DELETEATTENTION = "http://10.10.152.20:8081/monitoring-system/delAttention/deleteAttention";
-	public static final String ADDATTENTION = "http://10.10.152.20:8081/monitoring-system/addAttention/addAttention";
-	public static final String ATTENTIONLIST = "http://10.10.152.20:8081/monitoring-system/attentionList/reqAttentionList";
-
 	// 告警
 	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0";
 	public static final String ALARMDEAL = "restws/alm/external";
