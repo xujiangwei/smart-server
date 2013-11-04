@@ -57,6 +57,9 @@ public final class Action {
 	public final static String NETEQUIPMENT = "requestNetEqpt";
 	public final static String DATABASE = "requestDatabase";
 
+	public final static String EQUIPMENTCONFIG="requestEqptConfig";
+	public final static String HOSTCONFIG="requestHostConfig";
+	public final static String NETEQUIPMENTCONFIG="requestNeqtConfig";
 	public final static String CPU = "requestCPU";
 	public final static String MEMORY = "requestMemory";
 	public final static String FILESYSTEM = "requestFileSys";

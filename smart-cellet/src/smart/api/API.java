@@ -44,6 +44,9 @@ public final class API {
 	public final static String NETEQUIPMENT = "restws/data/perf/mo/101";
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
 
+	public final static String EQUIPMENTCONFIG="restws/data/cfg/mo/101";
+	public final static String HOSTCONFIG="restws/data/cfg/mo/101";
+	public final static String NETEQUIPMENTCONFIG="restws/data/cfg/mo/101"; 
 	public final static String CPU = "restws/data/perf/mo/101";
 	public final static String MEMORY = "restws/data/perf/mo/101";
 	public final static String FILESYSTEM = "restws/data/perf/mo/101";
