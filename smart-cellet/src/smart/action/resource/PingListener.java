@@ -7,6 +7,12 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
+
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
@@ -16,18 +22,12 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
-import smart.core.HostManager;
 import smart.mast.action.Action;
 
 public class PingListener extends AbstractListener {
@@ -113,9 +113,14 @@ public class PingListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
-								double pingDelay = 0;
-								long timestamp = 0;
+//								double pingDelay = 0;
+//								long timestamp = 0;
 
+								if(ja1.length()>0){
+									System.out.println(ja1);
+								}else{
+									System.out.println("data - length"+ja1.length());
+								}
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
@@ -124,29 +129,30 @@ public class PingListener extends AbstractListener {
 											|| "null".equals(jsonData1.get(0))
 											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("PING延迟", 0);
-										pingDelay = 0;
-										timestamp = df.parse(
-												(String) jsonData1.get(1))
-												.getTime();
+//										pingDelay = 0;
+//										timestamp = df.parse(
+//												(String) jsonData1.get(1))
+//												.getTime();
 									} else {
 										jo.put("PING延迟", Float
 												.valueOf((String) jsonData1
 														.get(0)));
-										pingDelay = Double
-												.valueOf((String) jsonData1
-														.get(0));
-										timestamp = df.parse(
-												(String) jsonData1.get(1))
-												.getTime();
+//										pingDelay = Double
+//												.valueOf((String) jsonData1
+//														.get(0));
+//										timestamp = df.parse(
+//												(String) jsonData1.get(1))
+//												.getTime();
 									}
 									jo.put("collectTime",
 											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
 
-									HostManager hm = HostManager.getInstance();
-									hm.addPingInfo(moId, pingDelay, timestamp);
+//									HostManager hm = HostManager.getInstance();
+//									hm.addPingInfo(moId, pingDelay, timestamp);
 
+									System.out.println("pingusage___"+ja2);
 								}
 
 								jsonData.remove("data");
@@ -169,7 +175,7 @@ public class PingListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("结果：" + data);
+					System.out.println("data：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
