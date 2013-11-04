@@ -39,15 +39,15 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.20:8081/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
-	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
-	public final static String DATABASE = "restws/data/perf/mo/998";
-	public final static String NETEQUIPMENT = "restws/data/perf/mo/998";
-	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
+	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
+	public final static String DATABASE = "restws/data/perf/mo/101";
+	public final static String NETEQUIPMENT = "restws/data/perf/mo/101";
+	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
 
-	public final static String CPU = "restws/data/perf/mo/998";
-	public final static String MEMORY = "restws/data/perf/mo/998";
-	public final static String FILESYSTEM = "restws/data/perf/mo/998";
-	public final static String PING = "restws/data/perf/type/998/FPING/fAvgRestTime";
+	public final static String CPU = "restws/data/perf/mo/101";
+	public final static String MEMORY = "restws/data/perf/mo/101";
+	public final static String FILESYSTEM = "restws/data/perf/mo/101";
+	public final static String PING = "restws/data/perf/type/101/FPING/fAvgRestTime";
 
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.20:8081/monitoring-system/performance/requestEquipmentPerformance";
