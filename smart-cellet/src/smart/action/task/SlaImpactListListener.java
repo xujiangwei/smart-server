@@ -23,15 +23,14 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
-public class IncidentCategoryListListener extends AbstractListener{
+public class SlaImpactListListener extends AbstractListener{
 
-	public IncidentCategoryListListener(Cellet cellet) {
+	public SlaImpactListListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
-
 
 		// 使用同步方式进行请求。
 		// 因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
@@ -41,7 +40,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INCIDENTCATEGORY);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.IMPACTLIST);
 		JSONObject json = null;
 		String bpiId=null;
 		try {
@@ -53,9 +52,10 @@ public class IncidentCategoryListListener extends AbstractListener{
 		}
 		
 		url.append("&bpiId=").append(bpiId);
-		System.out.println("获取故障类型URL："+url.toString());
+		System.out.println("获取影响程度的URL:" + url.toString());
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
+		
 		request.method(HttpMethod.GET);
 		
 		Properties params = new Properties();
@@ -81,19 +81,19 @@ public class IncidentCategoryListListener extends AbstractListener{
 				System.out.println(content);
 				try {
 					jo = new JSONObject(content);
-					System.out.println("故障类型返回值为：:" + jo);
+					System.out.println("影响程度的返回值为：:" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
 					// 响应动作，即向客户端发送 ActionDialect
-					this.response(Action.INCIDENTCATEGORY, params);
+					this.response(Action.IMPACTLIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.INCIDENTCATEGORY);
+				this.reportHTTPError(Action.IMPACTLIST);
 			}
 
 			break;
@@ -111,7 +111,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.INCIDENTCATEGORY, params);
+			this.response(Action.IMPACTLIST, params);
 			break;
 		}
 	

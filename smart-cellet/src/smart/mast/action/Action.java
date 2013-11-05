@@ -100,6 +100,10 @@ public final class Action {
 	public static final String INCIDENTCATEGORY= "requestIncidentCategory";
 	public static final String COMMONUSERLIST= "requestUserList";
 	public static final String BPILIST= "requestBpiList"; 
+	public static final String IMPACTLIST= "requestImpactList"; 
+	public static final String URGENTLIST= "requestUrgentList"; 
+	public static final String SERVICELEVELLIST= "requestServiceLevelList"; 
+	public static final String CLOSECODELIST= "requestCloseCodeList"; 
 	
 	// 资产
 	public static final String CILIST = "requestCiList";
