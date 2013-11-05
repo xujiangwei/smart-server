@@ -23,7 +23,7 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "http://10.10.152.20:8081/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-	public final static String MESSAGELIST = "noticem/listUnread.html?username=admin";
+	public final static String MESSAGELIST = "http://10.10.152.85:8080/fvsd/noticem/listUnread.html?username=admin";
 	public final static String MESSAGEDETAIL = "http://10.10.152.20:8081/monitoring-system/messageDetail/requestMessageDetail";
 	public final static String MESSAGECONTACTS = "http://10.10.152.20:8081/monitoring-system/contacts/requestMessageContacts";
 	public final static String MESSAGESEND = "http://10.10.152.20:8081/monitoring-system/messageSend/messageSend";
