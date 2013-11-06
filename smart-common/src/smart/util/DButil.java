@@ -5,8 +5,10 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.concurrent.TimeUnit;
 
 import net.cellcloud.util.SlidingWindowExecutor;
+import net.cellcloud.util.SlidingWindowTask;
 
 /**
  * 提供mariadb的数据库的连接，资源关闭
@@ -16,7 +18,7 @@ public class DButil {
 
 	private static final DButil instance = new DButil();
 	// 定义连接数据库的URL字符串
-	private static final String URL = "jdbc:mariadb://172.25.25.222:3308/resource";
+	private static final String URL = "jdbc:mariadb://localhost:3308/resource";
 	// 连接数据库的用户名
 	private static final String USER = "root";
 	// 连接数据库的密码
@@ -25,8 +27,7 @@ public class DButil {
 	// 数据库的连接对象
 	private static Connection conn;
 
-	private SlidingWindowExecutor swe = SlidingWindowExecutor
-			.newSlidingWindowThreadPool(4);
+	private SlidingWindowExecutor swe = SlidingWindowExecutor.newSlidingWindowThreadPool(4);
 
 	public static DButil getInstance() {
 		return DButil.instance;
@@ -47,18 +48,69 @@ public class DButil {
 	 * @return
 	 */
 	public Connection getConnection() {
-		swe.execute(new Runnable() {
-			@Override
-			public void run() {
+		
+//		SlidingWindowTask swt=new SlidingWindowTask(swe,new Runnable() {
+//		
+//			@Override
+//			public void run() {
+//				if (conn == null) {
+//					try {
+//						conn = DriverManager.getConnection(URL, USER, PASSWORD);
+//
+//						System.out.println("mythread...");
+//					} catch (Exception e) {
+//					}
+//				}
+//				
+//			}
+//		} );
+//		
+		
+//		swt.run();
+//		int i=swe.snapshootThreadNum();
+//		System.out.println("thread-num    "+i);
+		
+		
+//		swe.execute(new Runnable() {
+//			@Override
+//			
+//			public void run() {
 				if (conn == null) {
 					try {
 						conn = DriverManager.getConnection(URL, USER, PASSWORD);
+
+						System.out.println("mythread...");
 					} catch (Exception e) {
 					}
 				}
-			}
+//			}
+//
+//		});
 
-		});
+		
+		// 等待子线程全部结束
+//		try {
+//			Thread.sleep(500);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//		}
+
+//		SlidingWindowTask swt=new SlidingWindowTask(swe);
+//		swt.run();
+		// 关闭所有子线程，不关的话主线程会一直阻塞
+//		swe.shutdown();
+//		try {
+//			// 等待线程终止
+//			if (!swe.awaitTermination(10, TimeUnit.SECONDS)) {
+//				swe.shutdownNow();
+//				if (!swe.awaitTermination(10, TimeUnit.SECONDS))
+//					System.err.println("Pool did not terminate");
+//			}
+//		} catch (InterruptedException ie) {
+//			swe.shutdownNow();
+//			Thread.currentThread().interrupt();
+//		}
+
 		return conn;
 	}
 
@@ -101,7 +153,7 @@ public class DButil {
 
 	public static void main(String[] args) {
 		// 测试连接
-		System.out.println(instance.getConnection());
+		System.out.println(DButil.getInstance().getConnection());
 	}
 
 }
