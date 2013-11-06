@@ -113,13 +113,13 @@ public class EquipmentListListener extends AbstractListener {
 								"moIp", "moName", "alias", "moType",
 								"typeName", "vendor", "model", "mgrStatus",
 								"almStatus");
-//						int m = 0;
-//						if (ja.length() > 20) {
-//							m = 20;
-//						} else {
-//							m = ja.length();
-//						}
-						for (int i = 0; i < ja.length(); i++) {
+						int m = 0;
+						if (ja.length() > 20) {
+							m = 20;
+						} else {
+							m = ja.length();
+						}
+						for (int i = 0; i < m; i++) {
 							JSONObject jo = new JSONObject();
 							JSONObject job = new JSONObject();
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
