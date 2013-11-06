@@ -137,58 +137,61 @@ public final class AlarmListListener extends AbstractListener {
 								"lastTime", "count", "detail", "originalInfo",
 								"confirmTime", "confirmUserId", "confirmUser",
 								"moIp", "moName", "causeAlias", "location");
+						int m = 0;
 						if (ja.length() > 18) {
-							for (int i = 0; i < 18; i++) {
-								JSONObject job = new JSONObject();
+							m = 18;
+						} else {
+							m = ja.length();
+						}
+						for (int i = 0; i < m; i++) {
+							JSONObject job = new JSONObject();
 
-								for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
-									for (int k = 0; k < list.size(); k++) {
-										if (k == j) {
-											String key = list.get(k);
-											String value = ja.getJSONArray(i)
-													.get(j).toString();
-											if ("almId".equals(key)
-													|| "moId".equals(key)
-													|| ("confirmUserId"
-															.equals(key) && (!""
-															.equals(value)))) {
-												job.put(key,
-														Long.valueOf(value));
-											} else if ("occurTime".equals(key)
-													|| "lastTime".equals(key)
-													|| ("confirmTime"
-															.equals(key) && !""
-															.equals(value))) {
-												DateFormat df = new SimpleDateFormat(
-														"yyyy-MM-dd HH:mm:ss");
-												Date date = null;
-												date = df.parse(value);
-												job.put(key, date.getTime());
-											} else if ("count".equals(key)
-													|| "severity".equals(key)) {
-												job.put(key,
-														Integer.parseInt(value));
-											} else if (("confirmUserId"
-													.equals(key) || "confirmTime"
-													.equals(key))
-													&& "".equals(value)) {
-												job.put(key, 0);
-											} else {
-												job.put(key, value);
-											}
+							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
+								for (int k = 0; k < list.size(); k++) {
+									if (k == j) {
+										String key = list.get(k);
+										String value = ja.getJSONArray(i)
+												.get(j).toString();
+										if ("almId".equals(key)
+												|| "moId".equals(key)
+												|| ("confirmUserId".equals(key) && (!""
+														.equals(value)))) {
+											job.put(key, Long.valueOf(value));
+										} else if ("occurTime".equals(key)
+												|| "lastTime".equals(key)
+												|| ("confirmTime".equals(key) && !""
+														.equals(value))) {
+											DateFormat df = new SimpleDateFormat(
+													"yyyy-MM-dd HH:mm:ss");
+											Date date = null;
+											date = df.parse(value);
+											job.put(key, date.getTime());
+										} else if ("count".equals(key)
+												|| "severity".equals(key)) {
+											job.put(key,
+													Integer.parseInt(value));
+										} else if (("confirmUserId".equals(key) || "confirmTime"
+												.equals(key))
+												&& "".equals(value)) {
+											job.put(key, 0);
+										} else {
+											job.put(key, value);
 										}
 									}
 								}
-								jar.put(job);
-//								if (DButil.getInstance().getConnection() != null) {
-//									boolean b = AlarmManager.getInstance().isExist(job.getLong("almId"));
-//									if (!b){
-//										AlarmManager.getInstance().signInList(job);
-//									}
-//								}
 							}
+							jar.put(job);
+							// if (DButil.getInstance().getConnection() != null)
+							// {
+							// boolean b =
+							// AlarmManager.getInstance().isExist(job.getLong("almId"));
+							// if (!b){
+							// AlarmManager.getInstance().signInList(job);
+							// }
+							// }
 						}
-						System.out.println("jsonArray" + jar.length()+": " + jar);
+						System.out.println("jsonArray" + jar.length() + ": "
+								+ jar);
 						jo.remove("result");
 						jo.remove("almlist");
 						jo.put("almList", jar);
@@ -201,7 +204,7 @@ public final class AlarmListListener extends AbstractListener {
 						jo.put("status", 301);
 						jo.put("errorInfo", "找不到符合条件的相关告警列表");
 					}
-					
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
