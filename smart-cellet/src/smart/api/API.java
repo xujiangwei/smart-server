@@ -75,6 +75,9 @@ public final class API {
 	public final static String SERVICELEVELLIST = "incidentm/getServiceLevelByBpId.html?username=admin";
 	public final static String CLOSECODELIST = "incidentm/getBpCloseCodesByBp.html?username=admin";
 	
+	public final static String PROBLEMLIST =   "problemm/listTodos.html?username=admin";
+	public final static String PROBLEMDETAIL = "problemm/loadById.html?username=admin";
+	
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";

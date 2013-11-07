@@ -105,6 +105,12 @@ public final class Action {
 	public static final String SERVICELEVELLIST= "requestServiceLevelList"; 
 	public static final String CLOSECODELIST= "requestCloseCodeList"; 
 	
+	public static final String PROBLEMLIST = "requestProblemList";
+	public static final String PROBLEMDETAIL = "requestProblemDetail";
+	
+	
+	
+	
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";
