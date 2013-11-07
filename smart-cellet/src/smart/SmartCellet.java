@@ -528,7 +528,7 @@ public class SmartCellet extends Cellet {
 		
 		//问题列表		
 		ProblemListListener problemList = new ProblemListListener(this);
-		impactList.setHttpClient(this.httpClient);
+		problemList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMLIST, problemList);
 		
 		ProblemDetailListener problemDetail = new ProblemDetailListener(this);

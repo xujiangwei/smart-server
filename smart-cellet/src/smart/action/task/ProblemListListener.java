@@ -42,10 +42,10 @@ public class ProblemListListener  extends AbstractListener{
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.PROBLEMLIST);
-
+		System.out.println("获取问题列表的URL:" + url.toString());
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("获取问题列表的URL:" + url.toString());
+		
 		request.method(HttpMethod.GET);
 
 		Properties params = new Properties();
