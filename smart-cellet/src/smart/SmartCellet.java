@@ -67,6 +67,8 @@ import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
 import smart.action.task.IncidentProcessListener;
 import smart.action.task.OperationListListener;
+import smart.action.task.ProblemDetailListener;
+import smart.action.task.ProblemListListener;
 import smart.action.task.SlaImpactListListener;
 import smart.action.task.SlaServiceLevelListListener;
 import smart.action.task.SlaUrgentListListener;
@@ -523,6 +525,15 @@ public class SmartCellet extends Cellet {
 		BpCloseCodeListListener closeCodeList = new BpCloseCodeListListener(this);
 		impactList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
+		
+		//问题列表		
+		ProblemListListener problemList = new ProblemListListener(this);
+		impactList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.PROBLEMLIST, problemList);
+		
+		ProblemDetailListener problemDetail = new ProblemDetailListener(this);
+		problemDetail.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);
 
 		/*************** 资产管理 **************/
 		// 获取设备资产列表数据
