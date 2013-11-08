@@ -57,13 +57,15 @@ public final class Action {
 	public final static String NETEQUIPMENT = "requestNetEqpt";
 	public final static String DATABASE = "requestDatabase";
 
-	public final static String EQUIPMENTCONFIG="requestEqptConfig";
-	public final static String HOSTCONFIG="requestHostConfig";
-	public final static String NETEQUIPMENTCONFIG="requestNeqtConfig";
+	public final static String EQUIPMENTCONFIG = "requestEqptConfig";
+	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
+	public final static String HOSTCONFIG = "requestHostConfig";
+	public final static String NETEQUIPMENTCONFIG = "requestNeqtConfig";
 	public final static String CPU = "requestCPU";
 	public final static String MEMORY = "requestMemory";
 	public final static String FILESYSTEM = "requestFileSys";
 	public final static String PING = "requestPing";
+	public final static String INTERFACEFLOW = "requestIfflow";
 
 	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";
@@ -81,7 +83,7 @@ public final class Action {
 	public static final String ALARMLIST = "requestAlarmList";
 	public static final String ALARMDETAIL = "requestAlarmDetail";
 	public static final String ALARMDEAL = "alarmDeal";
-//	public static final String ALARMBASEINFO = "requestAlarmBaseInfo";
+	// public static final String ALARMBASEINFO = "requestAlarmBaseInfo";
 	public static final String ADDALARMOPINFO = "addAlarmOpInfo";
 	public static final String ADDALARMEXPERIENCE = "addAlarmExperience";
 	public static final String ALARMEXPERIENCE = "requestAlarmExperience";
@@ -97,23 +99,20 @@ public final class Action {
 	public static final String INCIDENTDETAIL = "requestIncidentDetail";
 	public static final String LISTOPERATION = "requestOperationList";
 	public static final String INCIDENTPROCESS = "sendIncidentProcessResult";
-	public static final String INCIDENTCATEGORY= "requestIncidentCategory";
-	public static final String COMMONUSERLIST= "requestUserList";
-	public static final String BPILIST= "requestBpiList"; 
-	public static final String IMPACTLIST= "requestImpactList"; 
-	public static final String URGENTLIST= "requestUrgentList"; 
-	public static final String SERVICELEVELLIST= "requestServiceLevelList"; 
-	public static final String CLOSECODELIST= "requestCloseCodeList"; 
-	
+	public static final String INCIDENTCATEGORY = "requestIncidentCategory";
+	public static final String COMMONUSERLIST = "requestUserList";
+	public static final String BPILIST = "requestBpiList";
+	public static final String IMPACTLIST = "requestImpactList";
+	public static final String URGENTLIST = "requestUrgentList";
+	public static final String SERVICELEVELLIST = "requestServiceLevelList";
+	public static final String CLOSECODELIST = "requestCloseCodeList";
+
 	public static final String PROBLEMLIST = "requestProblemList";
 	public static final String PROBLEMDETAIL = "requestProblemDetail";
-	
-	
-	
-	
+
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";
 	public static final String BIZSYSTEMLIST = "requestBizSystemList";
-	
+
 }

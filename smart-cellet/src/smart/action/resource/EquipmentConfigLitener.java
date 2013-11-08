@@ -83,7 +83,7 @@ public class EquipmentConfigLitener extends AbstractListener {
 
 		Properties params = new Properties();
 		JSONObject data = null;
-
+		JSONObject config = null;
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
@@ -96,103 +96,96 @@ public class EquipmentConfigLitener extends AbstractListener {
 					// if ("success".equals(data.get("status"))) {
 					if (!"".equals(data.get("data"))
 							&& data.get("data") != null) {
-						if ("主机 "
-								.equals(data.getString("moPath").split(">")[0])) {
-							JSONArray ja = data.getJSONArray("data");
+						JSONArray ja = data.getJSONArray("data");
 
-							for (int i = 0; i < ja.length(); i++) {
+						config = new JSONObject();
+						JSONArray jaIf = new JSONArray();
+						JSONArray jaDisk = new JSONArray();
+						JSONArray jaCpu = new JSONArray();
+						JSONArray jaFs = new JSONArray();
+						JSONArray jaMem = new JSONArray();
+						// JSONArray jaCpu = new JSONArray();
+						JSONArray jaBoard = new JSONArray();
+						for (int i = 0; i < ja.length(); i++) {
+							JSONObject jo = ja.getJSONObject(i);
+							JSONArray ja1 = jo.getJSONArray("attr");
+							JSONObject jsob = new JSONObject();
+							for (int j = 0; j < ja1.length(); j++) {
+								JSONArray ja2 = ja1.getJSONArray(j);
+								String key = (String) ja2.get(0);
+								Object value = ja2.get(1);
+
+								jsob.put(key, value);
+
+							}
+
+							jo.remove("attr");
+							jo.put("attr", jsob);
+
+							if ("主机 ".equals(data.getString("moPath")
+									.split(">")[0])) {
+
 								if ("接口".equals(ja.getJSONObject(i).getString(
 										"type"))) {
-									JSONObject jo = ja.getJSONObject(i);
-									JSONArray ja1 = jo.getJSONArray("attr");
-									JSONObject jsob = new JSONObject();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONArray ja2 = ja1.getJSONArray(j);
-										String key = (String) ja2.get(0);
-										Object value = ja2.get(1);
-
-										jsob.put(key, value);
-
+									if (jaIf.length() < 10) {
+										jaIf.put(jo);
 									}
-
-									jo.remove("attr");
-									jo.put("attr", jsob);
+									config.put("interfaceConfig", jaIf);
 								} else if ("磁盘".equals(ja.getJSONObject(i)
 										.getString("type"))) {
-									JSONObject jo = ja.getJSONObject(i);
-									JSONArray ja1 = jo.getJSONArray("attr");
-									JSONObject jsob = new JSONObject();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONArray ja2 = ja1.getJSONArray(j);
-										String key = (String) ja2.get(0);
-										Object value = ja2.get(1);
-
-										jsob.put(key, value);
-
+									if (jaDisk.length() < 10) {
+										jaDisk.put(jo);
 									}
-									jo.remove("attr");
-									jo.put("attr", jsob);
-								}
-							}
-							// System.out.println("data   "+data);
-
-						} else if ("网络 ".equals(data.getString("moPath").split(
-								">")[0])) {
-							JSONArray ja = data.getJSONArray("data");
-
-							for (int i = 0; i < ja.length(); i++) {
-								if ("接口".equals(ja.getJSONObject(i).getString(
-										"type"))) {
-									JSONObject jo = ja.getJSONObject(i);
-									JSONArray ja1 = jo.getJSONArray("attr");
-									JSONObject jsob = new JSONObject();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONArray ja2 = ja1.getJSONArray(j);
-										String key = (String) ja2.get(0);
-										Object value = ja2.get(1);
-
-										jsob.put(key, value);
-
-									}
-
-									jo.remove("attr");
-									jo.put("attr", jsob);
-								} else if ("内存".equals(ja.getJSONObject(i)
-										.getString("type"))) {
-									JSONObject jo = ja.getJSONObject(i);
-									JSONArray ja1 = jo.getJSONArray("attr");
-									JSONObject jsob = new JSONObject();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONArray ja2 = ja1.getJSONArray(j);
-										String key = (String) ja2.get(0);
-										Object value = ja2.get(1);
-
-										jsob.put(key, value);
-
-									}
-									jo.remove("attr");
-									jo.put("attr", jsob);
+									config.put("diskConfig", jaDisk);
 								} else if ("CPU".equals(ja.getJSONObject(i)
 										.getString("type"))) {
-
-									JSONObject jo = ja.getJSONObject(i);
-									JSONArray ja1 = jo.getJSONArray("attr");
-									JSONObject jsob = new JSONObject();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONArray ja2 = ja1.getJSONArray(j);
-										String key = (String) ja2.get(0);
-										Object value = ja2.get(1);
-
-										jsob.put(key, value);
+									if (jaCpu.length() < 10) {
+										jaCpu.put(jo);
 									}
-									jo.remove("attr");
-									jo.put("attr", jsob);
-
+									config.put("cpuConfig", jaCpu);
+								} else if ("文件系统".equals(ja.getJSONObject(i)
+										.getString("type"))) {
+									if (jaFs.length() < 10) {
+										jaFs.put(jo);
+									}
+									config.put("filesysConfig", jaFs);
 								}
+
+							} else if ("网络 ".equals(data.getString("moPath")
+									.split(">")[0])) {
+
+								if ("接口".equals(ja.getJSONObject(i).getString(
+										"type"))) {
+									if (jaIf.length() < 10) {
+										jaIf.put(jo);
+									}
+									config.put("interfaceConfig", jaIf);
+								} else if ("CPU".equals(ja.getJSONObject(i)
+										.getString("type"))) {
+									if (jaCpu.length() < 10) {
+										jaCpu.put(jo);
+									}
+									config.put("cpuConfig", jaCpu);
+								} else if ("内存".equals(ja.getJSONObject(i)
+										.getString("type"))) {
+									if (jaMem.length() < 10) {
+										jaMem.put(jo);
+									}
+									config.put("memoryConfig", jaMem);
+								} else if ("Board".equals(ja.getJSONObject(i)
+										.getString("type"))) {
+									if (jaBoard.length() < 10) {
+										jaBoard.put(jo);
+									}
+									config.put("BoardConfig", jaBoard);
+								}
+
 							}
 
 						}
 
+						data.put("config", config);
+						data.remove("data");
 					}
 					// } else {
 					// data.put("errorInfo", "未获取到相关kpi数据");

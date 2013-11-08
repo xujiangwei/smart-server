@@ -163,11 +163,11 @@ public class HostCPUDaoImpl extends AbstraceDao implements HostCPUDao {
 	 * 存储主机CPU的配置信息
 	 */
 	public void saveHostCPUInfo(long hcpu_mosn, String hcpu_name,
-			String hcpu_type, long hcpu_catch, String hcpu_sign,
+			String hcpu_type, String hcpu_catch, String hcpu_sign,
 			double hcpu_mhz, String hcpu_model, String hcpu_vender,
-			long hcpu_bits, long hcpu_eqptmosn) {
+			long hcpu_eqptmosn) {
 
-		String sql = "insert into t_hostcpu (hcpu_mosn,hcpu_name,hcpu_type,hcpu_catch,hcpu_sign,hcpu_mhz,hcpu_model,hcpu_vender,hcpu_bits,hcpu_eqptmosn)";
+		String sql = "insert into t_hostcpu (hcpu_mosn,hcpu_name,hcpu_type,hcpu_catch,hcpu_sign,hcpu_mhz,hcpu_model,hcpu_vender,hcpu_eqptmosn) values  (?,?,?,?,?,?,?,?,?)";
 
 		try {
 			super.doStart();
@@ -175,13 +175,13 @@ public class HostCPUDaoImpl extends AbstraceDao implements HostCPUDao {
 			pstmt.setLong(1, hcpu_mosn);
 			pstmt.setString(2, hcpu_name);
 			pstmt.setString(3, hcpu_type);
-			pstmt.setLong(4, hcpu_catch);
+			pstmt.setString(4, hcpu_catch);
 			pstmt.setString(5, hcpu_sign);
 			pstmt.setDouble(6, hcpu_mhz);
 			pstmt.setString(7, hcpu_model);
 			pstmt.setString(8, hcpu_vender);
-			pstmt.setLong(9, hcpu_bits);
-			pstmt.setLong(10, hcpu_eqptmosn);
+			// pstmt.setLong(9, hcpu_bits);
+			pstmt.setLong(9, hcpu_eqptmosn);
 
 			pstmt.executeUpdate();
 

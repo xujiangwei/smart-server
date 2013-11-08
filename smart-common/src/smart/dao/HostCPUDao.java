@@ -64,7 +64,7 @@ public interface HostCPUDao {
 	 * @param hcpu_eqptmosn
 	 */
 	public void saveHostCPUInfo(long hcpu_mosn, String hcpu_name,
-			String hcpu_type, long hcpu_catch, String hcpu_sign,
+			String hcpu_type, String hcpu_catch, String hcpu_sign,
 			double hcpu_mhz, String hcpu_model, String hcpu_vender,
-			long hcpu_bits, long hcpu_eqptmosn);
+			long hcpu_eqptmosn);
 }

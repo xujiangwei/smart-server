@@ -47,13 +47,11 @@ public class CPUUsageListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
-		String eqType = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
-			eqType = json.getString("eqType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -76,7 +74,6 @@ public class CPUUsageListener extends AbstractListener {
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("moId", moId);
 		capsule.append("rangeInHour", rangeInHour);
-		capsule.append("eqType", eqType);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -153,7 +150,6 @@ public class CPUUsageListener extends AbstractListener {
 //									HostManager hm=HostManager.getInstance();
 //									hm.addCPUPrecsById(cpuid, usedPercent, timestamp);
 
-									System.out.println("CPUPrec___"+ja2);
 								}
 
 								jsonData.remove("data");
@@ -176,7 +172,7 @@ public class CPUUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("data：      " + data);
+					System.out.println("cpuUsageData：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

@@ -14,7 +14,7 @@ public final class API {
 	public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
 	public static final String ALARMOPINFO = "restws/alm/external/deal";
 	public static final String ALARMEXPERIENCE = "restws/alm/external/exp/get?DMSN=101&userID=";
-	
+
 	public static final String ALARMFORWARD = "http://10.10.152.20:8081/monitoring-system/forward/alarmForward";
 	public static final String DEALINFO = "http://10.10.152.20:8081/monitoring-system/dealInfo/addDealInfo";
 	public static final String ALARMCOVERAGE = "http://10.10.152.20:8081/monitoring-system/alarmCoverage/reqAlarmCoverage";
@@ -44,13 +44,15 @@ public final class API {
 	public final static String NETEQUIPMENT = "restws/data/perf/mo/101";
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
 
-	public final static String EQUIPMENTCONFIG="restws/data/cfg/mo/101";
-	public final static String HOSTCONFIG="restws/data/cfg/mo/101";
-	public final static String NETEQUIPMENTCONFIG="restws/data/cfg/mo/101"; 
+	public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/101";
+	public final static String HOSTCONFIG = "restws/data/cfg/mo/101";
+	public final static String NETEQUIPMENTCONFIG = "restws/data/cfg/mo/101";
 	public final static String CPU = "restws/data/perf/mo/101";
 	public final static String MEMORY = "restws/data/perf/mo/101";
 	public final static String FILESYSTEM = "restws/data/perf/mo/101";
 	public final static String PING = "restws/data/perf/type/101/FPING/fAvgRestTime";
+	public final static String INTERFACEINFLOW = "restws/data/perf/mo/101";
+	public final static String INTERFACEOUTFLOW = "restws/data/perf/mo/101";
 
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.20:8081/monitoring-system/performance/requestEquipmentPerformance";
@@ -65,7 +67,7 @@ public final class API {
 	// 待办
 	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
 	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
-	public final static String LISTOPERATION =  "incidentm/listIncidentOperation.html?username=admin";
+	public final static String LISTOPERATION = "incidentm/listIncidentOperation.html?username=admin";
 	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
 	public final static String INCIDENTCATEGORY = "incidentm/getIncidentCategoryById.html?username=admin";
 	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
@@ -74,10 +76,10 @@ public final class API {
 	public final static String URGENTLIST = "incidentm/getUrgentListForBp.html?username=admin";
 	public final static String SERVICELEVELLIST = "incidentm/getServiceLevelByBpId.html?username=admin";
 	public final static String CLOSECODELIST = "incidentm/getBpCloseCodesByBp.html?username=admin";
-	
-	public final static String PROBLEMLIST =   "problemm/listTodos.html?username=admin";
+
+	public final static String PROBLEMLIST = "problemm/listTodos.html?username=admin";
 	public final static String PROBLEMDETAIL = "problemm/loadById.html?username=admin";
-	
+
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";

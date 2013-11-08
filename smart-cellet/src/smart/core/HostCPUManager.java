@@ -16,7 +16,7 @@ public class HostCPUManager {
 		this.hostCPUDao = new HostCPUDaoImpl();
 	}
 
-	public HostCPUManager getInstance() {
+	public static HostCPUManager getInstance() {
 		return HostCPUManager.instance;
 	}
 
@@ -35,13 +35,13 @@ public class HostCPUManager {
 	 * @param hcpu_eqptmosn
 	 */
 	public void saveHostCPUInfo(long hcpu_mosn, String hcpu_name,
-			String hcpu_type, long hcpu_catch, String hcpu_sign,
+			String hcpu_type, String hcpu_catch, String hcpu_sign,
 			double hcpu_mhz, String hcpu_model, String hcpu_vender,
-			long hcpu_bits, long hcpu_eqptmosn) {
+			long hcpu_eqptmosn) {
 		synchronized (this.hostCPUDao) {
 			this.hostCPUDao.saveHostCPUInfo(hcpu_mosn, hcpu_name, hcpu_type,
 					hcpu_catch, hcpu_sign, hcpu_mhz, hcpu_model, hcpu_vender,
-					hcpu_bits, hcpu_eqptmosn);
+					hcpu_eqptmosn);
 		}
 	}
 }

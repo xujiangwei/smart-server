@@ -30,14 +30,20 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class MemoryUsageListener extends AbstractListener {
+/**
+ * 网络接口出流速监听器
+ * 
+ * @author Administrator
+ */
+public class InterfOutFlowListener extends AbstractListener {
 
-	public MemoryUsageListener(Cellet cellet) {
+	public InterfOutFlowListener(Cellet cellet) {
 		super(cellet);
 	}
 
 	@Override
 	public void onAction(ActionDialect action) {
+
 		// 使用同步的方式进行请求
 		// 注意：因为onAction方法是由Cell Cloud的action dialect进行回调的
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
@@ -47,7 +53,6 @@ public class MemoryUsageListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
-
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getInt("moId");
@@ -55,13 +60,12 @@ public class MemoryUsageListener extends AbstractListener {
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-
 		// URL
 		HostConfig memConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(memConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.MEMORY).append("/").append(moId)
-				.append("/fMemRatio/?rangeInHour=").append(rangeInHour);
+				.append(API.INTERFACEOUTFLOW).append("/").append(moId)
+				.append("/fOutOctets/?rangeInHour=").append(rangeInHour);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -91,7 +95,6 @@ public class MemoryUsageListener extends AbstractListener {
 
 		Properties params = new Properties();
 		JSONObject data = null;
-
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
@@ -103,7 +106,6 @@ public class MemoryUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))
@@ -112,12 +114,21 @@ public class MemoryUsageListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 
-							for (int i = 0; i < ja.length(); i++) {
+							int l = 0;
+							if (ja.length() > 5) {
+								l = 5;
+							} else {
+								l = ja.length();
+							}
+
+							JSONArray jadata = new JSONArray();
+							for (int i = 0; i < l; i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
 								// long memid = jsonData.getLong("mosn");
+
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
@@ -138,42 +149,27 @@ public class MemoryUsageListener extends AbstractListener {
 													.getTime());
 									ja2.put(jo);
 
-									// Double usedPercent = Double
+									// Double flow = Double
 									// .valueOf((String) jsonData1.get(0));
 									// long timestamp = df.parse(
 									// (String) jsonData1.get(1))
 									// .getTime();
-									//
-									// if (eqType.equals("主机")) {
-									// HostManager hm = HostManager
-									// .getInstance();
-									// hm.addMemoryDetecById(memid,
-									// usedPercent, timestamp);
-									// }
-									// if (eqType.equals("网络设备")) {
-									// NetEquipmentManager nem =
-									// NetEquipmentManager
-									// .getInstance();
-									// nem.addMemoryDetecById(memid,
-									// usedPercent, timestamp);
-									//
-									// }
-
-									System.out.println("memusage__" + ja2);
 
 								}
+
+								// }
 								jsonData.remove("data");
 								jsonData.put("data", ja2);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
+
+								jadata.put(jsonData);
 							}
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", moId);
 
 							data.remove("dataList");
-							data.put("data", jo);
+							data.put("dataList", jadata);
+							data.put("resourceId", moId);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
@@ -181,7 +177,7 @@ public class MemoryUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("memoryUsageData：      " + data);
+					System.out.println("ifOutFlow：   " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -192,13 +188,14 @@ public class MemoryUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.MEMORY, params);
+				this.response(Action.INTERFACEFLOW, params);
 			} else {
-				this.reportHTTPError(Action.MEMORY);
+				this.reportHTTPError(Action.INTERFACEFLOW);
 			}
 			break;
 		default:
-			Logger.w(MemoryUsageListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(InterfOutFlowListener.class,
+					"返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
@@ -211,9 +208,10 @@ public class MemoryUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MEMORY, params);
+			this.response(Action.INTERFACEFLOW, params);
 			break;
 		}
+
 	}
 
 }

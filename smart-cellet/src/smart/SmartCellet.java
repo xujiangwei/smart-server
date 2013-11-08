@@ -55,10 +55,12 @@ import smart.action.resource.EquipmentPerformanceListener;
 import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.FileSystemUsageListener;
 import smart.action.resource.HostConfigListener;
+import smart.action.resource.InterfInFlowListener;
+import smart.action.resource.InterfOutFlowListener;
 import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentConfigListener;
 import smart.action.resource.NetEquipmentListener;
-import smart.action.resource.PingListener;
+import smart.action.resource.PingDelayListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.BpCloseCodeListListener;
 import smart.action.task.BpiListListener;
@@ -310,6 +312,31 @@ public class SmartCellet extends Cellet {
 		EquipmentConfigLitener ecl = new EquipmentConfigLitener(this);
 		ecl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTCONFIG, ecl);
+		
+		//获取设备的KPI指标
+		CPUUsageListener cpuul = new CPUUsageListener(this);
+		cpuul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, cpuul);
+
+		MemoryUsageListener memul = new MemoryUsageListener(this);
+		memul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, memul);
+
+		FileSystemUsageListener filesul = new FileSystemUsageListener(this);
+		filesul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, filesul);
+
+		PingDelayListener pdl = new PingDelayListener(this);
+		pdl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, pdl);
+		
+		InterfInFlowListener ifin = new InterfInFlowListener(this);
+		ifin.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, ifin);
+
+		InterfOutFlowListener ifout = new InterfOutFlowListener(this);
+		ifout.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, ifout);
 
 		// 获取主机设备配置信息
 		HostConfigListener hcl = new HostConfigListener(this);
@@ -320,6 +347,16 @@ public class SmartCellet extends Cellet {
 		NetEquipmentConfigListener necl = new NetEquipmentConfigListener(this);
 		necl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, necl);
+		
+		// 获取网络接口的入流速
+		InterfInFlowListener nfl = new InterfInFlowListener(this);
+		nfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INTERFACEFLOW, nfl);
+
+		// 获取网络接口的出流速
+		InterfOutFlowListener nol = new InterfOutFlowListener(this);
+		nol.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INTERFACEFLOW, nol);
 
 		// 获取主机设备
 		CPUUsageListener cu = new CPUUsageListener(this);
@@ -334,7 +371,7 @@ public class SmartCellet extends Cellet {
 		filesu.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOST, filesu);
 
-		PingListener ping = new PingListener(this);
+		PingDelayListener ping = new PingDelayListener(this);
 		ping.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOST, ping);
 
@@ -505,32 +542,34 @@ public class SmartCellet extends Cellet {
 		UserListListener userList = new UserListListener(this);
 		userList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.COMMONUSERLIST, userList);
-		
-		//影响程度
+
+		// 影响程度
 		SlaImpactListListener impactList = new SlaImpactListListener(this);
 		impactList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.IMPACTLIST, impactList);
-		
-		//紧急程度
+
+		// 紧急程度
 		SlaUrgentListListener urgentList = new SlaUrgentListListener(this);
 		urgentList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.URGENTLIST, urgentList);
-		
-		//优先级
-		SlaServiceLevelListListener serviceLevelList = new SlaServiceLevelListListener(this);
+
+		// 优先级
+		SlaServiceLevelListListener serviceLevelList = new SlaServiceLevelListListener(
+				this);
 		serviceLevelList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.SERVICELEVELLIST, serviceLevelList);
-		
-		//关闭代码
-		BpCloseCodeListListener closeCodeList = new BpCloseCodeListListener(this);
+
+		// 关闭代码
+		BpCloseCodeListListener closeCodeList = new BpCloseCodeListListener(
+				this);
 		impactList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
-		
-		//问题列表		
+
+		// 问题列表
 		ProblemListListener problemList = new ProblemListListener(this);
 		problemList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMLIST, problemList);
-		
+
 		ProblemDetailListener problemDetail = new ProblemDetailListener(this);
 		problemDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);

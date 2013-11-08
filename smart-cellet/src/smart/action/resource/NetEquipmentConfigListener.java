@@ -4,6 +4,12 @@ import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
+
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
@@ -13,11 +19,6 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
@@ -26,7 +27,12 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class NetEquipmentConfigListener extends AbstractListener{
+/**
+ * 网络设备配置信息监听器
+ * 
+ * @author Administrator
+ */
+public class NetEquipmentConfigListener extends AbstractListener {
 
 	public NetEquipmentConfigListener(Cellet cellet) {
 		super(cellet);
@@ -43,11 +49,11 @@ public class NetEquipmentConfigListener extends AbstractListener{
 		// 获取参数
 		JSONObject json = null;
 		long moId = 0;
-		String moType=null;
+		String moType = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getInt("moId");
-			moType=json.getString("moType");
+			moType = json.getString("moType");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -87,7 +93,7 @@ public class NetEquipmentConfigListener extends AbstractListener{
 
 		Properties params = new Properties();
 		JSONObject data = null;
-
+		JSONObject config = null;
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
@@ -104,57 +110,80 @@ public class NetEquipmentConfigListener extends AbstractListener{
 							&& data.get("data") != null) {
 						JSONArray ja = data.getJSONArray("data");
 
+						config = new JSONObject();
+						JSONArray jaIf = new JSONArray();
+						JSONArray jaMem = new JSONArray();
+						JSONArray jaCpu = new JSONArray();
+						JSONArray jaBoard = new JSONArray();
 						for (int i = 0; i < ja.length(); i++) {
+							JSONObject jo = ja.getJSONObject(i);
+							JSONArray ja1 = jo.getJSONArray("attr");
+							JSONObject jsob = new JSONObject();
+							for (int j = 0; j < ja1.length(); j++) {
+								JSONArray ja2 = ja1.getJSONArray(j);
+								String key = (String) ja2.get(0);
+								Object value = ja2.get(1);
+
+								jsob.put(key, value);
+
+							}
+
+							jo.remove("attr");
+							jo.put("attr", jsob);
 							if ("接口".equals(ja.getJSONObject(i).getString(
 									"type"))) {
-								JSONObject jo = ja.getJSONObject(i);
-								JSONArray ja1 = jo.getJSONArray("attr");
-								JSONObject jsob = new JSONObject();
-								for (int j = 0; j < ja1.length(); j++) {
-									JSONArray ja2 = ja1.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
-
-									jsob.put(key, value);
-									
+								if (jaIf.length() < 10) {
+									jaIf.put(jo);
 								}
-								
-								jo.remove("attr");
-								jo.put("attr", jsob);
+
+								config.put("interfaceConfig", jaIf);
+								// long if_mosn = jo.getLong("mosn");
+								// String if_name = jo.getString("name");
+								// String if_type = jo.getString("type");
+								//
+								// JSONObject joa = jo.getJSONObject("attr");
+								// long if_bandwidth = joa.getLong("带宽");
+								// String if_mac = joa.getString("物理地址");
+								// String if_isblock = joa.getString("是否允许阻断");
+								// int if_panel = joa.getInt("所属面板");
+								// String if_describe = joa.getString("接口描述");
+								// int if_index = joa.getInt("接口索引");
+								// int if_maxdatagramlength = joa
+								// .getInt("最大数据报长度");
+								// String if_alias = joa.getString("接口别名");
+								// long if_eqptmosn = joa.getLong("MOSN");
+
+								// InterfaceManager ifm = InterfaceManager
+								// .getInstance();
+								// ifm.saveIfInfo(if_mosn, if_name, if_type,
+								// if_bandwidth, if_mac, if_isblock,
+								// if_panel, if_describe, if_index,
+								// if_maxdatagramlength, if_alias,
+								// if_eqptmosn);
+
 							} else if ("内存".equals(ja.getJSONObject(i)
 									.getString("type"))) {
-								JSONObject jo = ja.getJSONObject(i);
-								JSONArray ja1 = jo.getJSONArray("attr");
-								JSONObject jsob = new JSONObject();
-								for (int j = 0; j < ja1.length(); j++) {
-									JSONArray ja2 = ja1.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
-
-									jsob.put(key, value);
-									
+								if (jaMem.length() < 10) {
+									jaMem.put(jo);
 								}
-								jo.remove("attr");
-								jo.put("attr", jsob);
-							}else if("CPU".equals(ja.getJSONObject(i)
-									.getString("type"))){
-
-								JSONObject jo = ja.getJSONObject(i);
-								JSONArray ja1 = jo.getJSONArray("attr");
-								JSONObject jsob = new JSONObject();
-								for (int j = 0; j < ja1.length(); j++) {
-									JSONArray ja2 = ja1.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
-
-									jsob.put(key, value);
-									
+								config.put("memoryConfig", jaMem);
+							} else if ("CPU".equals(ja.getJSONObject(i)
+									.getString("type"))) {
+								if (jaCpu.length() < 10) {
+									jaCpu.put(jo);
 								}
-								jo.remove("attr");
-								jo.put("attr", jsob);
-							
+								config.put("CpuConfig", jaCpu);
+							} else if ("Board".equals(ja.getJSONObject(i)
+									.getString("type"))) {
+								if (jaBoard.length() < 10) {
+									jaBoard.put(jo);
+								}
+								config.put("BoardConfig", jaBoard);
 							}
 						}
+						
+						data.put("config", config);
+						data.remove("data");
 					}
 					// } else {
 					// data.put("errorInfo", "未获取到相关kpi数据");
@@ -175,7 +204,8 @@ public class NetEquipmentConfigListener extends AbstractListener{
 			}
 			break;
 		default:
-			Logger.w(NetEquipmentConfigListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(NetEquipmentConfigListener.class,
+					"返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
@@ -192,7 +222,7 @@ public class NetEquipmentConfigListener extends AbstractListener{
 			break;
 
 		}
-	
+
 	}
 
 }
