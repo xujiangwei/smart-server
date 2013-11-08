@@ -41,7 +41,7 @@ public class ProblemDetailListener   extends AbstractListener{
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INCIDENTDETAIL);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.PROBLEMDETAIL);
 		JSONObject json = null;
 		String bpiId = null;
 		try {
@@ -87,13 +87,13 @@ public class ProblemDetailListener   extends AbstractListener{
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 					// 响应动作，即向客户端发送 ActionDialect
-					this.response(Action.INCIDENTDETAIL, params);
+					this.response(Action.PROBLEMDETAIL, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.INCIDENTDETAIL);
+				this.reportHTTPError(Action.PROBLEMDETAIL);
 			}
 
 			break;
@@ -110,7 +110,7 @@ public class ProblemDetailListener   extends AbstractListener{
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.INCIDENTDETAIL, params);
+			this.response(Action.PROBLEMDETAIL, params);
 			break;
 		}
 	

@@ -91,8 +91,7 @@ public class ProblemListListener  extends AbstractListener{
 
 			break;
 		default:
-			Logger.w(IncidentListListener.class,
-					"返回响应码：" + response.getStatus());
+			Logger.w(ProblemListListener.class,	"返回响应码：" + response.getStatus());
 			jo = new JSONObject();
 			try {
 				jo.put("status", 900);
