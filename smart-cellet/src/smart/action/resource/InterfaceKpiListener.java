@@ -32,9 +32,9 @@ import smart.mast.action.Action;
  * 网络设备监听器
  * 
  */
-public final class NetEquipmentListener extends AbstractListener {
+public final class InterfaceKpiListener extends AbstractListener {
 
-	public NetEquipmentListener(Cellet cellet) {
+	public InterfaceKpiListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -62,7 +62,7 @@ public final class NetEquipmentListener extends AbstractListener {
 		HostConfig config = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.NETEQUIPMENT).append("/").append(equipmentId)
+				.append(API.INTERFACEKPI).append("/").append(equipmentId)
 				.append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=")
 				.append(rangeInHour);
 
@@ -103,45 +103,50 @@ public final class NetEquipmentListener extends AbstractListener {
 								"yyyy-MM-dd HH:mm:ss");
 						JSONObject jsob = new JSONObject();
 						JSONArray jay = new JSONArray();
-						int k = 0;
-						if (ja.length() > 32) {
-							k = 32;
-						} else {
-							k = ja.length();
-						}
-						for (int m = 0; m < 5; m++) {
-							for (int i = 0; i < k; i++) {
+
+						int k = 3;
+						for (int m = 0; m < k; m++) {
+							for (int i = 0; i < ja.length(); i++) {
 								JSONObject job = ja.getJSONObject(i);
-								if (job.get("mosn").equals(
-										ja.getJSONObject(m).get("mosn"))) {
-									JSONArray ja1 = job.getJSONArray("data");
-									JSONArray ja2 = new JSONArray();
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONObject jo = new JSONObject();
-										jo.put("value",
-												Float.valueOf(ja1.getJSONArray(
-														j).getString(0)));
-										jo.put("collectTime",
-												df.parse(
-														ja1.getJSONArray(j)
-																.getString(1))
-														.getTime());
-										ja2.put(jo);
+								if (!ja.getJSONObject(m + 1)
+										.get("mosn")
+										.equals(ja.getJSONObject(m).get("mosn"))) {
+									if (job.get("mosn").equals(
+											ja.getJSONObject(m).get("mosn"))) {
+										JSONArray ja1 = job
+												.getJSONArray("data");
+										JSONArray ja2 = new JSONArray();
+										for (int j = 0; j < ja1.length(); j++) {
+											JSONObject jo = new JSONObject();
+											jo.put("value", Float.valueOf(ja1
+													.getJSONArray(j).getString(
+															0)));
+											jo.put("collectTime",
+													df.parse(
+															ja1.getJSONArray(j)
+																	.getString(
+																			1))
+															.getTime());
+											ja2.put(jo);
+										}
+										JSONObject job1 = new JSONObject();
+										job1.put("data", ja2);
+										job1.put("moPath",
+												job.getString("moPath"));
+										job1.put("kpiName",
+												job.getString("kpiName"));
+										String s = job.getString("moPath");
+										job1.put("name", s.substring(
+												s.indexOf("(") + 1,
+												s.lastIndexOf(")")));
+										job1.put("mosn", Long.valueOf(job
+												.getString("mosn")));
+										jay.put(job1);
 									}
-									JSONObject job1 = new JSONObject();
-									job1.put("data", ja2);
-									job1.put("moPath", job.getString("moPath"));
-									job1.put("kpiName",
-											job.getString("kpiName"));
-									String s = job.getString("moPath");
-									job1.put(
-											"name",
-											s.substring(s.indexOf("(") + 1,
-													s.lastIndexOf(")")));
-									job1.put("mosn",
-											Long.valueOf(job.getString("mosn")));
-									jay.put(job1);
+								} else {
+									k++;
 								}
+
 							}
 						}
 						jsob.put("dataList", jay);
@@ -155,7 +160,7 @@ public final class NetEquipmentListener extends AbstractListener {
 						data.put("data", "");
 						data.put("status", 603);
 					}
-					System.out.println("网络设备detail: " + data);
+					System.out.println("interfaceKpiDetail: " + data);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
@@ -167,9 +172,9 @@ public final class NetEquipmentListener extends AbstractListener {
 
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
-				this.response(Action.NETEQUIPMENT, params);
+				this.response(Action.INTERFACEKPI, params);
 			} else {
-				this.reportHTTPError(Action.NETEQUIPMENT);
+				this.reportHTTPError(Action.INTERFACEKPI);
 			}
 			break;
 		default:
@@ -186,7 +191,7 @@ public final class NetEquipmentListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.NETEQUIPMENT, params);
+			this.response(Action.INTERFACEKPI, params);
 			break;
 		}
 

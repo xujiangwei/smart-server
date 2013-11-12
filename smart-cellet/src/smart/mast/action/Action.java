@@ -54,7 +54,6 @@ public final class Action {
 	// 资源设备
 	public final static String DEVICE = "requestDevice";
 	public final static String HOST = "requestHost";
-	public final static String NETEQUIPMENT = "requestNetEqpt";
 	public final static String DATABASE = "requestDatabase";
 
 	public final static String EQUIPMENTCONFIG = "requestEqptConfig";
@@ -66,6 +65,7 @@ public final class Action {
 	public final static String FILESYSTEM = "requestFileSys";
 	public final static String PING = "requestPing";
 	public final static String INTERFACEFLOW = "requestIfflow";
+	public final static String INTERFACEKPI = "requestIfKpi";
 
 	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";

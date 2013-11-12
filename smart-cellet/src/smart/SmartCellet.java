@@ -59,7 +59,7 @@ import smart.action.resource.InterfInFlowListener;
 import smart.action.resource.InterfOutFlowListener;
 import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentConfigListener;
-import smart.action.resource.NetEquipmentListener;
+import smart.action.resource.InterfaceKpiListener;
 import smart.action.resource.PingDelayListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.BpCloseCodeListListener;
@@ -312,8 +312,8 @@ public class SmartCellet extends Cellet {
 		EquipmentConfigLitener ecl = new EquipmentConfigLitener(this);
 		ecl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTCONFIG, ecl);
-		
-		//获取设备的KPI指标
+
+		// 获取设备的KPI指标
 		CPUUsageListener cpuul = new CPUUsageListener(this);
 		cpuul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTKPI, cpuul);
@@ -329,14 +329,19 @@ public class SmartCellet extends Cellet {
 		PingDelayListener pdl = new PingDelayListener(this);
 		pdl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTKPI, pdl);
-		
-		InterfInFlowListener ifin = new InterfInFlowListener(this);
-		ifin.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, ifin);
 
-		InterfOutFlowListener ifout = new InterfOutFlowListener(this);
-		ifout.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, ifout);
+		// 获取接口KPI指标信息
+		InterfaceKpiListener ikl = new InterfaceKpiListener(this);
+		ikl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTKPI, ikl);
+
+//		InterfInFlowListener ifin = new InterfInFlowListener(this);
+//		ifin.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.EQUIPMENTKPI, ifin);
+
+//		InterfOutFlowListener ifout = new InterfOutFlowListener(this);
+//		ifout.setHttpClient(this.httpClient);
+//		dispatcher.addListener(Action.EQUIPMENTKPI, ifout);
 
 		// 获取主机设备配置信息
 		HostConfigListener hcl = new HostConfigListener(this);
@@ -347,7 +352,7 @@ public class SmartCellet extends Cellet {
 		NetEquipmentConfigListener necl = new NetEquipmentConfigListener(this);
 		necl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, necl);
-		
+
 		// 获取网络接口的入流速
 		InterfInFlowListener nfl = new InterfInFlowListener(this);
 		nfl.setHttpClient(this.httpClient);
@@ -375,10 +380,10 @@ public class SmartCellet extends Cellet {
 		ping.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOST, ping);
 
-		// 获取网络设备
-		NetEquipmentListener netEqpt = new NetEquipmentListener(this);
-		netEqpt.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.NETEQUIPMENT, netEqpt);
+		// 获取接口KPI指标信息
+		InterfaceKpiListener ifk = new InterfaceKpiListener(this);
+		ifk.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INTERFACEKPI, ifk);
 
 		// 获取设备基本信息
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(

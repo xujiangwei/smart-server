@@ -113,8 +113,8 @@ public class PingDelayListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
-//								double pingDelay = 0;
-//								long timestamp = 0;
+								// double pingDelay = 0;
+								// long timestamp = 0;
 
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
@@ -124,28 +124,30 @@ public class PingDelayListener extends AbstractListener {
 											|| "null".equals(jsonData1.get(0))
 											|| (jsonData1.get(0)).equals(null)) {
 										jo.put("PING延迟", 0);
-//										pingDelay = 0;
-//										timestamp = df.parse(
-//												(String) jsonData1.get(1))
-//												.getTime();
+										// pingDelay = 0;
+										// timestamp = df.parse(
+										// (String) jsonData1.get(1))
+										// .getTime();
 									} else {
 										jo.put("PING延迟", Float
 												.valueOf((String) jsonData1
 														.get(0)));
-//										pingDelay = Double
-//												.valueOf((String) jsonData1
-//														.get(0));
-//										timestamp = df.parse(
-//												(String) jsonData1.get(1))
-//												.getTime();
+										// pingDelay = Double
+										// .valueOf((String) jsonData1
+										// .get(0));
+										// timestamp = df.parse(
+										// (String) jsonData1.get(1))
+										// .getTime();
 									}
 									jo.put("collectTime",
 											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
 
-//									HostManager hm = HostManager.getInstance();
-//									hm.addPingInfo(moId, pingDelay, timestamp);
+									// HostManager hm =
+									// HostManager.getInstance();
+									// hm.addPingInfo(moId, pingDelay,
+									// timestamp);
 
 								}
 

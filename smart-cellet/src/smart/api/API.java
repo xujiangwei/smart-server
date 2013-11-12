@@ -41,10 +41,9 @@ public final class API {
 	// 设备资源
 	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
 	public final static String DATABASE = "restws/data/perf/mo/101";
-	public final static String NETEQUIPMENT = "restws/data/perf/mo/101";
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
-
 	public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/101";
+
 	public final static String HOSTCONFIG = "restws/data/cfg/mo/101";
 	public final static String NETEQUIPMENTCONFIG = "restws/data/cfg/mo/101";
 	public final static String CPU = "restws/data/perf/mo/101";
@@ -53,7 +52,8 @@ public final class API {
 	public final static String PING = "restws/data/perf/type/101/FPING/fAvgRestTime";
 	public final static String INTERFACEINFLOW = "restws/data/perf/mo/101";
 	public final static String INTERFACEOUTFLOW = "restws/data/perf/mo/101";
-
+	public final static String INTERFACEKPI = "restws/data/perf/mo/101";
+	
 	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
 	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.20:8081/monitoring-system/performance/requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.20:8081/monitoring-system/health/requestEquipmentHealthStatus";
