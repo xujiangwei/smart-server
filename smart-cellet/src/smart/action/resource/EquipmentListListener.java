@@ -182,7 +182,7 @@ public class EquipmentListListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(HostListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(EquipmentListListener.class, "返回响应码:" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);

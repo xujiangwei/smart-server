@@ -41,30 +41,27 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.20:8081/monitoring-system/fileUpload/messageFileUpload";
 
 	// 设备资源
-	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
-	public final static String DATABASE = "restws/data/perf/mo/101";
-	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
-	public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/101";
-
-	public final static String HOSTCONFIG = "restws/data/cfg/mo/101";
-	public final static String NETEQUIPMENTCONFIG = "restws/data/cfg/mo/101";
-	public final static String CPU = "restws/data/perf/mo/101";
-	public final static String MEMORY = "restws/data/perf/mo/101";
-	public final static String FILESYSTEM = "restws/data/perf/mo/101";
-	public final static String PING = "restws/data/perf/type/101/FPING/fAvgRestTime";
-	public final static String INTERFACEINFLOW = "restws/data/perf/mo/101";
-	public final static String INTERFACEOUTFLOW = "restws/data/perf/mo/101";
-	public final static String INTERFACEKPI = "restws/data/perf/mo/101";
-	
-	public final static String HOST = "/monitoring-system/equipmentHosts/requestEquipmentHosts";
-	public final static String EQUIPMENTPERFORMANCE = "http://10.10.152.20:8081/monitoring-system/performance/requestEquipmentPerformance";
-	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.20:8081/monitoring-system/health/requestEquipmentHealthStatus";
-
-	public final static String DELETEEQUIPMENT = "http://10.10.152.20:8081/monitoring-system/equipmentDel/equipmentDelete";
-	public final static String EQUIPMENTALARM = "http://10.10.152.20:8081/monitoring-system/equipmentAlarms/requestEquipmentAlarms";
-	public final static String EQUIPMENTMONITORSTATE = "http://10.10.152.20:8081/monitoring-system/monitorStatus/equipmentChangeMonitorStatus";
-	public final static String SENDSNAPSHOT = "http://10.10.152.20:8081/monitoring-system/snapshot/equipmentSendSnapshot";
-	public final static String EQUIPMENTTOPO = "http://10.10.152.20:8081/monitoring-system/equipmentTopos/requestEquipmentTopos";
+		public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
+		public final static String DATABASE = "restws/data/perf/mo/101";
+		public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/101";
+		public final static String HOSTCONFIG = "restws/data/cfg/mo/101";
+		public final static String NETEQUIPMENTCONFIG = "restws/data/cfg/mo/101";
+		public final static String EQUIPMENTBASIC = "restws/data/perf/mo/101";
+		
+		public final static String CPU = "restws/data/perf/mo/101";
+		public final static String MEMORY = "restws/data/perf/mo/101";
+		public final static String FILESYSTEM = "restws/data/perf/mo/101";
+		public final static String PING = "restws/data/perf/type/101/FPING/fAvgRestTime";
+		public final static String INTERFACEINFLOW = "restws/data/perf/mo/101";
+		public final static String INTERFACEOUTFLOW = "restws/data/perf/mo/101";
+		public final static String INTERFACEKPI = "restws/data/perf/mo/101";
+		
+		public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.20:8081/monitoring-system/health/requestEquipmentHealthStatus";
+		public final static String DELETEEQUIPMENT = "http://10.10.152.20:8081/monitoring-system/equipmentDel/equipmentDelete";
+		public final static String EQUIPMENTALARM = "http://10.10.152.20:8081/monitoring-system/equipmentAlarms/requestEquipmentAlarms";
+		public final static String EQUIPMENTMONITORSTATE = "http://10.10.152.20:8081/monitoring-system/monitorStatus/equipmentChangeMonitorStatus";
+		public final static String SENDSNAPSHOT = "http://10.10.152.20:8081/monitoring-system/snapshot/equipmentSendSnapshot";
+		public final static String EQUIPMENTTOPO = "http://10.10.152.20:8081/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
 	// 待办
 	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";

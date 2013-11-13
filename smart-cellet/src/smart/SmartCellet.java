@@ -52,15 +52,14 @@ import smart.action.resource.EquipmentConfigLitener;
 import smart.action.resource.EquipmentHealthStatusListener;
 import smart.action.resource.EquipmentListListener;
 import smart.action.resource.EquipmentMonitorStateListener;
-import smart.action.resource.EquipmentPerformanceListener;
 import smart.action.resource.EquipmentTopoListener;
 import smart.action.resource.FileSystemUsageListener;
 import smart.action.resource.HostConfigListener;
 import smart.action.resource.InterfInFlowListener;
 import smart.action.resource.InterfOutFlowListener;
+import smart.action.resource.InterfaceKpiListener;
 import smart.action.resource.MemoryUsageListener;
 import smart.action.resource.NetEquipmentConfigListener;
-import smart.action.resource.InterfaceKpiListener;
 import smart.action.resource.PingDelayListener;
 import smart.action.resource.SendSnapshotListener;
 import smart.action.task.BpCloseCodeListListener;
@@ -336,14 +335,6 @@ public class SmartCellet extends Cellet {
 		ikl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTKPI, ikl);
 
-//		InterfInFlowListener ifin = new InterfInFlowListener(this);
-//		ifin.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.EQUIPMENTKPI, ifin);
-
-//		InterfOutFlowListener ifout = new InterfOutFlowListener(this);
-//		ifout.setHttpClient(this.httpClient);
-//		dispatcher.addListener(Action.EQUIPMENTKPI, ifout);
-
 		// 获取主机设备配置信息
 		HostConfigListener hcl = new HostConfigListener(this);
 		hcl.setHttpClient(this.httpClient);
@@ -364,23 +355,6 @@ public class SmartCellet extends Cellet {
 		nol.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEFLOW, nol);
 
-		// 获取主机设备
-		CPUUsageListener cu = new CPUUsageListener(this);
-		cu.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, cu);
-
-		MemoryUsageListener memu = new MemoryUsageListener(this);
-		memu.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, memu);
-
-		FileSystemUsageListener filesu = new FileSystemUsageListener(this);
-		filesu.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, filesu);
-
-		PingDelayListener ping = new PingDelayListener(this);
-		ping.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOST, ping);
-
 		// 获取接口KPI指标信息
 		InterfaceKpiListener ifk = new InterfaceKpiListener(this);
 		ifk.setHttpClient(this.httpClient);
@@ -392,17 +366,11 @@ public class SmartCellet extends Cellet {
 		eqptBasicListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTBASIC, eqptBasicListener);
 
-		// 获取设备性能信息
-		EquipmentPerformanceListener eqptPerformance = new EquipmentPerformanceListener(
-				this);
-		eqptPerformance.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTDETAIL, eqptPerformance);
-
 		// 获取设备健康状态
 		EquipmentHealthStatusListener healthStatus = new EquipmentHealthStatusListener(
 				this);
 		healthStatus.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTDETAIL, healthStatus);
+		dispatcher.addListener(Action.EQUIPMENTHEALTHSTATUS, healthStatus);
 
 		// 删除设备
 		DeleteEquipmentListener equipmentDelete = new DeleteEquipmentListener(

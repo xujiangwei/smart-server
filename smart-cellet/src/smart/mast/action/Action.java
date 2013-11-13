@@ -53,13 +53,13 @@ public final class Action {
 
 	// 资源设备
 	public final static String DEVICE = "requestDevice";
-	public final static String HOST = "requestHost";
 	public final static String DATABASE = "requestDatabase";
 
 	public final static String EQUIPMENTCONFIG = "requestEqptConfig";
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
 	public final static String HOSTCONFIG = "requestHostConfig";
 	public final static String NETEQUIPMENTCONFIG = "requestNeqtConfig";
+	
 	public final static String CPU = "requestCPU";
 	public final static String MEMORY = "requestMemory";
 	public final static String FILESYSTEM = "requestFileSys";
@@ -67,12 +67,9 @@ public final class Action {
 	public final static String INTERFACEFLOW = "requestIfflow";
 	public final static String INTERFACEKPI = "requestIfKpi";
 
-	public final static String EQUIPMENTDETAIL = "requestEquipmentDetail";
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";
-	public final static String EQUIPMENTPERFORMANCE = "requestEquipmentPerformance";
 	public final static String EQUIPMENTHEALTHSTATUS = "requestEquipmentHealthStatus";
 
-	public final static String DEVICEINFO = "requestDeviceInfo";
 	public final static String DELETEEQUIPMENT = "equipmentDelete";
 	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
 	public final static String EQUIPMENTMONITORSTATE = "eqptChangeMonitorStatus";
