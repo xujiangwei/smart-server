@@ -195,7 +195,7 @@ public class AlarmChangeListListener extends AbstractListener {
 											if (!jt.get("fconfirmtime").equals(null)) {
 												job.put("confirmTime", df.parse(jt.getString("fconfirmtime")).getTime());
 											} else {
-												job.put("confirmTime", jt.get("fconfirmtime"));
+												job.put("confirmTime", 0);
 											}
 											if (!jt.get("fconfirmuserid").equals(null)) {
 												job.put("confirmUserId", Long.valueOf(jt.getString("fconfirmuserid")));
@@ -218,9 +218,7 @@ public class AlarmChangeListListener extends AbstractListener {
 										// 响应动作，即向客户端发送ActionDialect
 										// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
 										response(Action.ALARMLIST, params);
-									} else {
-										System.out.println("无变动或缓冲数据");
-									}
+									} 
 
 								} catch (JSONException e) {
 									e.printStackTrace();

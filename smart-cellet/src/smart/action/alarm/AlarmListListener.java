@@ -121,7 +121,7 @@ public final class AlarmListListener extends AbstractListener {
 							if (!jt.get("fconfirmtime").equals(null)) {
 								job.put("confirmTime", df.parse(jt.getString("fconfirmtime")).getTime());
 							} else {
-								job.put("confirmTime", jt.get("fconfirmtime"));
+								job.put("confirmTime", 0);
 							}
 							if (!jt.get("fconfirmuserid").equals(null)) {
 								job.put("confirmUserId", Long.valueOf(jt.getString("fconfirmuserid")));
