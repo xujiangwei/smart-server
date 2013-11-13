@@ -15,6 +15,7 @@ import smart.action.LoginListener;
 import smart.action.LogoutListener;
 import smart.action.NodeDetectionListener;
 import smart.action.alarm.AddAlarmOpInfoListener;
+import smart.action.alarm.AlarmChangeListListener;
 import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
 import smart.action.alarm.AlarmExperienceListener;
@@ -470,6 +471,10 @@ public class SmartCellet extends Cellet {
 		AlarmListListener alarmList = new AlarmListListener(this);
 		alarmList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMLIST, alarmList);
+		
+		AlarmChangeListListener alarmChange = new AlarmChangeListListener(this);
+		alarmChange.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMLIST, alarmChange);
 
 		// 获取告警处理信息
 		AlarmOpInfoListener alarmOpInfo = new AlarmOpInfoListener(this);
