@@ -114,20 +114,34 @@ public class HostConfigListener extends AbstractListener {
 						JSONArray jaFs = new JSONArray();
 						for (int i = 0; i < ja.length(); i++) {
 							JSONObject jo = ja.getJSONObject(i);
-							JSONArray ja1 = jo.getJSONArray("attr");
-							JSONObject jsob = new JSONObject();
-							for (int j = 0; j < ja1.length(); j++) {
-								JSONArray ja2 = ja1.getJSONArray(j);
-								String key = (String) ja2.get(0);
-								Object value = ja2.get(1);
-
-								jsob.put(key, value);
-
-							}
-							jo.remove("attr");
-							jo.put("attr", jsob);
 
 							if ("接口".equals(jo.getString("type"))) {
+								JSONArray jaattr = jo.getJSONArray("attr");
+								JSONObject joattr = new JSONObject();
+								JSONObject joat = new JSONObject();
+								for (int j = 0; j < jaattr.length(); j++) {
+									JSONArray ja2 = jaattr.getJSONArray(j);
+									String key = (String) ja2.get(0);
+									Object value = ja2.get(1);
+
+									joattr.put(key, value);
+								}
+
+								joat.put("bandwidth", joattr.get("带宽"));
+								joat.put("mac", joattr.get("物理地址"));
+								joat.put("isDlock", joattr.get("是否允许阻断"));
+								joat.put("panel", joattr.get("所属面板"));
+								joat.put("describe", joattr.get("接口描述"));
+								joat.put("index", joattr.get("接口索引"));
+								joat.put("maxDatagramLength",
+										joattr.get("最大数据报长度"));
+								joat.put("alias", joattr.get("接口别名"));
+								joat.put("eqptMosn", joattr.get("MOSN"));
+
+								jo.remove("attr");
+								jo.remove("joattr");
+								jo.put("attr", joat);
+
 								if (jaIf.length() < 10) {
 									jaIf.put(jo);
 								}
@@ -158,6 +172,26 @@ public class HostConfigListener extends AbstractListener {
 								// if_eqptmosn);
 
 							} else if ("磁盘".equals(jo.getString("type"))) {
+								JSONArray jaattr = jo.getJSONArray("attr");
+								JSONObject joattr = new JSONObject();
+								JSONObject joat = new JSONObject();
+								for (int j = 0; j < jaattr.length(); j++) {
+									JSONArray ja2 = jaattr.getJSONArray(j);
+									String key = (String) ja2.get(0);
+									Object value = ja2.get(1);
+
+									joattr.put(key, value);
+								}
+
+								joat.put("path", joattr.get("盘符"));
+								joat.put("partitionSign", joattr.get("分区标签"));
+								joat.put("partitionSize", joattr.get("分区容量"));
+								joat.put("eqptMosn", joattr.get("MOSN"));
+
+								jo.remove("attr");
+								jo.remove("joattr");
+								jo.put("attr", joat);
+
 								if (jaDisk.length() < 10) {
 									jaDisk.put(jo);
 								}
@@ -180,10 +214,33 @@ public class HostConfigListener extends AbstractListener {
 								// disk_eqptmosn);
 
 							} else if ("CPU".equals(jo.getString("type"))) {
+								JSONArray jaattr = jo.getJSONArray("attr");
+								JSONObject joattr = new JSONObject();
+								JSONObject joat = new JSONObject();
+								for (int j = 0; j < jaattr.length(); j++) {
+									JSONArray ja2 = jaattr.getJSONArray(j);
+									String key = (String) ja2.get(0);
+									Object value = ja2.get(1);
+
+									joattr.put(key, value);
+								}
+
+								joat.put("catch", joattr.get("CPU缓存"));
+								joat.put("sign", joattr.get("CPU标识"));
+								joat.put("mhz", joattr.get("主频(MHz)"));
+								joat.put("model", joattr.get("CPU类型"));
+								joat.put("bits", joattr.get("CPU位数"));
+								joat.put("vender", joattr.get("厂家"));
+								joat.put("eqptMosn", joattr.get("MOSN"));
+
+								jo.remove("attr");
+								jo.remove("joattr");
+								jo.put("attr", joat);
+
 								if (jaCpu.length() < 10) {
 									jaCpu.put(jo);
 								}
-								config.put("CpuConfig", jaCpu);
+								config.put("cpuConfig", jaCpu);
 
 								// long hcpu_mosn = jo.getLong("mosn");
 								// String hcpu_name = jo.getString("name");
@@ -205,6 +262,28 @@ public class HostConfigListener extends AbstractListener {
 								// hcpu_eqptmosn);
 
 							} else if ("文件系统".equals(jo.getString("type"))) {
+								JSONArray jaattr = jo.getJSONArray("attr");
+								JSONObject joattr = new JSONObject();
+								JSONObject joat = new JSONObject();
+								for (int j = 0; j < jaattr.length(); j++) {
+									JSONArray ja2 = jaattr.getJSONArray(j);
+									String key = (String) ja2.get(0);
+									Object value = ja2.get(1);
+
+									joattr.put(key, value);
+								}
+
+								joat.put("hangNode", joattr.get("挂结点"));
+								joat.put("fsName", joattr.get("文件系统名称"));
+								joat.put("fsType", joattr.get("文件类型"));
+								joat.put("nodeNum", joattr.get("节点总数"));
+								joat.put("capacity", joattr.get("容量"));
+								joat.put("eqptMosn", joattr.get("MOSN"));
+
+								jo.remove("attr");
+								jo.remove("joattr");
+								jo.put("attr", joat);
+
 								if (jaFs.length() < 10) {
 									jaFs.put(jo);
 								}
