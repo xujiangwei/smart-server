@@ -79,7 +79,8 @@ public final class API {
 
 	public final static String PROBLEMLIST = "problemm/listTodos.html?username=admin";
 	public final static String PROBLEMDETAIL = "problemm/loadById.html?username=admin";
-
+	public final static String PROBLEMPROCESS = "problemm/saveAndSubmit.html?username=admin";
+	
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";

@@ -71,6 +71,7 @@ import smart.action.task.IncidentProcessListener;
 import smart.action.task.OperationListListener;
 import smart.action.task.ProblemDetailListener;
 import smart.action.task.ProblemListListener;
+import smart.action.task.ProblemProcessListener;
 import smart.action.task.SlaImpactListListener;
 import smart.action.task.SlaServiceLevelListListener;
 import smart.action.task.SlaUrgentListListener;
@@ -551,6 +552,11 @@ public class SmartCellet extends Cellet {
 		ProblemDetailListener problemDetail = new ProblemDetailListener(this);
 		problemDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);
+		
+		// 问题任务单处理
+		ProblemProcessListener problemProcess = new ProblemProcessListener(this);
+		problemProcess.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.PROBLEMPROCESS, problemProcess);
 
 		/*************** 资产管理 **************/
 		// 获取设备资产列表数据
