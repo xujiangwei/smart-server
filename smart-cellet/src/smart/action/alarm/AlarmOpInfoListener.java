@@ -73,6 +73,7 @@ public final class AlarmOpInfoListener extends AbstractListener {
 					.append(",").append(moId).append("?DMSN=101&userID=")
 					.append(userId).append("&op=get");
 
+			System.out.println("处理信息url："+url.toString());
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());
 			request.method(HttpMethod.GET);

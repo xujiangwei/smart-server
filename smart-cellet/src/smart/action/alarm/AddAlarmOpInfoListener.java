@@ -82,7 +82,7 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 			
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());
-			request.method(HttpMethod.GET);
+			request.method(HttpMethod.POST);
 			url = null;
 
 			// 填写数据内容
