@@ -97,7 +97,7 @@ public final class Action {
 	public static final String INCIDENTDETAIL = "requestIncidentDetail";
 	public static final String LISTOPERATION = "requestOperationList";
 	public static final String INCIDENTPROCESS = "sendIncidentProcessResult";
-	public static final String INCIDENTCATEGORY = "requestIncidentCategory";
+	public static final String BPCATEGORYLIST = "requestBpCategory";
 	public static final String COMMONUSERLIST = "requestUserList";
 	public static final String BPILIST = "requestBpiList";
 	public static final String IMPACTLIST = "requestImpactList";

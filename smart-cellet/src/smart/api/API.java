@@ -69,7 +69,7 @@ public final class API {
 	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
 	public final static String LISTOPERATION = "incidentm/listIncidentOperation.html?username=admin";
 	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
-	public final static String INCIDENTCATEGORY = "incidentm/getIncidentCategoryById.html?username=admin";
+	public final static String BPCATEGORYLIST = "incidentm/getBpsCategoryById.html?username=admin";
 	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
 	public final static String BPILIST = "incidentm/getBpiList.html?username=admin";
 	public final static String IMPACTLIST = "incidentm/getImpactListForBp.html?username=admin";

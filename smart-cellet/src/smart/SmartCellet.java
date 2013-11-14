@@ -506,10 +506,10 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.INCIDENTPROCESS, incidentProcess);
 
 		// 获取故障类型
-		IncidentCategoryListListener incidentCategory = new IncidentCategoryListListener(
+		IncidentCategoryListListener bpCategoryList = new IncidentCategoryListListener(
 				this);
-		incidentCategory.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.INCIDENTCATEGORY, incidentCategory);
+		bpCategoryList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.BPCATEGORYLIST, bpCategoryList);
 
 		// 获取所有流程工单列表
 		BpiListListener bpiList = new BpiListListener(this);
@@ -540,7 +540,7 @@ public class SmartCellet extends Cellet {
 		// 关闭代码
 		BpCloseCodeListListener closeCodeList = new BpCloseCodeListListener(
 				this);
-		impactList.setHttpClient(this.httpClient);
+		closeCodeList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
 
 		// 问题列表

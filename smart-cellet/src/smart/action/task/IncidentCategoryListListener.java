@@ -41,7 +41,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INCIDENTCATEGORY);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.BPCATEGORYLIST);
 		JSONObject json = null;
 		String bpiId=null;
 		try {
@@ -87,13 +87,13 @@ public class IncidentCategoryListListener extends AbstractListener{
 					params.addProperty(new ObjectProperty("data", jo));
 
 					// 响应动作，即向客户端发送 ActionDialect
-					this.response(Action.INCIDENTCATEGORY, params);
+					this.response(Action.BPCATEGORYLIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.INCIDENTCATEGORY);
+				this.reportHTTPError(Action.BPCATEGORYLIST);
 			}
 
 			break;
@@ -111,7 +111,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.INCIDENTCATEGORY, params);
+			this.response(Action.BPCATEGORYLIST, params);
 			break;
 		}
 	
