@@ -299,6 +299,7 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
 				messageFileUploadListener);
 
+		/************** 设备 **************/
 		// 获取所有设备列表
 		EquipmentListListener equipmentList = new EquipmentListListener(this);
 		equipmentList.setHttpClient(this.httpClient);
@@ -314,49 +315,61 @@ public class SmartCellet extends Cellet {
 		ecl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTCONFIG, ecl);
 
-		// 获取设备的KPI指标
-		CPUUsageListener cpuul = new CPUUsageListener(this);
-		cpuul.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, cpuul);
-
-		MemoryUsageListener memul = new MemoryUsageListener(this);
-		memul.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, memul);
-
-		FileSystemUsageListener filesul = new FileSystemUsageListener(this);
-		filesul.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, filesul);
-
-		PingDelayListener pdl = new PingDelayListener(this);
-		pdl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, pdl);
-
-		// 获取接口KPI指标信息
-		InterfaceKpiListener ikl = new InterfaceKpiListener(this);
-		ikl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTKPI, ikl);
-
 		// 获取主机设备配置信息
-		HostConfigListener hcl = new HostConfigListener(this);
-		hcl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOSTCONFIG, hcl);
+		HostConfigListener hostcl = new HostConfigListener(this);
+		hostcl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTCONFIG, hostcl);
 
 		// 获取网络设备配置信息
-		NetEquipmentConfigListener necl = new NetEquipmentConfigListener(this);
-		necl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, necl);
+		NetEquipmentConfigListener neptcl = new NetEquipmentConfigListener(this);
+		neptcl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, neptcl);
 
-		// 获取网络接口的入流速
+		// 获取主机设备的CPU/内存/文件系统/接口的kpi信息，PING延时信息
+		CPUUsageListener hcpuul = new CPUUsageListener(this);
+		hcpuul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hcpuul);
+
+		MemoryUsageListener hmemul = new MemoryUsageListener(this);
+		hmemul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hmemul);
+
+		FileSystemUsageListener hfilesul = new FileSystemUsageListener(this);
+		hfilesul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hfilesul);
+
+		PingDelayListener hpdl = new PingDelayListener(this);
+		hpdl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hpdl);
+
+		InterfaceKpiListener hifkl = new InterfaceKpiListener(this);
+		hifkl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hifkl);
+		
+		//获取网络设备的CPU/内存/接口的kpi信息
+		CPUUsageListener ncpuul = new CPUUsageListener(this);
+		ncpuul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQPTKPI, ncpuul);
+
+		MemoryUsageListener nmemul = new MemoryUsageListener(this);
+		nmemul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQPTKPI, nmemul);
+
+		InterfaceKpiListener nifkl = new InterfaceKpiListener(this);
+		nifkl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQPTKPI, nifkl);
+
+		// 测试--获取网络接口的入流速
 		InterfInFlowListener nfl = new InterfInFlowListener(this);
 		nfl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEFLOW, nfl);
 
-		// 获取网络接口的出流速
+		// 测试--获取网络接口的出流速
 		InterfOutFlowListener nol = new InterfOutFlowListener(this);
 		nol.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEFLOW, nol);
 
-		// 获取接口KPI指标信息
+		// 测试--获取接口KPI指标信息
 		InterfaceKpiListener ifk = new InterfaceKpiListener(this);
 		ifk.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEKPI, ifk);
