@@ -1,3 +1,4 @@
+
 package smart.api;
 
 public final class API {

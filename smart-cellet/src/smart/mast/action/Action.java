@@ -1,3 +1,4 @@
+
 /*
 -------------------------------------------------------------------------------
 This source file is part of Mast Engine.
@@ -113,3 +114,4 @@ public final class Action {
 	public static final String BIZSYSTEMLIST = "requestBizSystemList";
 
 }
+

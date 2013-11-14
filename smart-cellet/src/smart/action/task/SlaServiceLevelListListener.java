@@ -46,7 +46,7 @@ public class SlaServiceLevelListListener extends AbstractListener{
 		String bpiId=null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			bpiId=json.getString("incidentId");
+			bpiId=json.getString("bpiId");
 		
 			
 		} catch (JSONException e2) {

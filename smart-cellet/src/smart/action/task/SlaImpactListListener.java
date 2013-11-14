@@ -45,7 +45,7 @@ public class SlaImpactListListener extends AbstractListener{
 		String bpiId=null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			bpiId=json.getString("incidentId");
+			bpiId=json.getString("bpiId");
 			
 		} catch (JSONException e2) {
 			e2.printStackTrace();

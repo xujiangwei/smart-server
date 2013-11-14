@@ -32,7 +32,6 @@ public class BpCloseCodeListListener extends AbstractListener{
 	@Override
 	public void onAction(ActionDialect action) {
 
-
 		// 使用同步方式进行请求。
 		// 因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
@@ -46,16 +45,16 @@ public class BpCloseCodeListListener extends AbstractListener{
 		String bpiId=null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			bpiId=json.getString("incidentId");
-			System.out.println("-------"+bpiId);
+			bpiId=json.getString("bpiId");
 			
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		
 		url.append("&bpiId=").append(bpiId);
-		System.out.println("--------------"+url.toString());
-			// 创建请求
+		System.out.println("获取关闭类型URL："+url.toString());
+	
+		
+		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 		
@@ -82,7 +81,7 @@ public class BpCloseCodeListListener extends AbstractListener{
 				System.out.println(content);
 				try {
 					jo = new JSONObject(content);
-					System.out.println("响应工单保存数据的返回值为：:" + jo);
+					System.out.println("关闭代码返回值为：:" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
@@ -115,7 +114,6 @@ public class BpCloseCodeListListener extends AbstractListener{
 			this.response(Action.CLOSECODELIST, params);
 			break;
 		}
-	
 	}
 
 }
