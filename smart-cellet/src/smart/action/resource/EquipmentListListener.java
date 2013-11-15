@@ -77,7 +77,7 @@ public class EquipmentListListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 					JSONArray ja = new JSONArray();
-					System.out.println("结果：" + data);
+					System.out.println("moList  源：" + data);
 					if ("success".equals(data.getString("status"))) {
 						JSONObject vendor = new JSONObject();
 						vendor.put("微软", 1);
@@ -156,7 +156,7 @@ public class EquipmentListListener extends AbstractListener {
 //							}
 							jar.put(jo);
 						}
-						System.out.println("jsonArray" + jar.length()+": "+ jar);
+//						System.out.println("jsonArray" + jar.length()+": "+ jar);
 						data.remove("moList");
 						data.put("status", 300);
 						data.put("moList", jar);
@@ -168,6 +168,7 @@ public class EquipmentListListener extends AbstractListener {
 						data.put("errorInfo", "获取设备列表出错");
 					}
 
+					System.out.println("moList：  " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

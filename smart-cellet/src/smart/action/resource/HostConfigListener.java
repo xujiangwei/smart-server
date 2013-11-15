@@ -101,7 +101,7 @@ public class HostConfigListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-
+					System.out.println("hostCfg 源数据：" + data);
 					// if ("success".equals(data.get("status"))) {
 					if (!"".equals(data.get("data"))
 							&& data.get("data") != null) {
@@ -318,7 +318,7 @@ public class HostConfigListener extends AbstractListener {
 					// data.put("errorInfo", "未获取到相关kpi数据");
 					// }
 
-					System.out.println("data：      " + data);
+					System.out.println("hostCfg data：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

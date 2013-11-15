@@ -103,7 +103,7 @@ public class MemoryUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-
+					System.out.println("memUsage 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))
@@ -112,6 +112,7 @@ public class MemoryUsageListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 
+							System.out.println("length" + ja.length());
 							for (int i = 0; i < ja.length(); i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
@@ -159,21 +160,21 @@ public class MemoryUsageListener extends AbstractListener {
 									//
 									// }
 
-									System.out.println("memusage__" + ja2);
+									// System.out.println("memusage__" + ja2);
 
 								}
 								jsonData.remove("data");
-								jsonData.put("data", ja2);
+								jsonData.put("usageData", ja2);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
+
+								data.put("data", jsonData);
 							}
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", moId);
 
 							data.remove("dataList");
-							data.put("data", jo);
+							// data.put("dataList", ja);
+							data.put("moId", moId);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
@@ -181,7 +182,7 @@ public class MemoryUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("memoryUsageData：      " + data);
+					System.out.println("memUsageData：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -192,9 +193,9 @@ public class MemoryUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.MEMORY, params);
+				this.response(Action.MEMORYUSAGE, params);
 			} else {
-				this.reportHTTPError(Action.MEMORY);
+				this.reportHTTPError(Action.MEMORYUSAGE);
 			}
 			break;
 		default:
@@ -211,7 +212,7 @@ public class MemoryUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.MEMORY, params);
+			this.response(Action.MEMORYUSAGE, params);
 			break;
 		}
 	}

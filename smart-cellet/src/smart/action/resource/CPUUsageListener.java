@@ -104,7 +104,7 @@ public class CPUUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-
+//					System.out.println("cpuUsage 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
@@ -159,12 +159,9 @@ public class CPUUsageListener extends AbstractListener {
 								jsonData.remove("kpi");
 							}
 
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", moId);
-
 							data.remove("dataList");
-							data.put("data", jo);
+							data.put("dataList", ja);
+							data.put("moId", moId);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
@@ -183,9 +180,9 @@ public class CPUUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.CPU, params);
+				this.response(Action.CPUUSAGE, params);
 			} else {
-				this.reportHTTPError(Action.CPU);
+				this.reportHTTPError(Action.CPUUSAGE);
 			}
 			break;
 		default:
@@ -202,7 +199,7 @@ public class CPUUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.CPU, params);
+			this.response(Action.CPUUSAGE, params);
 			break;
 		}
 	}

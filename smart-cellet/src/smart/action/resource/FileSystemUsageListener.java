@@ -102,24 +102,36 @@ public class FileSystemUsageListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 					if ("success".equals(data.get("status"))) {
-
+//						System.out.println("filesys 源数据：      " + data);
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 							
-							for (int i = 0; i < ja.length(); i++) {
+							System.out.println("length   "+ja.length());
+							int l=0;
+							if(ja.length()>3){
+								l=3;
+							}else{
+								l=ja.length();
+							}
+							
+							System.out.println("l---"+l);
+							JSONArray jaData=new JSONArray();
+							for (int i = 0; i < l; i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
-
-								
-								
-								
 //								long filesysid=jsonData.getLong("mosn");
 								
-								for (int j = 0; j < ja1.length(); j++) {
+								int m=0;
+								if(ja1.length()>40){
+									m=40;
+								}else{
+									m=ja1.length();
+								}
+								for (int j = 0; j < m; j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
 
@@ -148,18 +160,17 @@ public class FileSystemUsageListener extends AbstractListener {
 								}
 
 								jsonData.remove("data");
-								jsonData.put("data", ja2);
+								jsonData.put("usageData", ja2);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
+								
+								jaData.put(jsonData);
 							}
 
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", moId);
-
 							data.remove("dataList");
-							data.put("data", jo);
+							data.put("dataList", jaData);
+							data.put("moId", moId);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
@@ -178,9 +189,9 @@ public class FileSystemUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.FILESYSTEM, params);
+				this.response(Action.FILESYSTEMUSAGE, params);
 			} else {
-				this.reportHTTPError(Action.FILESYSTEM);
+				this.reportHTTPError(Action.FILESYSTEMUSAGE);
 			}
 			break;
 		default:
@@ -198,7 +209,7 @@ public class FileSystemUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.FILESYSTEM, params);
+			this.response(Action.FILESYSTEMUSAGE, params);
 			break;
 		}
 	}

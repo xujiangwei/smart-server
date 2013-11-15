@@ -99,7 +99,7 @@ public class PingDelayListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-
+//					System.out.println("pingDelay 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))
@@ -107,7 +107,7 @@ public class PingDelayListener extends AbstractListener {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
-
+							
 							for (int i = 0; i < ja.length(); i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
@@ -148,22 +148,20 @@ public class PingDelayListener extends AbstractListener {
 									// HostManager.getInstance();
 									// hm.addPingInfo(moId, pingDelay,
 									// timestamp);
-
+									
 								}
-
+								
 								jsonData.remove("data");
-								jsonData.put("data", ja2);
+								jsonData.put("delayData", ja2);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[2]);
 								jsonData.remove("kpi");
+								
+								data.put("data", jsonData);
 							}
 
-							JSONObject jo = new JSONObject();
-							jo.put("dataList", ja);
-							jo.put("resourceId", moId);
-
 							data.remove("dataList");
-							data.put("data", jo);
+							data.put("moId", moId);
 							data.put("status", 300);
 							data.put("errorInfo", "");
 						}
@@ -171,7 +169,7 @@ public class PingDelayListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("pingDelayData：      " + data);
+					System.out.println("pingDelay Data：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -182,9 +180,9 @@ public class PingDelayListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.PING, params);
+				this.response(Action.PINGDELAY, params);
 			} else {
-				this.reportHTTPError(Action.PING);
+				this.reportHTTPError(Action.PINGDELAY);
 			}
 			break;
 		default:
@@ -201,7 +199,7 @@ public class PingDelayListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.PING, params);
+			this.response(Action.PINGDELAY, params);
 			break;
 		}
 	}

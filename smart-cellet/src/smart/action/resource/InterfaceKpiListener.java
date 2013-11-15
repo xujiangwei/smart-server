@@ -50,11 +50,11 @@ public final class InterfaceKpiListener extends AbstractListener {
 
 		// 获取参数
 		JSONObject json = null;
-		long equipmentId = 0;
+		long moId = 0;
 		int rangeInHour = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			equipmentId = json.getLong("moId");
+			moId = json.getLong("moId");
 			rangeInHour = json.getInt("rangeInHour");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -64,7 +64,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 		HostConfig config = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.INTERFACEKPI).append("/").append(equipmentId)
+				.append(API.INTERFACEKPI).append("/").append(moId)
 				.append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=")
 				.append(rangeInHour);
 
@@ -94,13 +94,13 @@ public final class InterfaceKpiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
+					// System.out.println("ifKpi 源数据：      " + data);
 					if ("success".equals(data.get("status"))
 							&& (!"".equals(data.get("dataList"))
 									&& data.get("dataList") != null
 									&& !"null".equals(data.get("dataList")) && !data
 									.get("dataList").equals(null))) {
 						JSONArray ja = data.getJSONArray("dataList");
-						System.out.println("数据总长度：" + ja.length());
 						DateFormat df = new SimpleDateFormat(
 								"yyyy-MM-dd HH:mm:ss");
 
@@ -109,19 +109,16 @@ public final class InterfaceKpiListener extends AbstractListener {
 							long mosnAll = ja.getJSONObject(i).getLong("mosn");
 							if (!mosnList.contains(mosnAll)) {
 								mosnList.add(mosnAll);
-								
-								System.out.println("mosn   "+mosnAll);
 							}
 						}
-						System.out.println("mosnList  "+mosnList.size());
 						List<Long> subml = new ArrayList<Long>();
-						if (mosnList.size() > 3) {
-							subml = mosnList.subList(0, 2);
+						if (mosnList.size() > 2) {
+							subml = mosnList.subList(0, 1);
 						} else {
 							subml = mosnList;
 						}
-						
-						System.out.println("subml-size   "+subml.size());
+
+						// System.out.println("subml-size   " + subml.size());
 						JSONArray jaSub = new JSONArray();
 						for (int i = 0; i < subml.size(); i++) {
 							long mosnSub = subml.get(i);
@@ -132,7 +129,14 @@ public final class InterfaceKpiListener extends AbstractListener {
 									JSONArray jsData = joAll
 											.getJSONArray("data");
 									JSONArray jsDa = new JSONArray();
-									for (int k = 0; k < jsData.length(); k++) {
+
+									int l = 0;
+									if (jsData.length() > 30) {
+										l = 30;
+									} else {
+										l = jsData.length();
+									}
+									for (int k = 0; k < l; k++) {
 										JSONObject joKpi = new JSONObject();
 										joKpi.put("value", Float.valueOf(jsData
 												.getJSONArray(k).getString(0)));
@@ -145,7 +149,8 @@ public final class InterfaceKpiListener extends AbstractListener {
 										jsDa.put(joKpi);
 									}
 
-									joAll.put("data", jsDa);
+									joAll.remove("data");
+									joAll.put("usageData", jsDa);
 									jaSub.put(joAll);
 								}
 
@@ -155,15 +160,14 @@ public final class InterfaceKpiListener extends AbstractListener {
 
 						data.remove("dataList");
 						data.put("data", jaSub);
-
-						data.put("resourceId", equipmentId);
+						data.put("moId", moId);
 						data.put("status", 300);
 						data.put("errorInfo", "");
 					} else {
 						data.put("data", "");
 						data.put("status", 603);
 					}
-					System.out.println("interfaceKpiDetail: " + data);
+					System.out.println("ifKpiData: " + data);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));

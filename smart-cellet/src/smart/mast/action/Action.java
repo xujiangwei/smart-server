@@ -58,16 +58,16 @@ public final class Action {
 
 	public final static String EQUIPMENTCONFIG = "requestEqptConfig";
 	public final static String HOSTCONFIG = "requestHostConfig";
-	public final static String NETEQUIPMENTCONFIG = "requestNeqtConfig";
+	public final static String NETEQUIPMENTCONFIG = "requestNetEqptConfig";
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
 	public final static String HOSTKPI="requestHostKpi";
 	public final static String NETEQPTKPI="requestNetEqptKpi";
 	
 	
-	public final static String CPU = "requestCPU";
-	public final static String MEMORY = "requestMemory";
-	public final static String FILESYSTEM = "requestFileSys";
-	public final static String PING = "requestPing";
+	public final static String CPUUSAGE = "requestCPUUsage";
+	public final static String MEMORYUSAGE = "requestMemoryUsage";
+	public final static String FILESYSTEMUSAGE = "requestFileSysUsage";
+	public final static String PINGDELAY = "requestPingDelay";
 	public final static String INTERFACEFLOW = "requestIfflow";
 	public final static String INTERFACEKPI = "requestIfKpi";
 
