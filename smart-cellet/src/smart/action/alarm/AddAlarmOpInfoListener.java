@@ -75,14 +75,14 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 			HostConfigContext context = new HostConfigContext(config);
 			StringBuilder url = new StringBuilder(context.getAPIHost())
 					.append("/").append(API.ALARMOPINFO).append("/").append(almId).append(",")
-					.append(Long.valueOf(moType)).append(",").append(almCause).append(",")
-					.append(moId).append(",").append(dealInfo).append("?DMSN=101&userID=")
+					.append(moType).append(",").append(almCause).append(",")
+					.append(String.valueOf(moId)).append(",").append(dealInfo).append("?DMSN=101&userID=")
 					.append(dealUserId).append("&op=save");
 			System.out.println("请求的URL: "+url.toString());
 			
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());
-			request.method(HttpMethod.POST);
+			request.method(HttpMethod.GET);
 			url = null;
 
 			// 填写数据内容
@@ -122,6 +122,15 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 					try {
 						jo = new JSONObject(content);
 						System.out.println("返回："+jo);
+						if ("成功".equals(jo.getString("result"))) {
+							jo.remove("result");
+							jo.put("status", 300);
+							jo.put("errorInfo", "");
+						} else {
+							jo.remove("result");
+							jo.put("status", 376);
+							jo.put("errorInfo", jo.get("msg"));
+						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 

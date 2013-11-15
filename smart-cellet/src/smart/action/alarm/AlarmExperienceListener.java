@@ -1,6 +1,9 @@
 package smart.action.alarm;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -15,6 +18,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -62,11 +66,13 @@ public final class AlarmExperienceListener extends AbstractListener {
 			HostConfig config = new MonitorSystemHostConfig();
 			HostConfigContext context = new HostConfigContext(config);
 			StringBuilder url = new StringBuilder(context.getAPIHost())
-					.append("/").append(API.ALARMEXPERIENCE).append(userId)
-					.append("&op=get");
+					.append("/").append(API.ALARMEXPERIENCE).append("/get?DMSN=101&userID=")
+					.append(userId).append("&op=get");
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());
+			
+			System.out.println("维护经验："+url.toString());
 			request.method(HttpMethod.GET);
 			url = null;
 
@@ -101,7 +107,40 @@ public final class AlarmExperienceListener extends AbstractListener {
 					String content = new String(bytes, Charset.forName("UTF-8"));
 					try {
 						jo = new JSONObject(content);
-
+						if ("成功".equals(jo.getString("result"))) {
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							JSONArray ja = jo.getJSONArray("list");
+							for (int i = 0; i < ja.length(); i++) {
+								JSONObject job = ja.getJSONObject(i);
+								job.put("dealTime", df.parse(job.getString("foffertime")).getTime());
+								job.put("dealUserId", Long.valueOf(job.getString("fofferuserid")));
+								job.put("dealInfo", job.getString("fmtnexper"));
+								if (job.get("falmtype") == null || job.get("falmtype").equals(null)) {
+									job.put("almType", "");
+								} else {
+									job.put("almType", job.get("falmtype"));
+								}
+								job.put("moId", Long.valueOf(job.getString("fmoidlist")));
+								job.remove("fid");
+								job.remove("fverifyuserid");
+								job.remove("fmtnexper");
+								job.remove("fmotype");
+								job.remove("fcause");
+								job.remove("fremark");
+								job.remove("foffertime");
+								job.remove("fmoidlist");
+								job.remove("fofferuserid");
+								job.remove("fverifytime");
+								job.remove("falmtype");
+							}
+							jo.remove("result");
+							jo.put("status", 300);
+							jo.put("errorInfo", "");
+						} else {
+							jo.remove("result");
+							jo.put("status", 326);
+							jo.put("errorInfo", jo.get("msg"));
+						}
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 
@@ -110,6 +149,8 @@ public final class AlarmExperienceListener extends AbstractListener {
 						this.response(token, Action.ALARMEXPERIENCE, params);
 
 					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
 						e.printStackTrace();
 					}
 				} else {

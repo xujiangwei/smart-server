@@ -70,7 +70,7 @@ public final class AlarmDetailListener extends AbstractListener {
 			HostConfigContext context = new HostConfigContext(config);
 			StringBuilder url = new StringBuilder(context.getAPIHost())
 					.append("/").append(API.ALARMDETAIL).append("/")
-					.append(almId);
+					.append(almId).append("?pagesize=0&currentIndex=0");
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());

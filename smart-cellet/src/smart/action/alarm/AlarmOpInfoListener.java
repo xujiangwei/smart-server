@@ -1,6 +1,9 @@
 package smart.action.alarm;
 
 import java.nio.charset.Charset;
+import java.text.DateFormat;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -15,6 +18,7 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -113,7 +117,34 @@ public final class AlarmOpInfoListener extends AbstractListener {
 					String content = new String(bytes, Charset.forName("UTF-8"));
 					try {
 						jo = new JSONObject(content);
-
+						if ("成功".equals(jo.getString("result"))) {
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+							JSONArray ja = jo.getJSONArray("list");
+							for (int i = 0; i < ja.length(); i++) {
+								JSONObject job = ja.getJSONObject(i);
+								job.put("dealTime", df.parse(job.getString("fmtntime")).getTime());
+								job.put("almId", Long.valueOf(job.getString("falmsn")));
+								job.put("dealInfo", job.getString("fmtnnote"));
+								job.put("dealUserId", Long.valueOf(job.getString("fmtnuserid")));
+								job.put("moId", Long.valueOf(job.getString("mosn")));
+								job.put("role", job.get("fname"));
+								job.remove("fmtntime");
+								job.remove("falmsn");
+								job.remove("fmtnnote");
+								job.remove("fmtnuserid");
+								job.remove("fmotype");
+								job.remove("fcause");
+								job.remove("fname");
+							}
+							jo.remove("result");
+							jo.put("status", 300);
+							jo.put("errorInfo", "");
+						} else {
+							jo.remove("result");
+							jo.put("status", 321);
+							jo.put("errorInfo", jo.getString("msg"));
+						}
+						
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", jo));
 
@@ -122,6 +153,8 @@ public final class AlarmOpInfoListener extends AbstractListener {
 						this.response(token, Action.ALARMOPINFO, params);
 
 					} catch (JSONException e) {
+						e.printStackTrace();
+					} catch (ParseException e) {
 						e.printStackTrace();
 					}
 				} else {

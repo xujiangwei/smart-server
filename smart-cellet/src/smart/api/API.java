@@ -15,7 +15,7 @@ public final class API {
 	public static final String ALARMDEAL = "restws/alm/external";
 	public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
 	public static final String ALARMOPINFO = "restws/alm/external/deal";
-	public static final String ALARMEXPERIENCE = "restws/alm/external/exp/get?DMSN=101&userID=";
+	public static final String ALARMEXPERIENCE = "restws/alm/external/exp";
 	public static final String ALARMBUFFER = "alarm/buff";
 
 	public static final String ALARMFORWARD = "http://10.10.152.20:8081/monitoring-system/forward/alarmForward";
