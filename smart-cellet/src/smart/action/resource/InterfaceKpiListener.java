@@ -4,6 +4,8 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -101,59 +103,60 @@ public final class InterfaceKpiListener extends AbstractListener {
 						System.out.println("数据总长度：" + ja.length());
 						DateFormat df = new SimpleDateFormat(
 								"yyyy-MM-dd HH:mm:ss");
-						JSONObject jsob = new JSONObject();
-						JSONArray jay = new JSONArray();
 
-						int k = 3;
-						for (int m = 0; m < k; m++) {
-							for (int i = 0; i < ja.length(); i++) {
-								JSONObject job = ja.getJSONObject(i);
-								if (!ja.getJSONObject(m + 1)
-										.get("mosn")
-										.equals(ja.getJSONObject(m).get("mosn"))) {
-									if (job.get("mosn").equals(
-											ja.getJSONObject(m).get("mosn"))) {
-										JSONArray ja1 = job
-												.getJSONArray("data");
-										JSONArray ja2 = new JSONArray();
-										for (int j = 0; j < ja1.length(); j++) {
-											JSONObject jo = new JSONObject();
-											jo.put("value", Float.valueOf(ja1
-													.getJSONArray(j).getString(
-															0)));
-											jo.put("collectTime",
-													df.parse(
-															ja1.getJSONArray(j)
-																	.getString(
-																			1))
-															.getTime());
-											ja2.put(jo);
-										}
-										JSONObject job1 = new JSONObject();
-										job1.put("data", ja2);
-										job1.put("moPath",
-												job.getString("moPath"));
-										job1.put("kpiName",
-												job.getString("kpiName"));
-										String s = job.getString("moPath");
-										job1.put("name", s.substring(
-												s.indexOf("(") + 1,
-												s.lastIndexOf(")")));
-										job1.put("mosn", Long.valueOf(job
-												.getString("mosn")));
-										jay.put(job1);
+						List<Long> mosnList = new ArrayList<Long>();
+						for (int i = 0; i < ja.length(); i++) {
+							long mosnAll = ja.getJSONObject(i).getLong("mosn");
+							if (!mosnList.contains(mosnAll)) {
+								mosnList.add(mosnAll);
+								
+								System.out.println("mosn   "+mosnAll);
+							}
+						}
+						System.out.println("mosnList  "+mosnList.size());
+						List<Long> subml = new ArrayList<Long>();
+						if (mosnList.size() > 3) {
+							subml = mosnList.subList(0, 2);
+						} else {
+							subml = mosnList;
+						}
+						
+						System.out.println("subml-size   "+subml.size());
+						JSONArray jaSub = new JSONArray();
+						for (int i = 0; i < subml.size(); i++) {
+							long mosnSub = subml.get(i);
+
+							for (int j = 0; j < ja.length(); j++) {
+								JSONObject joAll = ja.getJSONObject(j);
+								if (mosnSub == joAll.getLong("mosn")) {
+									JSONArray jsData = joAll
+											.getJSONArray("data");
+									JSONArray jsDa = new JSONArray();
+									for (int k = 0; k < jsData.length(); k++) {
+										JSONObject joKpi = new JSONObject();
+										joKpi.put("value", Float.valueOf(jsData
+												.getJSONArray(k).getString(0)));
+										joKpi.put(
+												"collectTime",
+												df.parse(
+														jsData.getJSONArray(k)
+																.getString(1))
+														.getTime());
+										jsDa.put(joKpi);
 									}
-								} else {
-									k++;
+
+									joAll.put("data", jsDa);
+									jaSub.put(joAll);
 								}
 
 							}
+
 						}
-						jsob.put("dataList", jay);
-						jsob.put("resourceId", equipmentId);
 
 						data.remove("dataList");
-						data.put("data", jsob);
+						data.put("data", jaSub);
+
+						data.put("resourceId", equipmentId);
 						data.put("status", 300);
 						data.put("errorInfo", "");
 					} else {
