@@ -175,7 +175,10 @@ public class FileSystemUsageListener extends AbstractListener {
 							data.put("errorInfo", "");
 						}
 					} else {
-						data.put("errorInfo", "未获取到相关kpi数据");
+						data.remove("dataList");
+						data.put("status", 613);
+						data.put("dataList", "");
+						data.put("errorInfo", "未获取到文件系统kpi数据");
 					}
 
 					System.out.println("filesysData：      " + data);

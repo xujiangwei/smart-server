@@ -166,7 +166,10 @@ public class PingDelayListener extends AbstractListener {
 							data.put("errorInfo", "");
 						}
 					} else {
-						data.put("errorInfo", "未获取到相关kpi数据");
+						data.remove("dataList");
+						data.put("status", 615);
+						data.put("data", "");
+						data.put("errorInfo", "未获取到ping延迟数据");
 					}
 
 					System.out.println("pingDelay Data：      " + data);

@@ -164,8 +164,10 @@ public final class InterfaceKpiListener extends AbstractListener {
 						data.put("status", 300);
 						data.put("errorInfo", "");
 					} else {
+						data.remove("dataList");
+						data.put("status", 614);
 						data.put("data", "");
-						data.put("status", 603);
+						data.put("errorInfo", "未获取到接口kpi数据");
 					}
 					System.out.println("ifKpiData: " + data);
 

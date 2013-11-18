@@ -275,8 +275,15 @@ public class NetEquipmentConfigListener extends AbstractListener {
 							}
 						}
 
-						data.put("config", config);
 						data.remove("data");
+						data.put("config", config);
+						data.put("status", 300);
+						data.put("errorInfo", "");
+					}else{
+						data.remove("data");
+						data.put("status", 603);
+						data.put("config", "");
+						data.put("errorInfo", "未获取到网络设备配置数据");
 					}
 					// } else {
 					// data.put("errorInfo", "未获取到相关kpi数据");

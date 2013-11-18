@@ -129,7 +129,7 @@ public class HostConfigListener extends AbstractListener {
 
 								joat.put("bandwidth", joattr.get("带宽"));
 								joat.put("mac", joattr.get("物理地址"));
-								joat.put("isDlock", joattr.get("是否允许阻断"));
+								joat.put("isBlock", joattr.get("是否允许阻断"));
 								joat.put("panel", joattr.get("所属面板"));
 								joat.put("describe", joattr.get("接口描述"));
 								joat.put("index", joattr.get("接口索引"));
@@ -311,8 +311,16 @@ public class HostConfigListener extends AbstractListener {
 							// data.put("config", config);
 							// data.remove("data");
 						}
-						data.put("config", config);
+						
 						data.remove("data");
+						data.put("config", config);
+						data.put("status", 300);
+						data.put("errorInfo", "");
+					}else{
+						data.remove("data");
+						data.put("status", 602);
+						data.put("config", "");
+						data.put("errorInfo", "未获取到主机配置数据");
 					}
 					// } else {
 					// data.put("errorInfo", "未获取到相关kpi数据");
