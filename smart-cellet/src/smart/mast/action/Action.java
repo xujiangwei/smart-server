@@ -82,6 +82,7 @@ public final class Action {
 
 	// 告警
 	public static final String ALARMLIST = "requestAlarmList";
+	public static final String ALARMBUFFER = "requestAlarmBuffer";
 	public static final String ALARMDETAIL = "requestAlarmDetail";
 	public static final String ALARMDEAL = "alarmDeal";
 	// public static final String ALARMBASEINFO = "requestAlarmBaseInfo";
