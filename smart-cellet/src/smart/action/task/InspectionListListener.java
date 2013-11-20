@@ -33,7 +33,6 @@ public class InspectionListListener extends AbstractListener {
 	public void onAction(ActionDialect action) {
 
 
-
 		// 使用同步方式进行请求。
 		// 因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
@@ -42,15 +41,12 @@ public class InspectionListListener extends AbstractListener {
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.PROBLEMLIST);
-		System.out.println("获取问题列表的URL:" + url.toString());
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INSPECTIONTASKLIST);
+		System.out.println("获取巡检任务列表的URL:" + url.toString());
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		
 		request.method(HttpMethod.GET);
-
 		Properties params = new Properties();
-
 		// 发送请求
 		ContentResponse response = null;
 		try {
@@ -75,19 +71,19 @@ public class InspectionListListener extends AbstractListener {
 
 				try {
 					jo = new JSONObject(content);
-					System.out.println("问题列表数据为:" + jo);
+					System.out.println("巡检任务列表数据为:" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
 					// 响应动作，即向客户端发送 ActionDialect
-					this.response(Action.PROBLEMLIST, params);
+					this.response(Action.INSPECTIONTASKLIST, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.PROBLEMLIST);
+				this.reportHTTPError(Action.INSPECTIONTASKLIST);
 			}
 
 			break;
@@ -104,7 +100,7 @@ public class InspectionListListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", jo));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.PROBLEMLIST, params);
+			this.response(Action.INSPECTIONTASKLIST, params);
 			break;
 		}
 	
