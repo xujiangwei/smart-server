@@ -69,6 +69,11 @@ import smart.action.task.IncidentCategoryListListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
 import smart.action.task.IncidentProcessListener;
+import smart.action.task.InspectionCiSaveListener;
+import smart.action.task.InspectionDetailListener;
+import smart.action.task.InspectionItemListener;
+import smart.action.task.InspectionListListener;
+import smart.action.task.InspectionSaveListener;
 import smart.action.task.OperationListListener;
 import smart.action.task.ProblemDetailListener;
 import smart.action.task.ProblemListListener;
@@ -503,7 +508,7 @@ public class SmartCellet extends Cellet {
 		nodeDec.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NODEDETECTION, nodeDec);
 
-		/************** 待办 *************/
+		/************** 故障任务 *************/
 		// 获取故障列表
 		IncidentListListener incidentList = new IncidentListListener(this);
 		incidentList.setHttpClient(this.httpClient);
@@ -563,7 +568,7 @@ public class SmartCellet extends Cellet {
 		closeCodeList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
 
-		// 问题列表
+		/************** 问题任务 *************/
 		ProblemListListener problemList = new ProblemListListener(this);
 		problemList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMLIST, problemList);
@@ -572,11 +577,27 @@ public class SmartCellet extends Cellet {
 		problemDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);
 		
-		// 问题任务单处理
-		ProblemProcessListener problemProcess = new ProblemProcessListener(this);
-		problemProcess.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.PROBLEMPROCESS, problemProcess);
-
+		/************** 巡检任务 *************/
+		InspectionListListener inspectionTaskList = new InspectionListListener(this);
+		inspectionTaskList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INSPECTIONTASKLIST, inspectionTaskList);
+		
+		InspectionDetailListener inspectionTaskDetail = new InspectionDetailListener(this);
+		inspectionTaskDetail.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INSPECTIONTASKDETAIL, inspectionTaskDetail);
+		
+		InspectionItemListener inspectionItemList = new InspectionItemListener(this);
+		inspectionItemList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INSPECTIONITEMLIST, inspectionItemList);
+		
+		InspectionCiSaveListener saveInspectionCi = new InspectionCiSaveListener(this);
+		saveInspectionCi.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INSPECTIONCISAVE, saveInspectionCi);
+		
+		InspectionSaveListener saveInspection = new InspectionSaveListener(this);
+		saveInspection.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.INSPECTIONSAVE, saveInspection);
+		
 		/*************** 资产管理 **************/
 		// 获取设备资产列表数据
 		CiListListener ciListener = new CiListListener(this);

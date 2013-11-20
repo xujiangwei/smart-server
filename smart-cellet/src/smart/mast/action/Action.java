@@ -113,6 +113,12 @@ public final class Action {
 	public static final String PROBLEMDETAIL = "requestProblemDetail";
 	public static final String PROBLEMPROCESS = "sendProblemProcessResult";
 
+	public final static String INSPECTIONTASKLIST = "requestInspectionTaskList";
+	public final static String INSPECTIONTASKDETAIL = "requestInspectionTaskDetail";
+	public final static String INSPECTIONITEMLIST = "requestInspectionItem";
+	public final static String INSPECTIONCISAVE = "requestSaveInspectionCi";
+	public final static String INSPECTIONSAVE = "requestSaveInspection";
+	
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";

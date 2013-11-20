@@ -81,6 +81,12 @@ public final class API {
 	public final static String PROBLEMDETAIL = "problemm/loadById.html?username=admin";
 	public final static String PROBLEMPROCESS = "problemm/saveAndSubmit.html?username=admin";
 	
+	public final static String INSPECTIONTASKLIST = "taskPlanm/getTaskPlanList.html?username=admin";
+	public final static String INSPECTIONTASKDETAIL = "taskPlanm/forView.html?username=admin";
+	public final static String INSPECTIONITEMLIST = "taskPlanm/getAllCheckItem.html?username=admin";
+	public final static String INSPECTIONCISAVE = "taskPlanm/saveInspectionCi.html?username=admin";
+	public final static String INSPECTIONSAVE = "taskPlanm/saveInspection.html?username=admin";
+	
 	// 资产
 	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
 	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
