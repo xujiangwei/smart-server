@@ -89,6 +89,7 @@ public class AlarmChangeListListener extends AbstractListener {
 										Charset.forName("UTF-8"));
 								try {
 									jo = new JSONObject(content);
+									if (!jo.get("result").equals("fail"))
 									if (jo.getJSONArray("list").length() != 0) {
 										jo.remove("result");
 										jo.put("status", 300);
