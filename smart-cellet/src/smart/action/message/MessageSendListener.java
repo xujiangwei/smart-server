@@ -21,11 +21,14 @@ import org.json.JSONObject;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
  * 发送消息监听器
- *
+ * 
  */
 public final class MessageSendListener extends AbstractListener {
 
@@ -41,41 +44,53 @@ public final class MessageSendListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式调用
 		// 因此，在这里可以用同步的方式请求HTTP API
 
+		// 获取参数
+		JSONObject json = null;
+		String title = null;
+		String sender = null;
+		String recieverIds = null;
+		String time = null;
+		String contents = null;
+		try {
+			json = new JSONObject(action.getParamAsString("data"));
+			title = json.getString("title");
+			sender = json.getString("sender");
+			recieverIds = json.getString("recieverIds");
+			time = json.getString("time");
+			contents = json.getString("contents");
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+
+		System.out.println(recieverIds);
+		System.out.println("title    " + title);
+		System.out.println("time    " + time);
+		System.out.println("contents    " + contents);
 		// URL
-		StringBuilder url = new StringBuilder(API.MESSAGESEND);
+		HostConfig config = new ServiceDeskHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.MESSAGESEND);
+
+		url.append("&title=").append(title).append("&sender=").append(sender)
+				.append("&content=").append(contents).append("&recieverIds=")
+				.append(recieverIds);
+		System.out.println("url   " + url);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);
 		url = null;
 
-		// 获取参数
-		JSONObject json = null;
-		String sender = null;
-		String receiver = null;
-		long time = 0;
-		long messageId = 0;
-		String content = null;
-		try {
-			json = new JSONObject(action.getParamAsString("data"));
-			sender = json.getString("sender");
-			receiver = json.getString("receiver");
-			time = json.getLong("time");
-			messageId = json.getLong("messageId");
-			content = json.getString("content");
-		} catch (JSONException e1) {
-			e1.printStackTrace();
-		}
-
 		// 填写数据内容
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("content", content);
-		capsule.append("time", time);
-		capsule.append("receiver", receiver);
+		capsule.append("title", title);
+		capsule.append("recieverIds", recieverIds);
 		capsule.append("sender", sender);
-		capsule.append("messageId", messageId);
+		capsule.append("content", contents);
+		capsule.append("time", time);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -98,20 +113,33 @@ public final class MessageSendListener extends AbstractListener {
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
 			if (null != bytes) {
-				// 获取从Web服务器上返回的数据
-				String wcontent = new String(bytes, Charset.forName("UTF-8"));
-				try {
-					data = new JSONObject(wcontent);
 
-					// 设置参数
-					params.addProperty(new ObjectProperty("data", data));
+				// 获取从Web服务器上返回的数据
+				String content = new String(bytes, Charset.forName("UTF-8"));
+
+				System.out.println("源数据-messageDetail：" + content);
+				try {
+					data = new JSONObject(content);
+
+					if (data.get("success").equals(true)) {
+						// 设置参数
+						params.addProperty(new ObjectProperty("data", data));
+					} else {
+						data.remove("root");
+						data.put("root", "");
+						data.put("status", 412);
+						data.put("errorInfo", "未获取到消息数据");
+						params.addProperty(new ObjectProperty("data", data));
+					}
+					System.out.println("send  " + data);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
-				// 响应动作，即想客户端发送ACctionDialect
+
+				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
-				this.response(Action.MESSAGESEND, params);
+				this.response(Action.MESSAGEDETAIL, params);
+
 			} else {
 				this.reportHTTPError(Action.MESSAGESEND);
 			}

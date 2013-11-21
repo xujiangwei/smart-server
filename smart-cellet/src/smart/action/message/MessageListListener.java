@@ -26,7 +26,7 @@ import smart.mast.action.Action;
 
 /**
  * 获取信息列表监听
- *
+ * 
  */
 public final class MessageListListener extends AbstractListener {
 
@@ -43,9 +43,10 @@ public final class MessageListListener extends AbstractListener {
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
 		// URL
-		HostConfig  config = new ServiceDeskHostConfig();
-		HostConfigContext context=new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.MESSAGELIST);
+		HostConfig config = new ServiceDeskHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.MESSAGELIST);
 		// 获取参数
 		JSONObject json = null;
 		int pageSize = 12;
@@ -53,7 +54,7 @@ public final class MessageListListener extends AbstractListener {
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			System.out.println("data  " + json);
+			System.out.println("params  " + json);
 			Logger.i(this.getClass(), json.toString());
 			pageSize = json.getInt("pageSize");
 			currentIndex = json.getInt("currentIndex");
@@ -64,10 +65,10 @@ public final class MessageListListener extends AbstractListener {
 
 		url.append("&currentIndex=").append(currentIndex);
 		url.append("&pageSize=").append(pageSize);
-		
+
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
-	
+
 		// 发送请求
 		ContentResponse response = null;
 		try {
@@ -88,17 +89,25 @@ public final class MessageListListener extends AbstractListener {
 			if (null != bytes) {
 				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-				
-				System.out.println("从服务台获取的消息JSON为："+content);
+
+				System.out.println("从服务台获取的消息JSON为：" + content);
 				try {
 					data = new JSONObject(content);
 
-					// 设置参数
-					params.addProperty(new ObjectProperty("data", data));
+					if ("true".equals(data.get("success"))) {
+						// 设置参数
+						params.addProperty(new ObjectProperty("data", data));
+					} else {
+						data.remove("root");
+						data.put("root", "");
+						data.put("status", 401);
+						data.put("errorInfo", "未获取到消息数据");
+					}
+
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGELIST, params);

@@ -237,7 +237,7 @@ public class NetEquipmentConfigListener extends AbstractListener {
 									jaCpu.put(jo);
 								}
 
-								config.put("CpuConfig", jaCpu);
+								config.put("cpuConfig", jaCpu);
 							} else if ("Board".equals(jo.getString("type"))) {
 								JSONArray jaattr = jo.getJSONArray("attr");
 								JSONObject joattr = new JSONObject();
@@ -258,9 +258,9 @@ public class NetEquipmentConfigListener extends AbstractListener {
 								joat.put("number", joattr.get("同级编号"));
 								joat.put("isPlug", joattr.get("可否插拔"));
 								joat.put("category", joattr.get("类别"));
-								joat.put("cName", joattr.get("名称"));
+								joat.put("bName", joattr.get("名称"));
 								joat.put("alais", joattr.get("别名"));
-								joat.put("sign", joattr.get("CPU标识"));
+								joat.put("sign", joattr.get("Board标识"));
 								joat.put("serialNum", joattr.get("实体序列号"));
 								joat.put("eqptMosn", joattr.get("MOSN"));
 
@@ -271,7 +271,7 @@ public class NetEquipmentConfigListener extends AbstractListener {
 								if (jaBoard.length() < 10) {
 									jaBoard.put(jo);
 								}
-								config.put("BoardConfig", jaBoard);
+								config.put("boardConfig", jaBoard);
 							}
 						}
 

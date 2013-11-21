@@ -15,18 +15,20 @@ import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
  * 删除消息监听
- *
+ * 
  */
 public final class MessageDeleteListener extends AbstractListener {
 
@@ -42,29 +44,34 @@ public final class MessageDeleteListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在次线程里进行阻塞式调用
 		// 因此，可以用同步的方式请求HTTP API
 
+		// 获取参数
+		JSONObject json = null;
+		String deleteIds = null;
+		try {
+			json = new JSONObject(action.getParamAsString("data"));
+			deleteIds = json.getString("deleteIds");
+			System.out.println("deleteIds     "+deleteIds);
+		} catch (JSONException jsone) {
+			jsone.printStackTrace();
+		}
+
 		// URL
-		StringBuilder url = new StringBuilder(API.MESSAGEDELETE);
+		HostConfig config = new ServiceDeskHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.MESSAGEDELETE);
+		url.append("?&deleteIds=").append(deleteIds);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);
 		url = null;
 
-		// 获取参数
-		JSONObject json = null;
-		JSONArray idList = new JSONArray();
-		try {
-			json = new JSONObject(action.getParamAsString("data"));
-			idList = json.getJSONArray("idList");
-		} catch (JSONException jsone) {
-			jsone.printStackTrace();
-		}
-
 		// 填写数据内容
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("idList", idList);
+		capsule.append("deleteIds", deleteIds);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);

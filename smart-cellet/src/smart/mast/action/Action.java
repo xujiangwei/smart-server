@@ -1,8 +1,7 @@
-
 /*
--------------------------------------------------------------------------------
-This source file is part of Mast Engine.
--------------------------------------------------------------------------------
+ -------------------------------------------------------------------------------
+ This source file is part of Mast Engine.
+ -------------------------------------------------------------------------------
  */
 
 package smart.mast.action;
@@ -34,11 +33,11 @@ public final class Action {
 
 	// 消息
 	public final static String MESSAGELIST = "requestMessages";
-	public final static String MESSAGEDETAIL = "requestMessageDetail";
-	public final static String MESSAGECONTACTS = "requestMessageContacts";
+	public final static String MESSAGEDETAIL = "requestMsgDetail";
+	public final static String MESSAGEDELETE = "messageDelete";
 	public final static String MESSAGESEND = "messageSend";
+	public final static String CONTACTS = "requestContacts";
 
-	public final static String MESSAGEDELETE = "messageDealDelete";
 	public final static String MESSAGEMOVE = "messageDealMove";
 	public static final String MESSAGEMARK = "messageDealMark";
 
@@ -60,10 +59,9 @@ public final class Action {
 	public final static String HOSTCONFIG = "requestHostConfig";
 	public final static String NETEQUIPMENTCONFIG = "requestNetEqptConfig";
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
-	public final static String HOSTKPI="requestHostKpi";
-	public final static String NETEQPTKPI="requestNetEqptKpi";
-	
-	
+	public final static String HOSTKPI = "requestHostKpi";
+	public final static String NETEQPTKPI = "requestNetEqptKpi";
+
 	public final static String CPUUSAGE = "requestCPUUsage";
 	public final static String MEMORYUSAGE = "requestMemoryUsage";
 	public final static String FILESYSTEMUSAGE = "requestFileSysUsage";
@@ -118,11 +116,10 @@ public final class Action {
 	public final static String INSPECTIONITEMLIST = "requestInspectionItem";
 	public final static String INSPECTIONCISAVE = "requestSaveInspectionCi";
 	public final static String INSPECTIONSAVE = "requestSaveInspection";
-	
+
 	// 资产
 	public static final String CILIST = "requestCiList";
 	public static final String CIDETAIL = "requestCiDetail";
 	public static final String BIZSYSTEMLIST = "requestBizSystemList";
 
 }
-

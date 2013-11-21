@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,11 +19,13 @@ import org.json.JSONObject;
 
 import smart.action.AbstractListener;
 import smart.api.API;
-import smart.api.RequestContentCapsule;
+import smart.api.host.HostConfig;
+import smart.api.host.HostConfigContext;
+import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
- * 信息详细内容监听器
+ * 消息详细内容监听器
  *
  */
 public final class MessageDetailListener extends AbstractListener {
@@ -41,32 +42,30 @@ public final class MessageDetailListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
 		// 因此，这里可以用同步方式请求 HTTP API 。
 
-		// URL
-		StringBuilder url = new StringBuilder(API.MESSAGEDETAIL);
-
-		// 创建请求
-		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.GET);
-		url = null;
-
 		// 获取参数
 		JSONObject json = null;
-		long messageId = 0;
+		String messageId=null; 
+
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			messageId = json.getLong("messageId");
+			System.out.println("params  " + json);
+			Logger.i(this.getClass(), json.toString());
+			messageId = json.getString("messageId");
+
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
+		// URL
+		HostConfig config = new ServiceDeskHostConfig();
+		HostConfigContext context = new HostConfigContext(config);
+		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
+				.append(API.MESSAGEDETAIL);
+		
+		url.append("&messageId=").append(messageId);
 
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("messageId", messageId);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
+		Request request = this.getHttpClient().newRequest(url.toString());
+		request.method(HttpMethod.GET);
 
 		// 发送请求
 		ContentResponse response = null;
@@ -88,15 +87,25 @@ public final class MessageDetailListener extends AbstractListener {
 			if (null != bytes) {
 				// 获取从Web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
+
+				System.out.println("源数据-messageDetail：" + content);
 				try {
 					data = new JSONObject(content);
 
-					// 设置参数
-					params.addProperty(new ObjectProperty("data", data));
+					if (data.get("success").equals(true)) {
+						// 设置参数
+						params.addProperty(new ObjectProperty("data", data));
+					} else {
+						data.remove("root");
+						data.put("root", "");
+						data.put("status", 412);
+						data.put("errorInfo", "未获取到消息数据");
+					}
+					System.out.println("msgDetail  "+data);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
+
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGEDETAIL, params);
@@ -105,8 +114,7 @@ public final class MessageDetailListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(MessageDetailListener.class,
-					"返回响应码" + response.getStatus());
+			Logger.w(MessageDetailListener.class, "返回响应码" + response.getContent());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -120,7 +128,6 @@ public final class MessageDetailListener extends AbstractListener {
 			this.response(Action.MESSAGEDETAIL, params);
 			break;
 		}
-
 	}
 
 }
