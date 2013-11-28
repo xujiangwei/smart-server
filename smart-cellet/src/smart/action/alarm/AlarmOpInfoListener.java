@@ -135,6 +135,7 @@ public final class AlarmOpInfoListener extends AbstractListener {
 								job.remove("fmotype");
 								job.remove("fcause");
 								job.remove("fname");
+								job.remove("mosn");
 							}
 							jo.remove("result");
 							jo.put("status", 300);
