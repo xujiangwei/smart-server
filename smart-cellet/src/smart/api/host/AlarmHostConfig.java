@@ -2,7 +2,7 @@ package smart.api.host;
 
 public class AlarmHostConfig implements HostConfig {
 
-	private String host = "http://10.10.152.18:7981";
+	private String host = "http://10.10.152.26:7981";
 	
 	public AlarmHostConfig() {
 	}
