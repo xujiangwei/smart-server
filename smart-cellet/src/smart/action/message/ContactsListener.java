@@ -91,8 +91,9 @@ public final class ContactsListener extends AbstractListener {
 					} else {
 						data.remove("root");
 						data.put("root", "");
-						data.put("status", 413);
-						data.put("errorInfo", "未获取到消息数据");
+						data.put("status", 415);
+						data.put("errorInfo", "获取联系人失败");
+						params.addProperty(new ObjectProperty("data", data));
 					}
 					System.out.println("contacts  " + data);
 				} catch (JSONException e) {
@@ -108,8 +109,7 @@ public final class ContactsListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(ContactsListener.class,
-					"返回响应码：" + response.getStatus());
+			Logger.w(ContactsListener.class, "返回响应码：" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);

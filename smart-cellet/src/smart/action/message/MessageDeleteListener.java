@@ -50,7 +50,7 @@ public final class MessageDeleteListener extends AbstractListener {
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			deleteIds = json.getString("deleteIds");
-			System.out.println("deleteIds     "+deleteIds);
+			System.out.println("deleteIds     " + deleteIds);
 		} catch (JSONException jsone) {
 			jsone.printStackTrace();
 		}
@@ -97,14 +97,26 @@ public final class MessageDeleteListener extends AbstractListener {
 				// 获取从web服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
+					// delete-return
 					data = new JSONObject(content);
+					System.out.println("delete 源数据    " + data);
+					if (data.get("success").equals(true)) {
+						// 设置参数
+						params.addProperty(new ObjectProperty("data", data));
+					} else {
+						data.remove("root");
+						data.put("root", "");
+						data.put("status", 413);
+						data.put("errorInfo", "删除消息失败");
+						// 设置参数
+						params.addProperty(new ObjectProperty("data", data));
+					}
 
-					// 设置参数
-					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException jsone) {
 					jsone.printStackTrace();
 				}
 
+				System.out.println("delete-return   " + data);
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识
 				this.response(Action.MESSAGEDELETE, params);

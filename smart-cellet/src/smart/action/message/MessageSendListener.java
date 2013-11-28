@@ -127,8 +127,8 @@ public final class MessageSendListener extends AbstractListener {
 					} else {
 						data.remove("root");
 						data.put("root", "");
-						data.put("status", 412);
-						data.put("errorInfo", "未获取到消息数据");
+						data.put("status", 414);
+						data.put("errorInfo", "发送消息失败");
 						params.addProperty(new ObjectProperty("data", data));
 					}
 					System.out.println("send  " + data);

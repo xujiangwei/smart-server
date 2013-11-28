@@ -26,7 +26,7 @@ import smart.mast.action.Action;
 
 /**
  * 消息详细内容监听器
- *
+ * 
  */
 public final class MessageDetailListener extends AbstractListener {
 
@@ -44,7 +44,7 @@ public final class MessageDetailListener extends AbstractListener {
 
 		// 获取参数
 		JSONObject json = null;
-		String messageId=null; 
+		String messageId = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
@@ -61,7 +61,7 @@ public final class MessageDetailListener extends AbstractListener {
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.MESSAGEDETAIL);
-		
+
 		url.append("&messageId=").append(messageId);
 
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -100,8 +100,9 @@ public final class MessageDetailListener extends AbstractListener {
 						data.put("root", "");
 						data.put("status", 412);
 						data.put("errorInfo", "未获取到消息数据");
+						params.addProperty(new ObjectProperty("data", data));
 					}
-					System.out.println("msgDetail  "+data);
+					System.out.println("msgDetail  " + data);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -114,7 +115,8 @@ public final class MessageDetailListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(MessageDetailListener.class, "返回响应码" + response.getContent());
+			Logger.w(MessageDetailListener.class,
+					"返回响应码" + response.getContent());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);

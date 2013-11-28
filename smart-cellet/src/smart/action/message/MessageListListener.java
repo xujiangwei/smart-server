@@ -94,20 +94,22 @@ public final class MessageListListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 
-					if ("true".equals(data.get("success"))) {
+					if (data.get("success").equals(true)) {
 						// 设置参数
 						params.addProperty(new ObjectProperty("data", data));
 					} else {
 						data.remove("root");
 						data.put("root", "");
-						data.put("status", 401);
+						data.put("status", 411);
 						data.put("errorInfo", "未获取到消息数据");
+						params.addProperty(new ObjectProperty("data", data));
 					}
 
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-
+				
+				System.out.println("messageList  "+data);
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGELIST, params);
