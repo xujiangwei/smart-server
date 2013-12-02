@@ -105,8 +105,6 @@ public class EquipmentListListener extends AbstractListener {
 						vendor.put("凯创(5624)", 23);
 						vendor.put("汉柏", 24);
 						vendor.put("D-Link", 25);
-						vendor.put("Dell", 26);
-						vendor.put("爱默生(13400)", 27);
 						vendor.put("未知", 0);
 
 						ja = data.getJSONArray("moList");

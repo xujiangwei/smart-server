@@ -76,6 +76,7 @@ public final class IncidentProcessListener extends AbstractListener {
 		String reason=null;
 		String resolution=null;
 		String closeCode=null;
+		String jbpmTransition=null;
 		
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
@@ -101,37 +102,45 @@ public final class IncidentProcessListener extends AbstractListener {
 			 System.out.println(reason);
 			 resolution=json.getString("resolution");
 			 closeCode=json.getString("closeCode");
+			 jbpmTransition=json.getString("jbpmTransition");
 			
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		url.append("&bpiId=").append(bpiId);
-		url.append("&summary='").append(summary).append("'");
-		url.append("&description='").append(description).append("'");
-		url.append("&occurTime='").append("2013-08-20").append("'");
-		url.append("&contactId=").append(contactId);
-		url.append("&reportWays=").append(reportWays);
-		url.append("&source=").append(source);
-		url.append("&applicant=").append(applicant);
-		url.append("&influencer=").append(influencer);
-		url.append("&urgent=").append(urgent);
-		url.append("&impact=").append(impact);
-		url.append("&serviceLevel=").append(serviceLevel);
-		url.append("&isMajor=").append(isMajor);
-		url.append("&comment=").append(comment);
-		url.append("&assigner=").append(assigner);
-		url.append("&investDiagn=").append(investDiagn);
-		url.append("&isSoluation=").append(isSoluation);
-		url.append("&reason=").append(reason);
-		url.append("&resolution=").append(resolution);
-		url.append("&closeCode=").append(closeCode);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		System.out.println("故障处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
+		
+		DeferredContentProvider dcp = new DeferredContentProvider();
+		RequestContentCapsule capsule = new RequestContentCapsule();
+		capsule.append("bpiId", bpiId);
+		capsule.append("summary", summary);
+		capsule.append("description", description);
+		capsule.append("occurTime", "2013-11-20");
+		capsule.append("contactId", contactId);
+		capsule.append("reportWays", reportWays);
+		capsule.append("source", source);
+		capsule.append("applicant", applicant);
+		capsule.append("influencer", influencer);
+		capsule.append("urgent", urgent);
+		capsule.append("impact", impact);
+		capsule.append("serviceLevel", serviceLevel);
+		capsule.append("isMajor", isMajor);
+		capsule.append("comment", comment);
+		capsule.append("assigner", assigner);
+		capsule.append("investDiagn", investDiagn);
+		capsule.append("isSoluation", isSoluation);
+		capsule.append("reason", reason);
+		capsule.append("resolution", resolution);
+		capsule.append("closeCode", closeCode);
+		capsule.append("jbpmTransition", jbpmTransition);
+		dcp.offer(capsule.toBuffer());
+		dcp.close();
+		request.content(dcp);
 	
 		Properties params = new Properties();
 			
