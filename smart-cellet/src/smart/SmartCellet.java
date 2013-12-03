@@ -77,6 +77,7 @@ import smart.action.task.InspectionSaveListener;
 import smart.action.task.OperationListListener;
 import smart.action.task.ProblemDetailListener;
 import smart.action.task.ProblemListListener;
+import smart.action.task.ProblemProcessListener;
 import smart.action.task.SlaImpactListListener;
 import smart.action.task.SlaServiceLevelListListener;
 import smart.action.task.SlaUrgentListListener;
@@ -305,12 +306,6 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
 				messageFileUploadListener);
 
-		/*************** 仪表板 **************/
-		// 获取主机负载综合
-		EquipmentListListener ept = new EquipmentListListener(this);
-		ept.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.TOPHOST, ept);
-		
 		/************** 设备 **************/
 		// 获取所有设备列表
 		EquipmentListListener equipmentList = new EquipmentListListener(this);
@@ -437,7 +432,6 @@ public class SmartCellet extends Cellet {
 		currentTime.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CURRENTTIME, currentTime);
 
-		/*************** 告警管理 **************/
 		// 获取告警基本信息
 		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
 		alarmDetail.setHttpClient(this.httpClient);
@@ -584,6 +578,10 @@ public class SmartCellet extends Cellet {
 		ProblemDetailListener problemDetail = new ProblemDetailListener(this);
 		problemDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);
+		
+		ProblemProcessListener problemProcess = new ProblemProcessListener(this);
+		problemProcess.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.PROBLEMPROCESS, problemProcess);
 
 		/************** 巡检任务 *************/
 		InspectionListListener inspectionTaskList = new InspectionListListener(
