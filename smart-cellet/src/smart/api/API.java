@@ -3,16 +3,18 @@ package smart.api;
 public final class API {
 
 	// 登录
-	public final static String LOGIN = "restws/right/auth/user/login/101";
+	public final static String LOGIN = "restws/right/auth/user/login/998";
 
 	// 注销
 	public static final String LOGOUT = "http://10.10.152.20:8081/monitoring-system/out/logout";
 
 	// 告警
-	public static final String ALARMLIST = "restws/alm/external/list/101/2013071712351482/0?pagesize=";
+	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0?pagesize=";
+//	public static final String ALARMLIST = "restws/alm/external/list/101/2013071712351482/0?pagesize=";
 	// public static final String ALARMLIST = "alarm/list?dmsn=101&pagesize=";
 	public static final String ALARMDEAL = "restws/alm/external";
-	public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
+	public static final String ALARMDETAIL = "restws/alm/external/list/998/9980000000000000";
+//	public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
 	public static final String ALARMOPINFO = "restws/alm/external/deal";
 	public static final String ALARMEXPERIENCE = "restws/alm/external/exp";
 	public static final String ALARMBUFFER = "alarm/buff";
@@ -43,7 +45,8 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.20:8081/monitoring-system/fileUpload/messageFileUpload";
 	
 	// 设备资源
-	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
+	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
+//	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
 	public final static String DATABASE = "restws/data/perf/mo/101";
 	public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/101";
 	public final static String HOSTCONFIG = "restws/data/cfg/mo/101";

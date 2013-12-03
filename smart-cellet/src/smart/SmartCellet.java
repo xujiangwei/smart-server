@@ -305,6 +305,12 @@ public class SmartCellet extends Cellet {
 		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
 				messageFileUploadListener);
 
+		/*************** 仪表板 **************/
+		// 获取主机负载综合
+		EquipmentListListener ept = new EquipmentListListener(this);
+		ept.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.TOPHOST, ept);
+		
 		/************** 设备 **************/
 		// 获取所有设备列表
 		EquipmentListListener equipmentList = new EquipmentListListener(this);
@@ -431,6 +437,7 @@ public class SmartCellet extends Cellet {
 		currentTime.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CURRENTTIME, currentTime);
 
+		/*************** 告警管理 **************/
 		// 获取告警基本信息
 		AlarmDetailListener alarmDetail = new AlarmDetailListener(this);
 		alarmDetail.setHttpClient(this.httpClient);
