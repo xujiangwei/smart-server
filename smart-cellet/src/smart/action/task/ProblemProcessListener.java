@@ -68,29 +68,11 @@ public class ProblemProcessListener extends AbstractListener{
 			json = new JSONObject(action.getParamAsString("data"));
 			bpiId = json.getString("problemId");
 
-			description = new String(json.getString("description").getBytes(),
-					"UTF-8");
-			if (json.getString("category").indexOf("null") >= 0) {
-				category = "";
-			} else {
-				category = json.getString("category");
-			}
-			if (json.getString("urgent").indexOf("null") >= 0) {
-				urgent = "";
-			} else {
-				urgent = json.getString("urgent");
-			}
-			if (json.getString("impact").indexOf("null") >= 0) {
-				impact = "";
-			} else {
-				impact = json.getString("impact");
-			}
-			if (json.getString("closeCode").indexOf("null") >= 0) {
-				closeCode = "";
-			} else {
-				closeCode = json.getString("closeCode");
-			}
-
+			description = json.getString("description");
+			category = json.getString("category");
+			urgent = json.getString("urgent");
+			impact = json.getString("impact");
+			closeCode = json.getString("closeCode");
 			isMajor = json.getString("isMajor");
 			comment = json.getString("comment");
 			reviewType = json.getString("reviewType");// 是否有效解决
@@ -98,11 +80,9 @@ public class ProblemProcessListener extends AbstractListener{
 			resolution = json.getString("resolution");
 			jbpmTransition=json.getString("jbpmTransition");
 
-		} catch (JSONException e2) {
-			e2.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
-		}
+		} 
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		System.out.println("问题工单处理提交的URL："+url.toString());

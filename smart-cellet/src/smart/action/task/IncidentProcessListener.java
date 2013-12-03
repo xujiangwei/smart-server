@@ -79,10 +79,10 @@ public final class IncidentProcessListener extends AbstractListener {
 		String jbpmTransition=null;
 		
 		try {
-			json = new JSONObject(action.getParamAsString("data"));
-			bpiId=json.getString("incidentId");
-			 summary=new String(json.getString("summary").getBytes(),"UTF-8");
-			 description=new String(json.getString("description").getBytes(),"UTF-8");
+			 json = new JSONObject(action.getParamAsString("data"));
+			 bpiId=json.getString("incidentId");
+			 summary=json.getString("summary");
+			 description=json.getString("description");
 			 occurTime=json.getString("occurTime");
 			 contactId=json.getString("contactId");
 			 reportWays=json.getString("reportWays");
@@ -104,9 +104,7 @@ public final class IncidentProcessListener extends AbstractListener {
 			 closeCode=json.getString("closeCode");
 			 jbpmTransition=json.getString("jbpmTransition");
 			
-		} catch (JSONException e2) {
-			e2.printStackTrace();
-		} catch (UnsupportedEncodingException e) {
+		} catch (JSONException e) {
 			e.printStackTrace();
 		}
 
