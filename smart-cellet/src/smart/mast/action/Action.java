@@ -51,6 +51,9 @@ public final class Action {
 	public final static String FILEUPLOAD = "fileUpload";
 	public static final String MESSAGEFILEUPLOAD = "messageFileUpload";
 
+	// 仪表板
+	public final static String TOPHOST = "requestTopHost";
+	
 	// 资源设备
 	public final static String DEVICE = "requestDevice";
 	public final static String DATABASE = "requestDatabase";
