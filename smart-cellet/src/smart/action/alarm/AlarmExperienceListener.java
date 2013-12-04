@@ -50,11 +50,11 @@ public final class AlarmExperienceListener extends AbstractListener {
 		// 获取请求参数
 		JSONObject json;
 		String token = null;
-		long userId = 0;
+//		long userId = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			token = json.getString("token");
-			userId = json.getLong("userId");
+//			userId = json.getLong("userId");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -66,8 +66,8 @@ public final class AlarmExperienceListener extends AbstractListener {
 			HostConfig config = new MonitorSystemHostConfig();
 			HostConfigContext context = new HostConfigContext(config);
 			StringBuilder url = new StringBuilder(context.getAPIHost())
-					.append("/").append(API.ALARMEXPERIENCE).append("/get?DMSN=998&userID=")
-					.append(userId).append("&op=get");
+					.append("/").append(API.ALARMEXPERIENCE)
+					.append("/get?DMSN=998&userID=9980000000000000").append("&op=get");
 
 			// 创建请求
 			Request request = this.getHttpClient().newRequest(url.toString());
@@ -79,7 +79,7 @@ public final class AlarmExperienceListener extends AbstractListener {
 			// 填写数据内容
 			DeferredContentProvider dcp = new DeferredContentProvider();
 			RequestContentCapsule capsule = new RequestContentCapsule();
-			capsule.append("userId", userId);
+//			capsule.append("userId", userId);
 			capsule.append("token", token);
 			dcp.offer(capsule.toBuffer());
 			dcp.close();

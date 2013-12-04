@@ -46,13 +46,11 @@ public class AddAlarmExperienceListener extends AbstractListener {
 		// 获取请求参数
 		JSONObject json;
 		String jsonData = null;
-		long userId = 0;
 		String note = null;
 		
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			jsonData = json.getString("json");
-			userId = json.getLong("userId");
 			note = json.getString("note");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -64,7 +62,7 @@ public class AddAlarmExperienceListener extends AbstractListener {
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.ALARMEXPERIENCE).append("/").append(jsonData)
-				.append("?DMSN=101&userID=").append(userId)
+				.append("?DMSN=998&userID=9980000000000000")
 				.append("&op=save&note=").append(note);
 		System.out.println("请求的URL: " + url.toString());
 

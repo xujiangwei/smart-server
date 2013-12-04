@@ -51,7 +51,7 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 		String almCause = null;
 		long moId = 0;
 		String dealInfo = null;
-		long dealUserId = 0;
+//		long dealUserId = 0;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
@@ -61,7 +61,7 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 			almCause = json.getString("almCause");
 			moId = json.getLong("moId");
 			dealInfo = json.getString("dealInfo");
-			dealUserId = json.getLong("dealUserId");
+//			dealUserId = json.getLong("dealUserId");
 			
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -76,8 +76,8 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 			StringBuilder url = new StringBuilder(context.getAPIHost())
 					.append("/").append(API.ALARMOPINFO).append("/").append(almId).append(",")
 					.append(moType).append(",").append(almCause).append(",")
-					.append(String.valueOf(moId)).append(",").append(dealInfo).append("?DMSN=101&userID=")
-					.append(dealUserId).append("&op=save");
+					.append(String.valueOf(moId)).append(",").append(dealInfo)
+					.append("?DMSN=998&userID=9980000000000000").append("&op=save");
 			System.out.println("请求的URL: "+url.toString());
 			
 			// 创建请求
@@ -93,7 +93,6 @@ public final class AddAlarmOpInfoListener extends AbstractListener {
 			capsule.append("moId", moId);
 			capsule.append("moType", moType);
 			capsule.append("dealInfo", dealInfo);
-			capsule.append("dealUser", dealUserId);
 			capsule.append("token", token);
 			dcp.offer(capsule.toBuffer());
 			dcp.close();

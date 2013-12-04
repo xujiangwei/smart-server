@@ -53,14 +53,14 @@ public final class AlarmOpInfoListener extends AbstractListener {
 		String moType = null;
 		String almCause = null;
 		long moId = 0;
-		long userId = 0;
+//		long userId = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			token = json.getString("token");
 			moType = json.getString("moType");
 			almCause = json.getString("almCause");
 			moId = json.getLong("moId");
-			userId = json.getLong("userId");
+//			userId = json.getLong("userId");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -74,8 +74,8 @@ public final class AlarmOpInfoListener extends AbstractListener {
 			StringBuilder url = new StringBuilder(context.getAPIHost())
 					.append("/").append(API.ALARMOPINFO).append("/")
 					.append(moType).append(",").append(almCause)
-					.append(",").append(moId).append("?DMSN=998&userID=")
-					.append(userId).append("&op=get");
+					.append(",").append(moId).append("?DMSN=998&userID=9980000000000000")
+					.append("&op=get");
 
 			System.out.println("处理信息url："+url.toString());
 			// 创建请求
@@ -89,7 +89,7 @@ public final class AlarmOpInfoListener extends AbstractListener {
 			capsule.append("moId", moId);
 			capsule.append("moType", moType);
 			capsule.append("almCause", almCause);
-			capsule.append("userId", userId);
+//			capsule.append("userId", userId);
 			capsule.append("token", token);
 			dcp.offer(capsule.toBuffer());
 			dcp.close();
