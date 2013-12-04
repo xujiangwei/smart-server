@@ -52,7 +52,8 @@ public final class Action {
 	public static final String MESSAGEFILEUPLOAD = "messageFileUpload";
 
 	// 仪表板
-	public final static String HOSTTOPCPU = "requestTopHost";
+	public final static String HOSTTOP = "requestTopHost";
+	public final static String HOSTTOPCPU = "requestTopHostCpu";
 	public final static String HOSTTOPMEM = "requestTopHostMem";
 
 	// 资源设备

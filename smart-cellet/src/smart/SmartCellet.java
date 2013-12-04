@@ -312,11 +312,11 @@ public class SmartCellet extends Cellet {
 		// 获取主机负载综合
 		HostCpuListener hostCpu = new HostCpuListener(this);
 		hostCpu.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOSTTOPCPU, hostCpu);
+		dispatcher.addListener(Action.HOSTTOP, hostCpu);
 
 		HostMemTopListener hmtl = new HostMemTopListener(this);
 		hmtl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOSTTOPMEM, hmtl);
+		dispatcher.addListener(Action.HOSTTOP, hmtl);
 
 		/************** 设备 **************/
 		// 获取所有设备列表
