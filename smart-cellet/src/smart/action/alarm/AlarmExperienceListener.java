@@ -66,7 +66,7 @@ public final class AlarmExperienceListener extends AbstractListener {
 			HostConfig config = new MonitorSystemHostConfig();
 			HostConfigContext context = new HostConfigContext(config);
 			StringBuilder url = new StringBuilder(context.getAPIHost())
-					.append("/").append(API.ALARMEXPERIENCE).append("/get?DMSN=101&userID=")
+					.append("/").append(API.ALARMEXPERIENCE).append("/get?DMSN=998&userID=")
 					.append(userId).append("&op=get");
 
 			// 创建请求

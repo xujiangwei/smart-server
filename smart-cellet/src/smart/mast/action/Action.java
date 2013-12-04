@@ -52,7 +52,7 @@ public final class Action {
 	public static final String MESSAGEFILEUPLOAD = "messageFileUpload";
 
 	// 仪表板
-	public final static String TOPHOST = "requestTopHost";
+	public final static String HOSTTOPCPU = "requestTopHost";
 	
 	// 资源设备
 	public final static String DEVICE = "requestDevice";

@@ -74,7 +74,7 @@ public final class AlarmOpInfoListener extends AbstractListener {
 			StringBuilder url = new StringBuilder(context.getAPIHost())
 					.append("/").append(API.ALARMOPINFO).append("/")
 					.append(moType).append(",").append(almCause)
-					.append(",").append(moId).append("?DMSN=101&userID=")
+					.append(",").append(moId).append("?DMSN=998&userID=")
 					.append(userId).append("&op=get");
 
 			System.out.println("处理信息url："+url.toString());

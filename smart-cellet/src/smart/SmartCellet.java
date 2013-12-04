@@ -30,6 +30,7 @@ import smart.action.attention.DeleteAttentionListener;
 import smart.action.ci.BusinessSystemListListener;
 import smart.action.ci.CiDetailListener;
 import smart.action.ci.CiListListener;
+import smart.action.form.HostCpuListener;
 import smart.action.message.ContactsListener;
 import smart.action.message.MessageCustomTagListener;
 import smart.action.message.MessageDeleteListener;
@@ -308,9 +309,9 @@ public class SmartCellet extends Cellet {
 
 		/*************** 仪表板 **************/
 		// 获取主机负载综合
-		EquipmentListListener ept = new EquipmentListListener(this);
-		ept.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.TOPHOST, ept);
+		HostCpuListener hostCpu = new HostCpuListener(this);
+		hostCpu.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTTOPCPU, hostCpu);
 		
 		/************** 设备 **************/
 		// 获取所有设备列表

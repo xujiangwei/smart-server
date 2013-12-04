@@ -27,7 +27,6 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "http://10.10.152.20:8081/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-
 	public final static String CONTACTS = "userm/getUserList.html?username=admin";
 	public final static String MESSAGELIST = "noticem/listUnread.html?username=admin";
 	public final static String MESSAGEDETAIL = "noticem/forView.html?username=admin";
@@ -44,6 +43,9 @@ public final class API {
 	public final static String MESSAGECUSTOMTAGS = "http://10.10.152.20:8081/monitoring-system/customTags/requestMessageCustomTags";
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.20:8081/monitoring-system/fileUpload/messageFileUpload";
 
+	// 报表数据
+	public final static String HOSTTOPCPU="typ/allinfo/creatAmChart.action?atomId=atom_hoAvgCPURatio_amcolumn&top=10&time=1&mockUserName=admin&mockDMSN=998";
+	
 	// 设备资源
 	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
 	// public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
