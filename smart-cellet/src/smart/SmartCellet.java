@@ -31,6 +31,7 @@ import smart.action.ci.BusinessSystemListListener;
 import smart.action.ci.CiDetailListener;
 import smart.action.ci.CiListListener;
 import smart.action.form.HostCpuListener;
+import smart.action.form.HostMemTopListener;
 import smart.action.message.ContactsListener;
 import smart.action.message.MessageCustomTagListener;
 import smart.action.message.MessageDeleteListener;
@@ -220,13 +221,13 @@ public class SmartCellet extends Cellet {
 		// al2.setHttpClient(this.httpClient);
 		// dispatcher.addListener(Action.ADDATTENTION, al2);
 
-		/**************消息*************/
-		
+		/************** 消息 *************/
+
 		// 获取联系人
 		ContactsListener ctl = new ContactsListener(this);
 		ctl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CONTACTS, ctl);
-		
+
 		// 获取消息
 		MessageListListener messageList = new MessageListListener(this);
 		messageList.setHttpClient(this.httpClient);
@@ -312,7 +313,11 @@ public class SmartCellet extends Cellet {
 		HostCpuListener hostCpu = new HostCpuListener(this);
 		hostCpu.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTTOPCPU, hostCpu);
-		
+
+		HostMemTopListener hmtl = new HostMemTopListener(this);
+		hmtl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTTOPMEM, hmtl);
+
 		/************** 设备 **************/
 		// 获取所有设备列表
 		EquipmentListListener equipmentList = new EquipmentListListener(this);
@@ -585,7 +590,7 @@ public class SmartCellet extends Cellet {
 		ProblemDetailListener problemDetail = new ProblemDetailListener(this);
 		problemDetail.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMDETAIL, problemDetail);
-		
+
 		ProblemProcessListener problemProcess = new ProblemProcessListener(this);
 		problemProcess.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PROBLEMPROCESS, problemProcess);

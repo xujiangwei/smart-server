@@ -10,11 +10,13 @@ public final class API {
 
 	// 告警
 	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0?pagesize=";
-	// public static final String ALARMLIST = "restws/alm/external/list/101/2013071712351482/0?pagesize=";
+	// public static final String ALARMLIST =
+	// "restws/alm/external/list/101/2013071712351482/0?pagesize=";
 	// public static final String ALARMLIST = "alarm/list?dmsn=101&pagesize=";
 	public static final String ALARMDEAL = "restws/alm/external";
 	public static final String ALARMDETAIL = "restws/alm/external/list/998/9980000000000000";
-	// public static final String ALARMDETAIL = "restws/alm/external/list/101/2013071712351482";
+	// public static final String ALARMDETAIL =
+	// "restws/alm/external/list/101/2013071712351482";
 	public static final String ALARMOPINFO = "restws/alm/external/deal";
 	public static final String ALARMEXPERIENCE = "restws/alm/external/exp";
 	public static final String ALARMBUFFER = "alarm/buff";
@@ -44,11 +46,13 @@ public final class API {
 	public final static String MESSAGEFILEUPLOAD = "http://10.10.152.20:8081/monitoring-system/fileUpload/messageFileUpload";
 
 	// 报表数据
-	public final static String HOSTTOPCPU="typ/allinfo/creatAmChart.action?atomId=atom_hoAvgCPURatio_amcolumn&top=10&time=1&mockUserName=admin&mockDMSN=998";
-	
+	public final static String HOSTTOPCPU = "typ/allinfo/creatAmChart.action?atomId=atom_hoAvgCPURatio_amcolumn&top=10&time=1&mockUserName=admin&mockDMSN=998";
+	public final static String HOSTTOPMEM = "typ/allinfo/creatAmChart.action?atomId=atom_hoAvgMemRatio_amcolumn&top=10&time=1&mockUserName=admin&mockDMSN=998";
+
 	// 设备资源
 	public final static String EQUIPMENTLIST = "restws/model/core/mo/list/998/9980000000000000";
-	// public final static String EQUIPMENTLIST = "restws/model/core/mo/list/101/2013071712351482";
+	// public final static String EQUIPMENTLIST =
+	// "restws/model/core/mo/list/101/2013071712351482";
 	public final static String DATABASE = "restws/data/perf/mo/998";
 	public final static String EQUIPMENTCONFIG = "restws/data/cfg/mo/998";
 	public final static String HOSTCONFIG = "restws/data/cfg/mo/998";

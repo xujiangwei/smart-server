@@ -53,7 +53,8 @@ public final class Action {
 
 	// 仪表板
 	public final static String HOSTTOPCPU = "requestTopHost";
-	
+	public final static String HOSTTOPMEM = "requestTopHostMem";
+
 	// 资源设备
 	public final static String DEVICE = "requestDevice";
 	public final static String DATABASE = "requestDatabase";
