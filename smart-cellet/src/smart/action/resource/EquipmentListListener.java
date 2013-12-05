@@ -43,11 +43,26 @@ public class EquipmentListListener extends AbstractListener {
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用
 		// 因此，这里可以用同步的方式请求HTTP API
 
+		// 获取参数
+		JSONObject json = null;
+		int currentIndex = 0;
+		int pageSize = 0;
+		try {
+			json = new JSONObject(action.getParamAsString("data"));
+			currentIndex = json.getInt("currentIndex");
+			pageSize = json.getInt("pageSize");
+		} catch (JSONException e1) {
+			e1.printStackTrace();
+		}
+
 		// URL
 		HostConfig config = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.EQUIPMENTLIST);
+
+		// url.append("&currentIndex=").append(currentIndex);
+		// url.append("&pageSize=").append(pageSize);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -115,50 +130,62 @@ public class EquipmentListListener extends AbstractListener {
 								"moIp", "moName", "alias", "moType",
 								"typeName", "vendor", "model", "mgrStatus",
 								"almStatus");
-						int m = 0;
-						if (ja.length() > 20) {
-							m = 20;
-						} else {
-							m = ja.length();
-						}
-						for (int i = 0; i < m; i++) {
-							JSONObject jo = new JSONObject();
-							JSONObject job = new JSONObject();
-							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
-								for (int k = 0; k < list.size(); k++) {
-									if (k == j) {
-										String key = list.get(k);
-										Object value = ja.getJSONArray(i).get(j);
-										if ("vendor".equals(key)
-												&& ("".equals(value) || value == null)
-												|| "null".equals(value)
-												|| value.equals(null)) {
-											job.put(key, "未知");
-										} else {
-											job.put(key, value);
+//						int m = 0;
+//						if (ja.length() > 20) {
+//							m = 20;
+//						} else {
+//							m = ja.length();
+//						}
+						for (int i = 0; i < ja.length(); i++) {
+							if ((i >= (currentIndex - 1) * pageSize)
+									&& (i < (currentIndex * pageSize))) {
+								JSONObject jo = new JSONObject();
+								JSONObject job = new JSONObject();
+								for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
+									for (int k = 0; k < list.size(); k++) {
+										if (k == j) {
+											String key = list.get(k);
+											Object value = ja.getJSONArray(i)
+													.get(j);
+											if ("vendor".equals(key)
+													&& ("".equals(value) || value == null)
+													|| "null".equals(value)
+													|| value.equals(null)) {
+												job.put(key, "未知");
+											} else {
+												job.put(key, value);
+											}
 										}
 									}
 								}
-							}
-							jo.put("vendorID", vendor.getInt(job.get("vendor").toString()));
-							jo.put("typeCode", Long.valueOf(job.getString("moType").substring(0, 4)));
-							jo.put("moId", job.getLong("moId"));
-							jo.put("moSort", job.getString("typePath").split(" > ")[0]);
-							jo.put("typeName", job.getString("typePath").split(" > ")[1]);
-							job.remove("moId");
-//							job.remove("vendor");
-							job.remove("typeName");
-							jo.put("base_info", job);
+								jo.put("vendorID", vendor.getInt(job.get(
+										"vendor").toString()));
+								jo.put("typeCode", Long.valueOf(job.getString(
+										"moType").substring(0, 4)));
+								jo.put("moId", job.getLong("moId"));
+								jo.put("moSort", job.getString("typePath")
+										.split(" > ")[0]);
+								jo.put("typeName", job.getString("typePath")
+										.split(" > ")[1]);
+								job.remove("moId");
+								// job.remove("vendor");
+								job.remove("typeName");
+								jo.put("base_info", job);
 
-//							if (DButil.getInstance().getConnection() != null) {
-//								long id = jo.getLong("moId");
-//								if (!EquipmentManager.getInstance().isExist(id)) {
-//									EquipmentManager.getInstance().storeEquipment(jo);
-//								}
-//							}
-							jar.put(jo);
+								// if (DButil.getInstance().getConnection() !=
+								// null) {
+								// long id = jo.getLong("moId");
+								// if
+								// (!EquipmentManager.getInstance().isExist(id))
+								// {
+								// EquipmentManager.getInstance().storeEquipment(jo);
+								// }
+								// }
+								jar.put(jo);
+							}
 						}
-//						System.out.println("jsonArray" + jar.length()+": "+ jar);
+						// System.out.println("jsonArray" + jar.length()+": "+
+						// jar);
 						data.remove("moList");
 						data.put("status", 300);
 						data.put("moList", jar);
@@ -185,7 +212,8 @@ public class EquipmentListListener extends AbstractListener {
 			}
 			break;
 		default:
-			Logger.w(EquipmentListListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(EquipmentListListener.class,
+					"返回响应码:" + response.getStatus());
 			try {
 				data = new JSONObject();
 				data.put("status", 900);
@@ -202,5 +230,4 @@ public class EquipmentListListener extends AbstractListener {
 		}
 
 	}
-
 }
