@@ -46,11 +46,11 @@ public class EquipmentListListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		int currentIndex = 0;
-		int pageSize = 0;
+		int pageSize = 20;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			currentIndex = json.getInt("currentIndex");
-			pageSize = json.getInt("pageSize");
+//			pageSize = json.getInt("pageSize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}

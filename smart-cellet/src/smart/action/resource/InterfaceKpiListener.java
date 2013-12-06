@@ -31,7 +31,7 @@ import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
- * 网络设备监听器
+ * 网络接口kpi监听器
  * 
  */
 public final class InterfaceKpiListener extends AbstractListener {
@@ -52,10 +52,14 @@ public final class InterfaceKpiListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
+		int currentIndex = 0;
+		int pageSize = 1;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getLong("moId");
 			rangeInHour = json.getInt("rangeInHour");
+			currentIndex = json.getInt("currentIndex");
+//			pageSize = json.getInt("pageSize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -94,7 +98,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					// System.out.println("ifKpi 源数据：      " + data);
+					System.out.println("ifKpi 源数据：      " + data);
 					if ("success".equals(data.get("status"))
 							&& (!"".equals(data.get("dataList"))
 									&& data.get("dataList") != null
@@ -111,12 +115,22 @@ public final class InterfaceKpiListener extends AbstractListener {
 								mosnList.add(mosnAll);
 							}
 						}
+						System.out.println("mosnALL   "+mosnList);
+						
 						List<Long> subml = new ArrayList<Long>();
-						if (mosnList.size() > 2) {
-							subml = mosnList.subList(0, 1);
-						} else {
-							subml = mosnList;
+						for (int i = 0; i < mosnList.size(); i++) {
+							if ((i >= (currentIndex - 1) * pageSize)
+									&& (i < (currentIndex * pageSize))) {
+								subml.add(mosnList.get(i));
+							}
 						}
+						
+						System.out.println("mosnSUB   "+subml);
+						// if (mosnList.size() > 2) {
+						// subml = mosnList.subList(0, 1);
+						// } else {
+						// subml = mosnList;
+						// }
 
 						// System.out.println("subml-size   " + subml.size());
 						JSONArray jaSub = new JSONArray();
