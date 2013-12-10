@@ -56,8 +56,6 @@ public class NetEquipmentConfigListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
-		System.out.println("参数1: " + moId);
-
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
@@ -116,39 +114,35 @@ public class NetEquipmentConfigListener extends AbstractListener {
 						for (int i = 0; i < ja.length(); i++) {
 							JSONObject jo = ja.getJSONObject(i);
 							if ("接口".equals(jo.getString("type"))) {
-
 								JSONArray jaattr = jo.getJSONArray("attr");
 								JSONObject joattr = new JSONObject();
+								JSONObject joat = new JSONObject();
 								for (int j = 0; j < jaattr.length(); j++) {
 									JSONArray ja2 = jaattr.getJSONArray(j);
 									String key = (String) ja2.get(0);
 									Object value = ja2.get(1);
 
-									if (("带宽").equals(key)) {
-										key = "bandwidth";
-									} else if (("物理地址").equals(key)) {
-										key = "mac";
-									} else if (("是否允许阻断").equals(key)) {
-										key = "isBlock";
-									} else if (("所属面板").equals(key)) {
-										key = "panel";
-									} else if (("接口描述").equals(key)) {
-										key = "describe";
-									} else if (("接口索引").equals(key)) {
-										key = "index";
-									} else if (("最大数据报长度").equals(key)) {
-										key = "maxDatagramLength";
-									} else if (("接口别名").equals(key)) {
-										key = "alias";
-									} else if (("MOSN").equals(key)) {
-										key = "eqptMosn";
-									}
-
 									joattr.put(key, value);
 								}
 
+								joat.put("bandwidth", Long.parseLong(joattr
+										.getString("带宽")));
+								joat.put("mac", joattr.getString("物理地址"));
+								joat.put("isBlock", joattr.getString("是否允许阻断"));
+								joat.put("panel", Integer.parseInt(joattr
+										.getString("所属面板")));
+								joat.put("describe", joattr.getString("接口描述"));
+								joat.put("index", Integer.parseInt(joattr
+										.getString("接口索引")));
+								joat.put("maxDatagramLength", Integer
+										.parseInt(joattr.getString("最大数据报长度")));
+								joat.put("alias", joattr.getString("接口别名"));
+								joat.put("moId", Long.parseLong(joattr
+										.getString("MOSN")));
+
 								jo.remove("attr");
-								jo.put("attr", joattr);
+								jo.remove("joattr");
+								jo.put("attr", joat);
 
 								if (jaIf.length() < 10) {
 									jaIf.put(jo);
@@ -169,7 +163,7 @@ public class NetEquipmentConfigListener extends AbstractListener {
 								// int if_maxdatagramlength = joa
 								// .getInt("最大数据报长度");
 								// String if_alias = joa.getString("接口别名");
-								// long if_eqptmosn = joa.getLong("MOSN");
+								// long if_moId = joa.getLong("MOSN");
 
 								// InterfaceManager ifm = InterfaceManager
 								// .getInstance();
@@ -177,7 +171,7 @@ public class NetEquipmentConfigListener extends AbstractListener {
 								// if_bandwidth, if_mac, if_isblock,
 								// if_panel, if_describe, if_index,
 								// if_maxdatagramlength, if_alias,
-								// if_eqptmosn);
+								// if_moId);
 
 							} else if ("内存".equals(jo.getString("type"))) {
 								JSONArray jaattr = jo.getJSONArray("attr");
@@ -191,8 +185,9 @@ public class NetEquipmentConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("sign", joattr.get("内存标识"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								joat.put("sign", joattr.getString("内存标识"));
+								joat.put("moId", Long.parseLong(joattr
+										.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -215,19 +210,25 @@ public class NetEquipmentConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("index", joattr.get("索引"));
-								joat.put("tabindex", joattr.get("值表索引"));
-								joat.put("tabindex2", joattr.get("值表索引2"));
-								joat.put("location", joattr.get("位置"));
-								joat.put("describe", joattr.get("描述"));
-								joat.put("number", joattr.get("同级编号"));
-								joat.put("isPlug", joattr.get("可否插拔"));
-								joat.put("category", joattr.get("类别"));
-								joat.put("cName", joattr.get("名称"));
-								joat.put("alais", joattr.get("别名"));
-								joat.put("sign", joattr.get("CPU标识"));
-								joat.put("serialNum", joattr.get("实体序列号"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								joat.put("index", Integer.parseInt(joattr
+										.getString("索引")));
+								joat.put("tabindex", Integer.parseInt(joattr
+										.getString("值表索引")));
+								joat.put("tabindex2", Integer.parseInt(joattr
+										.getString("值表索引2")));
+								joat.put("location", joattr.getString("位置"));
+								joat.put("describe", joattr.getString("描述"));
+								joat.put("number", Integer.parseInt(joattr
+										.getString("同级编号")));
+								joat.put("isPlug", joattr.getString("可否插拔"));
+								joat.put("category", Integer.parseInt(joattr
+										.getString("类别")));
+								joat.put("cName", joattr.getString("名称"));
+								joat.put("alais", joattr.getString("别名"));
+								joat.put("sign", joattr.getString("CPU标识"));
+								joat.put("serialNum", joattr.getString("实体序列号"));
+								joat.put("moId", Long.parseLong(joattr
+										.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -249,20 +250,26 @@ public class NetEquipmentConfigListener extends AbstractListener {
 
 									joattr.put(key, value);
 								}
-
-								joat.put("index", joattr.get("索引"));
-								joat.put("tabindex", joattr.get("值表索引"));
-								joat.put("tabindex2", joattr.get("值表索引2"));
-								joat.put("location", joattr.get("位置"));
-								joat.put("describe", joattr.get("描述"));
-								joat.put("number", joattr.get("同级编号"));
-								joat.put("isPlug", joattr.get("可否插拔"));
-								joat.put("category", joattr.get("类别"));
-								joat.put("bName", joattr.get("名称"));
-								joat.put("alais", joattr.get("别名"));
-								joat.put("sign", joattr.get("Board标识"));
-								joat.put("serialNum", joattr.get("实体序列号"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								// Integer.parseInt( getString
+								joat.put("index", Integer.parseInt(joattr
+										.getString("索引")));
+								joat.put("tabindex", Integer.parseInt(joattr
+										.getString("值表索引")));
+								joat.put("tabindex2", Integer.parseInt(joattr
+										.getString("值表索引2")));
+								joat.put("location", joattr.getString("位置"));
+								joat.put("describe", joattr.getString("描述"));
+								joat.put("number", Integer.parseInt(joattr
+										.getString("同级编号")));
+								joat.put("isPlug", joattr.getString("可否插拔"));
+								joat.put("category", Integer.parseInt(joattr
+										.getString("类别")));
+								joat.put("bName", joattr.getString("名称"));
+								joat.put("alais", joattr.getString("别名"));
+								joat.put("sign", joattr.getString("Board标识"));
+								joat.put("serialNum", joattr.getString("实体序列号"));
+								joat.put("moId", Long.parseLong(joattr
+										.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -275,11 +282,13 @@ public class NetEquipmentConfigListener extends AbstractListener {
 							}
 						}
 
+						data.put("moId", data.get("mosn"));
+						data.remove("mosn");
 						data.remove("data");
 						data.put("config", config);
 						data.put("status", 300);
 						data.put("errorInfo", "");
-					}else{
+					} else {
 						data.remove("data");
 						data.put("status", 603);
 						data.put("config", "");

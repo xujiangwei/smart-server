@@ -127,16 +127,16 @@ public class HostConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("bandwidth", joattr.get("带宽"));
-								joat.put("mac", joattr.get("物理地址"));
-								joat.put("isBlock", joattr.get("是否允许阻断"));
-								joat.put("panel", joattr.get("所属面板"));
-								joat.put("describe", joattr.get("接口描述"));
-								joat.put("index", joattr.get("接口索引"));
+								joat.put("bandwidth", Long.parseLong(joattr.getString("带宽")));
+								joat.put("mac", joattr.getString("物理地址"));
+								joat.put("isBlock", joattr.getString("是否允许阻断"));
+								joat.put("panel", Integer.parseInt(joattr.getString("所属面板")));
+								joat.put("describe", joattr.getString("接口描述"));
+								joat.put("index", Integer.parseInt(joattr.getString("接口索引")));
 								joat.put("maxDatagramLength",
-										joattr.get("最大数据报长度"));
-								joat.put("alias", joattr.get("接口别名"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+										Integer.parseInt(joattr.getString("最大数据报长度")));
+								joat.put("alias", joattr.getString("接口别名"));
+								joat.put("moId", Long.parseLong(joattr.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -161,7 +161,7 @@ public class HostConfigListener extends AbstractListener {
 								// int if_maxdatagramlength = joa
 								// .getInt("最大数据报长度");
 								// String if_alias = joa.getString("接口别名");
-								// long if_eqptmosn = joa.getLong("MOSN");
+								// long if_moId = joa.getLong("MOSN");
 								//
 								// InterfaceManager ifm = InterfaceManager
 								// .getInstance();
@@ -169,7 +169,7 @@ public class HostConfigListener extends AbstractListener {
 								// if_bandwidth, if_mac, if_isblock,
 								// if_panel, if_describe, if_index,
 								// if_maxdatagramlength, if_alias,
-								// if_eqptmosn);
+								// if_moId);
 
 							} else if ("磁盘".equals(jo.getString("type"))) {
 								JSONArray jaattr = jo.getJSONArray("attr");
@@ -183,10 +183,10 @@ public class HostConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("path", joattr.get("盘符"));
-								joat.put("partitionSign", joattr.get("分区标签"));
-								joat.put("partitionSize", joattr.get("分区容量"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								joat.put("path", joattr.getString("盘符"));
+								joat.put("partitionSign", joattr.getString("分区标签"));
+								joat.put("partitionSize", Integer.parseInt(joattr.getString("分区容量")));
+								joat.put("moId", Long.parseLong(joattr.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -205,13 +205,13 @@ public class HostConfigListener extends AbstractListener {
 								// String disk_partitionsign = joa
 								// .getString("分区标签");
 								// int disk_partitionsize = joa.getInt("分区容量");
-								// long disk_eqptmosn = joa.getLong("MOSN");
+								// long disk_moId = joa.getLong("MOSN");
 								//
 								// DiskManager dm = DiskManager.getInstance();
 								// dm.saveDiskInfo(disk_mosn, disk_name,
 								// disk_type, disk_path,
 								// disk_partitionsign, disk_partitionsize,
-								// disk_eqptmosn);
+								// disk_moId);
 
 							} else if ("CPU".equals(jo.getString("type"))) {
 								JSONArray jaattr = jo.getJSONArray("attr");
@@ -225,13 +225,13 @@ public class HostConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("catch", joattr.get("CPU缓存"));
-								joat.put("sign", joattr.get("CPU标识"));
-								joat.put("mhz", joattr.get("主频(MHz)"));
-								joat.put("model", joattr.get("CPU类型"));
+								joat.put("catch", Integer.parseInt(joattr.getString("CPU缓存")));
+								joat.put("sign", Integer.parseInt(joattr.getString("CPU标识")));
+								joat.put("mhz", Double.parseDouble(joattr.getString("主频(MHz)")));
+								joat.put("model", joattr.getString("CPU类型"));
 								joat.put("bits", joattr.get("CPU位数"));
-								joat.put("vender", joattr.get("厂家"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								joat.put("vender", joattr.getString("厂家"));
+								joat.put("moId", Long.parseLong(joattr.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -252,14 +252,14 @@ public class HostConfigListener extends AbstractListener {
 								// double hcpu_mhz = joa.getDouble("主频(MHz)");
 								// String hcpu_model = joa.getString("CPU类型");
 								// String hcpu_vender = joa.getString("厂家");
-								// long hcpu_eqptmosn = joa.getLong("MOSN");
+								// long hcpu_moId = joa.getLong("MOSN");
 								//
 								// HostCPUManager hcm = HostCPUManager
 								// .getInstance();
 								// hcm.saveHostCPUInfo(hcpu_mosn, hcpu_name,
 								// hcpu_type, hcpu_catch, hcpu_sign,
 								// hcpu_mhz, hcpu_model, hcpu_vender,
-								// hcpu_eqptmosn);
+								// hcpu_moId);
 
 							} else if ("文件系统".equals(jo.getString("type"))) {
 								JSONArray jaattr = jo.getJSONArray("attr");
@@ -273,12 +273,12 @@ public class HostConfigListener extends AbstractListener {
 									joattr.put(key, value);
 								}
 
-								joat.put("hangNode", joattr.get("挂结点"));
-								joat.put("fsName", joattr.get("文件系统名称"));
-								joat.put("fsType", joattr.get("文件类型"));
-								joat.put("nodeNum", joattr.get("节点总数"));
-								joat.put("capacity", joattr.get("容量"));
-								joat.put("eqptMosn", joattr.get("MOSN"));
+								joat.put("hangNode", joattr.getString("挂结点"));
+								joat.put("fsName", joattr.getString("文件系统名称"));
+								joat.put("fsType", joattr.getString("文件类型"));
+								joat.put("nodeNum", Integer.parseInt(joattr.getString("节点总数")));
+								joat.put("capacity", Integer.parseInt(joattr.getString("容量")));
+								joat.put("moId", Long.parseLong(joattr.getString("MOSN")));
 
 								jo.remove("attr");
 								jo.remove("joattr");
@@ -298,13 +298,13 @@ public class HostConfigListener extends AbstractListener {
 								// String fs_fstype = joa.getString("文件类型");
 								// int fs_nodenum = joa.getInt("节点总数");
 								// int fs_capacity = joa.getInt("容量");
-								// long fs_eqptmosn = joa.getLong("MOSN");
+								// long fs_moId = joa.getLong("MOSN");
 								//
 								// FilesystemManager fsm = FilesystemManager
 								// .getInstance();
 								// fsm.saveFsInfo(fs_mosn, fs_name, fs_type,
 								// fs_hangnode, fs_fsname, fs_fstype,
-								// fs_nodenum, fs_capacity, fs_eqptmosn);
+								// fs_nodenum, fs_capacity, fs_moId);
 
 							}
 
@@ -312,6 +312,8 @@ public class HostConfigListener extends AbstractListener {
 							// data.remove("data");
 						}
 						
+						data.put("moId", data.get("mosn"));
+						data.remove("mosn");
 						data.remove("data");
 						data.put("config", config);
 						data.put("status", 300);
