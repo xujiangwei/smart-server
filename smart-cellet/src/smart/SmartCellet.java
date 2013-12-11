@@ -392,6 +392,11 @@ public class SmartCellet extends Cellet {
 		InterfaceKpiListener ifk = new InterfaceKpiListener(this);
 		ifk.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEKPI, ifk);
+		
+		//测试--获取主机ping延迟
+		PingDelayListener pdl = new PingDelayListener(this);
+		pdl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.PINGDELAY, pdl);
 
 		// 获取设备基本信息
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(

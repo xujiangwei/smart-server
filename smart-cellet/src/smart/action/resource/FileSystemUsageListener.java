@@ -109,7 +109,7 @@ public class FileSystemUsageListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 							
-							System.out.println("length   "+ja.length());
+//							System.out.println("length   "+ja.length());
 							int l=0;
 							if(ja.length()>3){
 								l=3;
@@ -117,7 +117,6 @@ public class FileSystemUsageListener extends AbstractListener {
 								l=ja.length();
 							}
 							
-							System.out.println("l---"+l);
 							JSONArray jaData=new JSONArray();
 							for (int i = 0; i < l; i++) {
 								JSONObject jsonData = ja.getJSONObject(i);

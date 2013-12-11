@@ -49,9 +49,14 @@ public class NetEquipmentConfigListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		long moId = 0;
+		int currentIndex = 0;
+		int pageSize = 10;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getInt("moId");
+			moId = json.getInt("moId");
+			currentIndex = json.getInt("currentIndex");
+			// pageSize = json.getInt("pageSize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -100,7 +105,7 @@ public class NetEquipmentConfigListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 
-					System.out.println("netConfig 源数据         " + data);
+					// System.out.println("netConfig 源数据         " + data);
 					// if ("success".equals(data.get("status"))) {
 					if (!"".equals(data.get("data"))
 							&& data.get("data") != null) {
@@ -112,172 +117,182 @@ public class NetEquipmentConfigListener extends AbstractListener {
 						JSONArray jaCpu = new JSONArray();
 						JSONArray jaBoard = new JSONArray();
 						for (int i = 0; i < ja.length(); i++) {
-							JSONObject jo = ja.getJSONObject(i);
-							if ("接口".equals(jo.getString("type"))) {
-								JSONArray jaattr = jo.getJSONArray("attr");
-								JSONObject joattr = new JSONObject();
-								JSONObject joat = new JSONObject();
-								for (int j = 0; j < jaattr.length(); j++) {
-									JSONArray ja2 = jaattr.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
+							if ((i >= (currentIndex - 1) * pageSize)
+									&& (i < (currentIndex * pageSize))) {
+								JSONObject jo = ja.getJSONObject(i);
+								if ("接口".equals(jo.getString("type"))) {
+									JSONArray jaattr = jo.getJSONArray("attr");
+									JSONObject joattr = new JSONObject();
+									JSONObject joat = new JSONObject();
+									for (int j = 0; j < jaattr.length(); j++) {
+										JSONArray ja2 = jaattr.getJSONArray(j);
+										String key = (String) ja2.get(0);
+										Object value = ja2.get(1);
 
-									joattr.put(key, value);
-								}
+										joattr.put(key, value);
+									}
 
-								joat.put("bandwidth", Long.parseLong(joattr
-										.getString("带宽")));
-								joat.put("mac", joattr.getString("物理地址"));
-								joat.put("isBlock", joattr.getString("是否允许阻断"));
-								joat.put("panel", Integer.parseInt(joattr
-										.getString("所属面板")));
-								joat.put("describe", joattr.getString("接口描述"));
-								joat.put("index", Integer.parseInt(joattr
-										.getString("接口索引")));
-								joat.put("maxDatagramLength", Integer
-										.parseInt(joattr.getString("最大数据报长度")));
-								joat.put("alias", joattr.getString("接口别名"));
-								joat.put("moId", Long.parseLong(joattr
-										.getString("MOSN")));
+									joat.put("bandwidth", Long.parseLong(joattr
+											.getString("带宽")));
+									joat.put("mac", joattr.getString("物理地址"));
+									joat.put("isBlock",
+											joattr.getString("是否允许阻断"));
+									joat.put("panel", Integer.parseInt(joattr
+											.getString("所属面板")));
+									joat.put("describe",
+											joattr.getString("接口描述"));
+									joat.put("index", Integer.parseInt(joattr
+											.getString("接口索引")));
+									joat.put("maxDatagramLength", Integer
+											.parseInt(joattr
+													.getString("最大数据报长度")));
+									joat.put("alias", joattr.getString("接口别名"));
+									joat.put("moId", Long.parseLong(joattr
+											.getString("MOSN")));
 
-								jo.remove("attr");
-								jo.remove("joattr");
-								jo.put("attr", joat);
+									jo.remove("attr");
+									jo.remove("joattr");
+									jo.put("attr", joat);
 
-								if (jaIf.length() < 10) {
 									jaIf.put(jo);
-								}
-								// jaIf.put(joattr);
-								config.put("interfaceConfig", jaIf);
-								// long if_mosn = jo.getLong("mosn");
-								// String if_name = jo.getString("name");
-								// String if_type = jo.getString("type");
-								//
-								// JSONObject joa = jo.getJSONObject("attr");
-								// long if_bandwidth = joa.getLong("带宽");
-								// String if_mac = joa.getString("物理地址");
-								// String if_isblock = joa.getString("是否允许阻断");
-								// int if_panel = joa.getInt("所属面板");
-								// String if_describe = joa.getString("接口描述");
-								// int if_index = joa.getInt("接口索引");
-								// int if_maxdatagramlength = joa
-								// .getInt("最大数据报长度");
-								// String if_alias = joa.getString("接口别名");
-								// long if_moId = joa.getLong("MOSN");
 
-								// InterfaceManager ifm = InterfaceManager
-								// .getInstance();
-								// ifm.saveIfInfo(if_mosn, if_name, if_type,
-								// if_bandwidth, if_mac, if_isblock,
-								// if_panel, if_describe, if_index,
-								// if_maxdatagramlength, if_alias,
-								// if_moId);
+									// jaIf.put(joattr);
 
-							} else if ("内存".equals(jo.getString("type"))) {
-								JSONArray jaattr = jo.getJSONArray("attr");
-								JSONObject joattr = new JSONObject();
-								JSONObject joat = new JSONObject();
-								for (int j = 0; j < jaattr.length(); j++) {
-									JSONArray ja2 = jaattr.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
+									// long if_mosn = jo.getLong("mosn");
+									// String if_name = jo.getString("name");
+									// String if_type = jo.getString("type");
+									//
+									// JSONObject joa =
+									// jo.getJSONObject("attr");
+									// long if_bandwidth = joa.getLong("带宽");
+									// String if_mac = joa.getString("物理地址");
+									// String if_isblock =
+									// joa.getString("是否允许阻断");
+									// int if_panel = joa.getInt("所属面板");
+									// String if_describe =
+									// joa.getString("接口描述");
+									// int if_index = joa.getInt("接口索引");
+									// int if_maxdatagramlength = joa
+									// .getInt("最大数据报长度");
+									// String if_alias = joa.getString("接口别名");
+									// long if_moId = joa.getLong("MOSN");
 
-									joattr.put(key, value);
-								}
+									// InterfaceManager ifm = InterfaceManager
+									// .getInstance();
+									// ifm.saveIfInfo(if_mosn, if_name, if_type,
+									// if_bandwidth, if_mac, if_isblock,
+									// if_panel, if_describe, if_index,
+									// if_maxdatagramlength, if_alias,
+									// if_moId);
 
-								joat.put("sign", joattr.getString("内存标识"));
-								joat.put("moId", Long.parseLong(joattr
-										.getString("MOSN")));
+								} else if ("内存".equals(jo.getString("type"))) {
+									JSONArray jaattr = jo.getJSONArray("attr");
+									JSONObject joattr = new JSONObject();
+									JSONObject joat = new JSONObject();
+									for (int j = 0; j < jaattr.length(); j++) {
+										JSONArray ja2 = jaattr.getJSONArray(j);
+										String key = (String) ja2.get(0);
+										Object value = ja2.get(1);
 
-								jo.remove("attr");
-								jo.remove("joattr");
-								jo.put("attr", joat);
+										joattr.put(key, value);
+									}
 
-								if (jaMem.length() < 10) {
+									joat.put("sign", joattr.getString("内存标识"));
+									joat.put("moId", Long.parseLong(joattr
+											.getString("MOSN")));
+
+									jo.remove("attr");
+									jo.remove("joattr");
+									jo.put("attr", joat);
+
 									jaMem.put(jo);
-								}
 
-								config.put("memoryConfig", jaMem);
-							} else if ("CPU".equals(jo.getString("type"))) {
-								JSONArray jaattr = jo.getJSONArray("attr");
-								JSONObject joattr = new JSONObject();
-								JSONObject joat = new JSONObject();
-								for (int j = 0; j < jaattr.length(); j++) {
-									JSONArray ja2 = jaattr.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
+								} else if ("CPU".equals(jo.getString("type"))) {
+									JSONArray jaattr = jo.getJSONArray("attr");
+									JSONObject joattr = new JSONObject();
+									JSONObject joat = new JSONObject();
+									for (int j = 0; j < jaattr.length(); j++) {
+										JSONArray ja2 = jaattr.getJSONArray(j);
+										String key = (String) ja2.get(0);
+										Object value = ja2.get(1);
 
-									joattr.put(key, value);
-								}
+										joattr.put(key, value);
+									}
 
-								joat.put("index", Integer.parseInt(joattr
-										.getString("索引")));
-								joat.put("tabindex", Integer.parseInt(joattr
-										.getString("值表索引")));
-								joat.put("tabindex2", Integer.parseInt(joattr
-										.getString("值表索引2")));
-								joat.put("location", joattr.getString("位置"));
-								joat.put("describe", joattr.getString("描述"));
-								joat.put("number", Integer.parseInt(joattr
-										.getString("同级编号")));
-								joat.put("isPlug", joattr.getString("可否插拔"));
-								joat.put("category", Integer.parseInt(joattr
-										.getString("类别")));
-								joat.put("cName", joattr.getString("名称"));
-								joat.put("alais", joattr.getString("别名"));
-								joat.put("sign", joattr.getString("CPU标识"));
-								joat.put("serialNum", joattr.getString("实体序列号"));
-								joat.put("moId", Long.parseLong(joattr
-										.getString("MOSN")));
+									joat.put("index", Integer.parseInt(joattr
+											.getString("索引")));
+									joat.put("tabindex", Integer
+											.parseInt(joattr.getString("值表索引")));
+									joat.put("tabindex2",
+											Integer.parseInt(joattr
+													.getString("值表索引2")));
+									joat.put("location", joattr.getString("位置"));
+									joat.put("describe", joattr.getString("描述"));
+									joat.put("number", Integer.parseInt(joattr
+											.getString("同级编号")));
+									joat.put("isPlug", joattr.getString("可否插拔"));
+									joat.put("category", Integer
+											.parseInt(joattr.getString("类别")));
+									joat.put("cName", joattr.getString("名称"));
+									joat.put("alais", joattr.getString("别名"));
+									joat.put("sign", joattr.getString("CPU标识"));
+									joat.put("serialNum",
+											joattr.getString("实体序列号"));
+									joat.put("moId", Long.parseLong(joattr
+											.getString("MOSN")));
 
-								jo.remove("attr");
-								jo.remove("joattr");
-								jo.put("attr", joat);
+									jo.remove("attr");
+									jo.remove("joattr");
+									jo.put("attr", joat);
 
-								if (jaCpu.length() < 10) {
 									jaCpu.put(jo);
-								}
 
-								config.put("cpuConfig", jaCpu);
-							} else if ("Board".equals(jo.getString("type"))) {
-								JSONArray jaattr = jo.getJSONArray("attr");
-								JSONObject joattr = new JSONObject();
-								JSONObject joat = new JSONObject();
-								for (int j = 0; j < jaattr.length(); j++) {
-									JSONArray ja2 = jaattr.getJSONArray(j);
-									String key = (String) ja2.get(0);
-									Object value = ja2.get(1);
+								} else if ("Board".equals(jo.getString("type"))) {
+									JSONArray jaattr = jo.getJSONArray("attr");
+									JSONObject joattr = new JSONObject();
+									JSONObject joat = new JSONObject();
+									for (int j = 0; j < jaattr.length(); j++) {
+										JSONArray ja2 = jaattr.getJSONArray(j);
+										String key = (String) ja2.get(0);
+										Object value = ja2.get(1);
 
-									joattr.put(key, value);
-								}
-								// Integer.parseInt( getString
-								joat.put("index", Integer.parseInt(joattr
-										.getString("索引")));
-								joat.put("tabindex", Integer.parseInt(joattr
-										.getString("值表索引")));
-								joat.put("tabindex2", Integer.parseInt(joattr
-										.getString("值表索引2")));
-								joat.put("location", joattr.getString("位置"));
-								joat.put("describe", joattr.getString("描述"));
-								joat.put("number", Integer.parseInt(joattr
-										.getString("同级编号")));
-								joat.put("isPlug", joattr.getString("可否插拔"));
-								joat.put("category", Integer.parseInt(joattr
-										.getString("类别")));
-								joat.put("bName", joattr.getString("名称"));
-								joat.put("alais", joattr.getString("别名"));
-								joat.put("sign", joattr.getString("Board标识"));
-								joat.put("serialNum", joattr.getString("实体序列号"));
-								joat.put("moId", Long.parseLong(joattr
-										.getString("MOSN")));
+										joattr.put(key, value);
+									}
 
-								jo.remove("attr");
-								jo.remove("joattr");
-								jo.put("attr", joat);
+									joat.put("index", Integer.parseInt(joattr
+											.getString("索引")));
+									joat.put("tabindex", Integer
+											.parseInt(joattr.getString("值表索引")));
+									joat.put("tabindex2",
+											Integer.parseInt(joattr
+													.getString("值表索引2")));
+									joat.put("location", joattr.getString("位置"));
+									joat.put("describe", joattr.getString("描述"));
+									joat.put("number", Integer.parseInt(joattr
+											.getString("同级编号")));
+									joat.put("isPlug", joattr.getString("可否插拔"));
+									joat.put("category", Integer
+											.parseInt(joattr.getString("类别")));
+									joat.put("bName", joattr.getString("名称"));
+									joat.put("alais", joattr.getString("别名"));
+									joat.put("sign",
+											joattr.getString("Board标识"));
+									joat.put("serialNum",
+											joattr.getString("实体序列号"));
+									joat.put("moId", Long.parseLong(joattr
+											.getString("MOSN")));
 
-								if (jaBoard.length() < 10) {
+									jo.remove("attr");
+									jo.remove("joattr");
+									jo.put("attr", joat);
+
 									jaBoard.put(jo);
+
 								}
+
+								config.put("interfaceConfig", jaIf);
+								config.put("memoryConfig", jaMem);
+								config.put("cpuConfig", jaCpu);
 								config.put("boardConfig", jaBoard);
 							}
 						}
@@ -286,8 +301,13 @@ public class NetEquipmentConfigListener extends AbstractListener {
 						data.remove("mosn");
 						data.remove("data");
 						data.put("config", config);
-						data.put("status", 300);
-						data.put("errorInfo", "");
+						if (data.getJSONObject("config").length() != 0) {
+							data.put("status", 300);
+							data.put("errorInfo", "");
+						} else {
+							data.put("status", 333);
+							data.put("errorInfo", "就这些数据啦，没有更多的信息！");
+						}
 					} else {
 						data.remove("data");
 						data.put("status", 603);

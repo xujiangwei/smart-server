@@ -59,7 +59,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 			moId = json.getLong("moId");
 			rangeInHour = json.getInt("rangeInHour");
 			currentIndex = json.getInt("currentIndex");
-//			pageSize = json.getInt("pageSize");
+			// pageSize = json.getInt("pageSize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -98,7 +98,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					System.out.println("ifKpi 源数据：      " + data);
+					// System.out.println("ifKpi 源数据：      " + data);
 					if ("success".equals(data.get("status"))
 							&& (!"".equals(data.get("dataList"))
 									&& data.get("dataList") != null
@@ -115,8 +115,8 @@ public final class InterfaceKpiListener extends AbstractListener {
 								mosnList.add(mosnAll);
 							}
 						}
-						System.out.println("mosnALL   "+mosnList);
-						
+						// System.out.println("mosnALL   "+mosnList);
+
 						List<Long> subml = new ArrayList<Long>();
 						for (int i = 0; i < mosnList.size(); i++) {
 							if ((i >= (currentIndex - 1) * pageSize)
@@ -124,8 +124,8 @@ public final class InterfaceKpiListener extends AbstractListener {
 								subml.add(mosnList.get(i));
 							}
 						}
-						
-						System.out.println("mosnSUB   "+subml);
+
+						// System.out.println("mosnSUB   "+subml);
 						// if (mosnList.size() > 2) {
 						// subml = mosnList.subList(0, 1);
 						// } else {
@@ -165,11 +165,11 @@ public final class InterfaceKpiListener extends AbstractListener {
 
 									joAll.remove("data");
 									joAll.put("usageData", jsDa);
-									String mosn1=joAll.getString("mosn");
-									long mosn=Long.parseLong(mosn1);
+									String mosn1 = joAll.getString("mosn");
+									long mosn = Long.parseLong(mosn1);
 									joAll.put("mosn", mosn);
-//									String kpi=joAll.getString("kpi");
-//									int kpi
+									// String kpi=joAll.getString("kpi");
+									// int kpi
 									jaSub.put(joAll);
 								}
 

@@ -103,7 +103,7 @@ public class MemoryUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					System.out.println("memUsage 源数据：      " + data);
+					// System.out.println("memUsage 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))
@@ -112,7 +112,7 @@ public class MemoryUsageListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
 
-							System.out.println("length" + ja.length());
+							// System.out.println("length" + ja.length());
 							for (int i = 0; i < ja.length(); i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");

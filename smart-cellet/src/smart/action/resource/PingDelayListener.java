@@ -99,7 +99,7 @@ public class PingDelayListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-//					System.out.println("pingDelay 源数据：      " + data);
+					// System.out.println("pingDelay 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))
@@ -107,7 +107,7 @@ public class PingDelayListener extends AbstractListener {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
-							
+
 							for (int i = 0; i < ja.length(); i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
@@ -123,13 +123,13 @@ public class PingDelayListener extends AbstractListener {
 											|| "".equals(jsonData1.get(0))
 											|| "null".equals(jsonData1.get(0))
 											|| (jsonData1.get(0)).equals(null)) {
-										jo.put("PING延迟", 0);
+										jo.put("PingDelay", 0);
 										// pingDelay = 0;
 										// timestamp = df.parse(
 										// (String) jsonData1.get(1))
 										// .getTime();
 									} else {
-										jo.put("PING延迟", Float
+										jo.put("PingDelay", Float
 												.valueOf((String) jsonData1
 														.get(0)));
 										// pingDelay = Double
@@ -148,15 +148,15 @@ public class PingDelayListener extends AbstractListener {
 									// HostManager.getInstance();
 									// hm.addPingInfo(moId, pingDelay,
 									// timestamp);
-									
+
 								}
-								
+
 								jsonData.remove("data");
 								jsonData.put("delayData", ja2);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[2]);
 								jsonData.remove("kpi");
-								
+
 								data.put("data", jsonData);
 							}
 
