@@ -51,7 +51,7 @@ public class SlaUrgentListListener extends AbstractListener{
 			e2.printStackTrace();
 		}
 		
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 		System.out.println("紧急度URL："+url.toString());
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

@@ -52,7 +52,7 @@ public class IncidentCategoryListListener extends AbstractListener{
 			e2.printStackTrace();
 		}
 		
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 		System.out.println("获取故障类型URL："+url.toString());
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

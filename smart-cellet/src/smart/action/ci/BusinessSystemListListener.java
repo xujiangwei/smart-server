@@ -53,7 +53,7 @@ public class BusinessSystemListListener extends AbstractListener {
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);

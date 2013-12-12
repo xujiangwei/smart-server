@@ -53,7 +53,7 @@ public class SlaServiceLevelListListener extends AbstractListener{
 			e2.printStackTrace();
 		}
 		
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 		System.out.println("获取服务级别的URL:" + url.toString());
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

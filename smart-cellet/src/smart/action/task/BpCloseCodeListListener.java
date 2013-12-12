@@ -50,7 +50,7 @@ public class BpCloseCodeListListener extends AbstractListener{
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 		System.out.println("获取关闭类型URL："+url.toString());
 	
 		

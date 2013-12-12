@@ -50,7 +50,7 @@ public class ProblemDetailListener   extends AbstractListener{
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		url.append("&bpiId=").append(bpiId);
+		url.append("?bpiId=").append(bpiId);
 
 		System.out.println("获取问题任务明细的URL："+url.toString());
 

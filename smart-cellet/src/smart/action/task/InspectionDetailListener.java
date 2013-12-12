@@ -49,7 +49,7 @@ public class InspectionDetailListener extends AbstractListener{
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		url.append("&inspectionId=").append(inspectionId);
+		url.append("?inspectionId=").append(inspectionId);
 
 		System.out.println("获取巡检任务明细的URL："+url.toString());
 

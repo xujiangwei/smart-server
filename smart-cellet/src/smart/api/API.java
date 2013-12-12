@@ -3,10 +3,10 @@ package smart.api;
 public final class API {
 
 	// 登录
-	public final static String LOGIN = "restws/right/auth/user/login/998";
+	public final static String LOGIN = "userm/login.html";
 
 	// 注销
-	public static final String LOGOUT = "http://10.10.152.20:8081/monitoring-system/out/logout";
+	public static final String LOGOUT = "userm/logout.html";
 
 	// 告警
 	public static final String ALARMLIST = "restws/alm/external/list/998/9980000000000000/0?pagesize=";
@@ -29,11 +29,11 @@ public final class API {
 	public static final String ALARMDISTRIBUTION = "http://10.10.152.20:8081/monitoring-system/distribution/reqAlarmDistribution";
 
 	// 消息
-	public final static String CONTACTS = "userm/getUserList.html?username=admin";
-	public final static String MESSAGELIST = "noticem/listUnread.html?username=admin";
-	public final static String MESSAGEDETAIL = "noticem/forView.html?username=admin";
-	public final static String MESSAGEDELETE = "noticem/deleteAll.html?username=admin";
-	public final static String MESSAGESEND = "noticem/send.html?username=admin";
+	public final static String CONTACTS = "userm/getUserList.html";
+	public final static String MESSAGELIST = "noticem/listUnread.html";
+	public final static String MESSAGEDETAIL = "noticem/forView.html";
+	public final static String MESSAGEDELETE = "noticem/deleteAll.html";
+	public final static String MESSAGESEND = "noticem/send.html";
 
 	public final static String MESSAGEMOVE = "http://10.10.152.20:8081/monitoring-system/messageDeal3/messageDealMove";
 	public final static String MESSAGEMARK = "http://10.10.152.20:8081/monitoring-system/messageDeal4/messageDealMark";
@@ -75,35 +75,35 @@ public final class API {
 	public final static String EQUIPMENTTOPO = "http://10.10.152.20:8081/monitoring-system/equipmentTopos/requestEquipmentTopos";
 
 	/*************************** 以下为服务台产品相关配置 ***********************************/
-	public final static String COMMONUSERLIST = "userm/getUserList.html?username=admin";
+	public final static String COMMONUSERLIST = "userm/getUserList.html";
 	public final static String SERVICEDESKLOGIN = "userm/login.html";
 
 	// 待办
-	public final static String INCIDENTLIST = "incidentm/listTodos.html?username=admin";
-	public final static String INCIDENTDETAIL = "incidentm/loadById.html?username=admin";
-	public final static String LISTOPERATION = "incidentm/listIncidentOperation.html?username=admin";
-	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html?username=admin";
-	public final static String BPCATEGORYLIST = "incidentm/getBpCategoryById.html?username=admin";
-	public final static String BPILIST = "incidentm/getBpiList.html?username=admin";
-	public final static String IMPACTLIST = "incidentm/getImpactListForBp.html?username=admin";
-	public final static String URGENTLIST = "incidentm/getUrgentListForBp.html?username=admin";
-	public final static String SERVICELEVELLIST = "incidentm/getServiceLevelByBpId.html?username=admin";
-	public final static String CLOSECODELIST = "incidentm/getBpCloseCodesByBp.html?username=admin";
+	public final static String INCIDENTLIST = "incidentm/listTodos.html";
+	public final static String INCIDENTDETAIL = "incidentm/loadById.html";
+	public final static String LISTOPERATION = "incidentm/listIncidentOperation.html";
+	public final static String INCIDENTPROCESS = "incidentm/saveAndSubmit.html";
+	public final static String BPCATEGORYLIST = "incidentm/getBpCategoryById.html";
+	public final static String BPILIST = "incidentm/getBpiList.html";
+	public final static String IMPACTLIST = "incidentm/getImpactListForBp.html";
+	public final static String URGENTLIST = "incidentm/getUrgentListForBp.html";
+	public final static String SERVICELEVELLIST = "incidentm/getServiceLevelByBpId.html";
+	public final static String CLOSECODELIST = "incidentm/getBpCloseCodesByBp.html";
 
-	public final static String PROBLEMLIST = "problemm/listTodos.html?username=admin";
-	public final static String PROBLEMDETAIL = "problemm/loadById.html?username=admin";
-	public final static String PROBLEMPROCESS = "problemm/saveAndSubmit.html?username=admin";
+	public final static String PROBLEMLIST = "problemm/listTodos.html";
+	public final static String PROBLEMDETAIL = "problemm/loadById.html";
+	public final static String PROBLEMPROCESS = "problemm/saveAndSubmit.html";
 
-	public final static String INSPECTIONTASKLIST = "taskPlanm/getTaskPlanList.html?username=admin";
-	public final static String INSPECTIONTASKDETAIL = "taskPlanm/forView.html?username=admin";
-	public final static String INSPECTIONITEMLIST = "taskPlanm/getAllCheckItem.html?username=admin";
-	public final static String INSPECTIONCISAVE = "taskPlanm/saveInspectionCi.html?username=admin";
-	public final static String INSPECTIONSAVE = "taskPlanm/saveInspection.html?username=admin";
+	public final static String INSPECTIONTASKLIST = "taskPlanm/getTaskPlanList.html";
+	public final static String INSPECTIONTASKDETAIL = "taskPlanm/forView.html";
+	public final static String INSPECTIONITEMLIST = "taskPlanm/getAllCheckItem.html";
+	public final static String INSPECTIONCISAVE = "taskPlanm/saveInspectionCi.html";
+	public final static String INSPECTIONSAVE = "taskPlanm/saveInspection.html";
 
 	// 资产
-	public final static String CILIST = "sacmm/listEquipments.html?username=admin";
-	public final static String CIDETAIL = "sacmm/loadEquipmentById.html?username=admin";
-	public final static String BIZSYSTEMLIST = "sacmm/getBizSystemList.html?username=admin";
+	public final static String CILIST = "sacmm/listEquipments.html";
+	public final static String CIDETAIL = "sacmm/loadEquipmentById.html";
+	public final static String BIZSYSTEMLIST = "sacmm/getBizSystemList.html";
 
 	private API() {
 	}

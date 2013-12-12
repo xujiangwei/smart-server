@@ -52,7 +52,7 @@ public class OperationListListener extends AbstractListener{
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
-		url.append("&jbpmTaskInstanceID=").append(jbpmTaskInstanceID);
+		url.append("?jbpmTaskInstanceID=").append(jbpmTaskInstanceID);
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
