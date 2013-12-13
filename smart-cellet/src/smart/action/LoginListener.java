@@ -24,6 +24,7 @@ import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
+import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
@@ -57,12 +58,10 @@ public final class LoginListener extends AbstractListener {
 		}
 
 		// URL
-		HostConfig config = new MonitorSystemHostConfig();
+		HostConfig config = new ServiceDeskHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.LOGIN).append("/").append(username)
-				.append("?password=").append(password);
-
+				.append(API.LOGIN);
 		System.out.println("访问的Url：" + url.toString());
 
 		// 创建请求
