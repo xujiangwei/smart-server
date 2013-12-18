@@ -23,7 +23,6 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
-import smart.api.host.MonitorSystemHostConfig;
 import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
@@ -107,7 +106,7 @@ public final class LoginListener extends AbstractListener {
 					if ("success".equals(jo.getString("status"))) {
 						jo.put("status", 300);
 						JSONObject j = jo.getJSONObject("userInfo");
-						j.put("userID", Long.valueOf(j.getString("userID")));
+						j.put("userID", j.getString("userID"));
 //						if (DButil.getInstance().getConnection() != null) {
 //
 //							if (!UserManager.getInstance().isExist(username,

@@ -6,6 +6,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
+import smart.api.RequestContentCapsule;
 import smart.api.host.HostConfig;
 import smart.api.host.HostConfigContext;
 import smart.api.host.ServiceDeskHostConfig;
@@ -43,13 +45,32 @@ public class ProblemListListener  extends AbstractListener{
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.PROBLEMLIST);
 		System.out.println("获取问题列表的URL:" + url.toString());
+		JSONObject json = null;
+		String start=null;
+		String limit=null;
+		String filterId=null;
+		try {
+			 json = new JSONObject(action.getParamAsString("data"));
+			 start=json.getString("currentIndex");
+			 limit=json.getString("pagesize");
+			 filterId=json.getString("filterId");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		
 		request.method(HttpMethod.GET);
+		
+		DeferredContentProvider dcp = new DeferredContentProvider();
+		RequestContentCapsule capsule = new RequestContentCapsule();
+		capsule.append("start", start);
+		capsule.append("limit", limit);
+		capsule.append("filterId", filterId);
+		dcp.offer(capsule.toBuffer());
+		dcp.close();
+		request.content(dcp);
 
 		Properties params = new Properties();
-
 		// 发送请求
 		ContentResponse response = null;
 		try {
