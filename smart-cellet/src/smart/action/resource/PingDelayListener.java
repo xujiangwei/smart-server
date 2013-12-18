@@ -99,7 +99,7 @@ public class PingDelayListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					// System.out.println("pingDelay 源数据：      " + data);
+					 System.out.println("pingDelay 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))

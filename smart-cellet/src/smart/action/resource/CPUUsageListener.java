@@ -104,7 +104,7 @@ public class CPUUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					// System.out.println("cpuUsage 源数据：      " + data);
+					 System.out.println("cpuUsage 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
@@ -155,6 +155,9 @@ public class CPUUsageListener extends AbstractListener {
 
 								jsonData.remove("data");
 								jsonData.put("data", ja2);
+								String mosn1 = jsonData.getString("mosn");
+								long mosn = Long.parseLong(mosn1);
+								jsonData.put("mosn", mosn);
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
 								jsonData.remove("kpi");
