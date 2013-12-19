@@ -102,7 +102,7 @@ public class FileSystemUsageListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 					if ("success".equals(data.get("status"))) {
-						System.out.println("filesys 源数据：      " + data);
+//						System.out.println("filesys 源数据：      " + data);
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
 							JSONArray ja = data.getJSONArray("dataList");
@@ -160,12 +160,12 @@ public class FileSystemUsageListener extends AbstractListener {
 
 								jsonData.remove("data");
 								jsonData.put("usageData", ja2);
-								String mosn1 = jsonData.getString("mosn");
-								long mosn = Long.parseLong(mosn1);
-								jsonData.put("mosn", mosn);
+								jsonData.put("mosn", Long.parseLong(jsonData
+										.getString("mosn")));
+								jsonData.put("kpi", Long.parseLong(jsonData
+										.getString("kpi")));
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
-								jsonData.remove("kpi");
 								
 								jaData.put(jsonData);
 							}

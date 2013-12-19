@@ -49,6 +49,7 @@ import smart.action.message.MessageTopInfoListener;
 import smart.action.resource.CPUUsageListener;
 import smart.action.resource.DataBaseListener;
 import smart.action.resource.DeleteEquipmentListener;
+import smart.action.resource.DiskFreeListener;
 import smart.action.resource.EquipmentAlarmListener;
 import smart.action.resource.EquipmentBasicListener;
 import smart.action.resource.EquipmentConfigLitener;
@@ -356,6 +357,10 @@ public class SmartCellet extends Cellet {
 		FileSystemUsageListener hfilesul = new FileSystemUsageListener(this);
 		hfilesul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hfilesul);
+		
+		DiskFreeListener dfl=new DiskFreeListener(this);
+		dfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DISKFREE, dfl);
 
 		PingDelayListener hpdl = new PingDelayListener(this);
 		hpdl.setHttpClient(this.httpClient);

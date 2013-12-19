@@ -165,11 +165,13 @@ public final class InterfaceKpiListener extends AbstractListener {
 
 									joAll.remove("data");
 									joAll.put("usageData", jsDa);
-									String mosn1 = joAll.getString("mosn");
-									long mosn = Long.parseLong(mosn1);
-									joAll.put("mosn", mosn);
-									// String kpi=joAll.getString("kpi");
-									// int kpi
+									// String mosn1 = joAll.getString("mosn");
+									// long mosn = Long.parseLong(mosn1);
+									// joAll.put("mosn", mosn);
+									joAll.put("mosn", Long.parseLong(joAll
+											.getString("mosn")));
+									joAll.put("kpi", Long.parseLong(joAll
+											.getString("kpi")));
 									jaSub.put(joAll);
 								}
 
