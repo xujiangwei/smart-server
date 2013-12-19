@@ -21,6 +21,7 @@ import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
 import smart.action.alarm.AlarmExperienceListener;
 import smart.action.alarm.AlarmForwardListener;
+import smart.action.alarm.AlarmLevelListener;
 import smart.action.alarm.AlarmListListener;
 import smart.action.alarm.AlarmOpInfoListener;
 import smart.action.attention.AddAttentionListener;
@@ -503,6 +504,11 @@ public class SmartCellet extends Cellet {
 				this);
 		alarmExperience.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
+		
+		// 告警级别统计
+		AlarmLevelListener alarmLevel = new AlarmLevelListener(this);
+		alarmLevel.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMLEVEL, alarmLevel);
 
 		// 获取告警影响范围
 		// AlarmCoverageListener alarmCoverage = new

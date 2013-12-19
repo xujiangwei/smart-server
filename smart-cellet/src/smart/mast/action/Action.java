@@ -89,6 +89,7 @@ public final class Action {
 	public static final String ALARMBUFFER = "requestAlarmBuffer";
 	public static final String ALARMDETAIL = "requestAlarmDetail";
 	public static final String ALARMDEAL = "alarmDeal";
+	public static final String ALARMLEVEL = "requestAlarmLevel";
 	// public static final String ALARMBASEINFO = "requestAlarmBaseInfo";
 	public static final String ADDALARMOPINFO = "addAlarmOpInfo";
 	public static final String ADDALARMEXPERIENCE = "addAlarmExperience";

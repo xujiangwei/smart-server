@@ -106,7 +106,8 @@ public final class LoginListener extends AbstractListener {
 					if ("success".equals(jo.getString("status"))) {
 						jo.put("status", 300);
 						JSONObject j = jo.getJSONObject("userInfo");
-						j.put("userID", j.getString("userID"));
+						j.put("userID", 9980000000000000l);
+//						j.put("userID", Long.valueOf(j.getString("userID")));
 //						if (DButil.getInstance().getConnection() != null) {
 //
 //							if (!UserManager.getInstance().isExist(username,

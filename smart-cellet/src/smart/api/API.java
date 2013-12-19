@@ -20,6 +20,7 @@ public final class API {
 	public static final String ALARMOPINFO = "restws/alm/external/deal";
 	public static final String ALARMEXPERIENCE = "restws/alm/external/exp";
 	public static final String ALARMBUFFER = "alarm/buff";
+	public static final String ALARMLEVEL = "restws/alm/stat/severity/998/9980000000000000";
 
 	public static final String ALARMFORWARD = "http://10.10.152.20:8081/monitoring-system/forward/alarmForward";
 	public static final String DEALINFO = "http://10.10.152.20:8081/monitoring-system/dealInfo/addDealInfo";
