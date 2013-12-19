@@ -59,6 +59,7 @@ public final class API {
 	public final static String HOSTCONFIG = "restws/data/cfg/mo/998";
 	public final static String NETEQUIPMENTCONFIG = "restws/data/cfg/mo/998";
 	public final static String EQUIPMENTBASIC = "restws/data/perf/mo/998";
+	public final static String EQUIPMENTALARM = "restws/alm/external/list/998/9980000000000000/0?MOSN=";
 
 	public final static String CPU = "restws/data/perf/mo/998";
 	public final static String MEMORY = "restws/data/perf/mo/998";
@@ -71,7 +72,6 @@ public final class API {
 
 	public final static String EQUIPMENTHEALTHSTATUS = "http://10.10.152.20:8081/monitoring-system/health/requestEquipmentHealthStatus";
 	public final static String DELETEEQUIPMENT = "http://10.10.152.20:8081/monitoring-system/equipmentDel/equipmentDelete";
-	public final static String EQUIPMENTALARM = "http://10.10.152.20:8081/monitoring-system/equipmentAlarms/requestEquipmentAlarms";
 	public final static String EQUIPMENTMONITORSTATE = "http://10.10.152.20:8081/monitoring-system/monitorStatus/equipmentChangeMonitorStatus";
 	public final static String SENDSNAPSHOT = "http://10.10.152.20:8081/monitoring-system/snapshot/equipmentSendSnapshot";
 	public final static String EQUIPMENTTOPO = "http://10.10.152.20:8081/monitoring-system/equipmentTopos/requestEquipmentTopos";

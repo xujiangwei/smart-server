@@ -58,8 +58,6 @@ public class DiskFreeListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
-		System.out.println("参数1: " + moId);
-
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
@@ -162,7 +160,7 @@ public class DiskFreeListener extends AbstractListener {
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("hostCfg data：      " + data);
+					System.out.println("diskFree：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {

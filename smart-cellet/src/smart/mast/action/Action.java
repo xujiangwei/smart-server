@@ -66,6 +66,7 @@ public final class Action {
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
 	public final static String HOSTKPI = "requestHostKpi";
 	public final static String NETEQPTKPI = "requestNetEqptKpi";
+	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
 
 	public final static String CPUUSAGE = "requestCPUUsage";
 	public final static String MEMORYUSAGE = "requestMemoryUsage";
@@ -79,7 +80,6 @@ public final class Action {
 	public final static String EQUIPMENTHEALTHSTATUS = "requestEquipmentHealthStatus";
 
 	public final static String DELETEEQUIPMENT = "equipmentDelete";
-	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
 	public final static String EQUIPMENTMONITORSTATE = "eqptChangeMonitorStatus";
 	public final static String SENDSNAPSHOT = "SendSnapshot";
 	public final static String EQUIPMENTTOPO = "requestEquipmentTopos";
