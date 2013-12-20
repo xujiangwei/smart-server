@@ -48,14 +48,10 @@ public class DataBaseListener extends AbstractListener {
 		JSONObject json = null;
 		long equipmentId = 0;
 		int rangeInHour = 0;
-		int currentIndex = 0;
-		int pagesize = 0;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			equipmentId = json.getLong("moId");
 			rangeInHour = json.getInt("rangeInHour");
-			currentIndex = json.getInt("currentIndex");
-			pagesize = json.getInt("pagesize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -95,51 +91,32 @@ public class DataBaseListener extends AbstractListener {
 					if ("success".equals(data.get("status"))&&(!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null)) {
 							JSONArray ja = data.getJSONArray("dataList");
-							DateFormat df = new SimpleDateFormat(
-									"yyyy-MM-dd HH:mm:ss");
-							
+							DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							JSONObject jo = new JSONObject();
 							JSONArray jay = new JSONArray();
-							int size = 0;
-							if (ja.length()-currentIndex>=pagesize) {
-								size = pagesize;
-							} else {
-								size = ja.length()-currentIndex;
-							}
-							for (int i = currentIndex; i < currentIndex+size; i++) {
+							for (int i = 0; i < ja.length(); i++) {
 								JSONObject job = ja.getJSONObject(i);
 								JSONArray ja1 = job.getJSONArray("data");
-								JSONArray ja2 = new JSONArray();
-//								if (ja1.length() < rangeInHour*60) {
-									for (int j = 0; j < ja1.length(); j++) {
-										JSONObject jt = new JSONObject();
-										jt.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-										jt.put("collectTime", df.parse(ja1.getJSONArray(j)
-												.getString(1)).getTime());
-										ja2.put(jt);
-									}
-//									for (int k = 0; k < rangeInHour*60-ja1.length(); k++) {
-//										JSONObject jo = new JSONObject();
-//										jo.put("usage", Float.valueOf(ja1.getJSONArray(ja1.length()-1).getString(0)));
-//										jo.put("collectTime", df.parse(ja1.getJSONArray(ja1.length()-1)
-//												.getString(1)).getTime()+60000*(k+1));
-//										ja2.put(jo);
+//								JSONArray ja2 = new JSONArray();
+//									for (int j = 0; j < ja1.length(); j++) {
+//										JSONObject jt = new JSONObject();
+//										jt.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
+////										jt.put("collectTime", df.parse(ja1.getJSONArray(j)
+////												.getString(1)).getTime());
+//										ja2.put(jt);
 //									}
-//								} else {
-//									for (int j = 0; j < rangeInHour*60; j++) {
-//										JSONObject jo = new JSONObject();
-//										jo.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-//										jo.put("collectTime", df.parse(ja1.getJSONArray(j)
-//												.getString(1)).getTime());
-//										ja2.put(jo);
-//									}
-//								}
+								JSONObject jt = new JSONObject();
+								jt.put("usage", Float.valueOf(ja1.getJSONArray(0).getString(0)));
+								jt.put("collectTime", df.parse(ja1.getJSONArray(0)
+									.getString(1)).getTime());
 								job.remove("data");
-								job.put("data", ja2);
-								System.out.println("data是: "+ja2);
+								job.put("data", jt);
 								String s = job.getString("moPath");
 								job.put("name", s.substring(s.indexOf("(")+1, s.lastIndexOf(")")));
 								job.remove("kpi");
+								job.remove("moPath");
+								job.remove("mosn");
+								job.remove("kpiName");
 								jay.put(job);
 							}
 							jo.put("dataList", jay);

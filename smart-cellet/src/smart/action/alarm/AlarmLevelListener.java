@@ -30,7 +30,7 @@ import smart.mast.action.Action;
 /**
  * 告警级别统计监听
  */
-public class AlarmLevelListener extends AbstractListener {
+public final class AlarmLevelListener extends AbstractListener {
 
 	public AlarmLevelListener(Cellet cellet) {
 		super(cellet);
@@ -88,6 +88,11 @@ public class AlarmLevelListener extends AbstractListener {
 								json.getJSONObject("severity"+i).put("occurTime", df.parse(str).getTime());
 							}
 						}
+						jo.put("errorInfo", "");
+					} else {
+						jo.put("status", 395);
+						jo.put("errorInfo", jo.getString("errMsg"));
+						jo.remove("errMsg");
 					}
 					
 					// 设置参数
