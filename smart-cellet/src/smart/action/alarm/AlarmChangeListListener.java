@@ -149,7 +149,7 @@ public class AlarmChangeListListener extends AbstractListener {
 						}
 					}
 
-				}, 60, 60, TimeUnit.SECONDS);
+				}, 10, 8, TimeUnit.SECONDS);
 	}
 
 }

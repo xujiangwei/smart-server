@@ -66,12 +66,10 @@ public final class Action {
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
 	public final static String HOSTKPI = "requestHostKpi";
 	public final static String NETEQPTKPI = "requestNetEqptKpi";
-	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
 
 	public final static String CPUUSAGE = "requestCPUUsage";
 	public final static String MEMORYUSAGE = "requestMemoryUsage";
 	public final static String FILESYSTEMUSAGE = "requestFileSysUsage";
-	public final static String DISKFREE="requestDiskFree";
 	public final static String PINGDELAY = "requestPingDelay";
 	public final static String INTERFACEFLOW = "requestIfflow";
 	public final static String INTERFACEKPI = "requestIfKpi";
@@ -80,6 +78,7 @@ public final class Action {
 	public final static String EQUIPMENTHEALTHSTATUS = "requestEquipmentHealthStatus";
 
 	public final static String DELETEEQUIPMENT = "equipmentDelete";
+	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
 	public final static String EQUIPMENTMONITORSTATE = "eqptChangeMonitorStatus";
 	public final static String SENDSNAPSHOT = "SendSnapshot";
 	public final static String EQUIPMENTTOPO = "requestEquipmentTopos";
@@ -89,7 +88,6 @@ public final class Action {
 	public static final String ALARMBUFFER = "requestAlarmBuffer";
 	public static final String ALARMDETAIL = "requestAlarmDetail";
 	public static final String ALARMDEAL = "alarmDeal";
-	public static final String ALARMLEVEL = "requestAlarmLevel";
 	// public static final String ALARMBASEINFO = "requestAlarmBaseInfo";
 	public static final String ADDALARMOPINFO = "addAlarmOpInfo";
 	public static final String ADDALARMEXPERIENCE = "addAlarmExperience";

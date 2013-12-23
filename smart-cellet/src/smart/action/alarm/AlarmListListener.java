@@ -107,7 +107,13 @@ public final class AlarmListListener extends AbstractListener {
 								"lastTime", "count", "detail", "originalInfo",
 								"confirmTime", "confirmUserId", "confirmUser",
 								"moIp", "moName", "causeAlias", "location");
-						for (int i = 0; i < ja.length(); i++) {
+						int m = 0;
+						if (ja.length() > 18) {
+							m = 18;
+						} else {
+							m = ja.length();
+						}
+						for (int i = 0; i < m; i++) {
 							JSONObject job = new JSONObject();
 
 							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
