@@ -100,7 +100,6 @@ public class ProblemListListener  extends AbstractListener{
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 
-					// 响应动作，即向客户端发送 ActionDialect
 					this.response(Action.PROBLEMLIST, params);
 
 				} catch (JSONException e) {

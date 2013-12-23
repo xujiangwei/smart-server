@@ -72,7 +72,7 @@ public final class IncidentProcessListener extends AbstractListener {
 		String comment=null;
 		String assigner=null;
 		String investDiagn=null;
-		String isSoluation=null;
+		String isSolved=null;
 		String reason=null;
 		String resolution=null;
 		String closeCode=null;
@@ -97,7 +97,7 @@ public final class IncidentProcessListener extends AbstractListener {
 			 System.out.println(comment);
 			 assigner=json.getString("assigner");
 			 investDiagn=json.getString("investDiagn");
-			 isSoluation=json.getString("isSoluation");
+			 isSolved=json.getString("isSolved");
 			 reason=json.getString("reason");
 			 System.out.println(reason);
 			 resolution=json.getString("resolution");
@@ -131,7 +131,7 @@ public final class IncidentProcessListener extends AbstractListener {
 		capsule.append("comment", comment);
 		capsule.append("assigner", assigner);
 		capsule.append("investDiagn", investDiagn);
-		capsule.append("isSoluation", isSoluation);
+		capsule.append("isSolved", isSolved);
 		capsule.append("reason", reason);
 		capsule.append("resolution", resolution);
 		capsule.append("closeCode", closeCode);
