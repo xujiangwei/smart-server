@@ -36,22 +36,69 @@ public class InspectionSaveListener  extends AbstractListener{
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INSPECTIONSAVE);
+	
 		JSONObject json = null;
-		String inspectionId=null;
+		String bpiId=null;
+
+		String description=null;
+		String category=null;
+		String urgent=null;
+		String impact=null;
+		
+		String isMajor=null;
+		String comment=null;
+		String reviewType=null;
+		String reason=null;
+		
+		String resolution=null;
+		String closeCode=null;
+		
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			inspectionId=json.getString("inspectionId");
-		} catch (JSONException e) {
+			bpiId=json.getString("problemId");
+			
+			 description=new String(json.getString("description").getBytes(),"UTF-8");
+			 category=json.getString("category");
+			 urgent=json.getString("urgent");
+			 impact=json.getString("impact");
+			 
+			 isMajor=json.getString("isMajor");
+			 comment=json.getString("comment");
+			 reviewType=json.getString("reviewType");//是否有效解决
+			 reason=json.getString("reason");
+			 
+			 resolution=json.getString("resolution");
+			 closeCode=json.getString("closeCode");
+			 if(closeCode.indexOf("null")>=0){
+				 closeCode="";
+			 }
+			
+		} catch (JSONException e2) {
+			e2.printStackTrace();
+		} catch (UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
-		url.append("?inspectionId=").append(inspectionId);
+		url.append("&bpiId=").append(bpiId);
+		url.append("&description='").append(description).append("'");
+		url.append("&category=").append(category);
+		url.append("&urgent=").append(urgent);
+		url.append("&impact=").append(impact);
 		
+		url.append("&isMajor=").append(isMajor);
+		url.append("&comment=").append(comment);
+		url.append("&reviewType=").append(reviewType);//是否有效解决
+		url.append("&reason=").append(reason);
+		
+		url.append("&resolution=").append(resolution);
+		url.append("&closeCode=").append(closeCode);
+
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("保存巡检任务的URL："+url.toString());
+		System.out.println("巡检任务处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
 	
 		Properties params = new Properties();
+			
 			// 发送请求
 		ContentResponse response = null;
 		try {
@@ -65,6 +112,8 @@ public class InspectionSaveListener  extends AbstractListener{
 		}
 
 		JSONObject jo = null;
+	
+		
 
 		switch (response.getStatus()) {
 		case HttpStatus.OK_200:
@@ -100,6 +149,7 @@ public class InspectionSaveListener  extends AbstractListener{
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}
+
 			// 设置参数
 			params.addProperty(new ObjectProperty("data", jo));
 

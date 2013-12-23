@@ -21,6 +21,7 @@ import smart.action.alarm.AlarmDealListener;
 import smart.action.alarm.AlarmDetailListener;
 import smart.action.alarm.AlarmExperienceListener;
 import smart.action.alarm.AlarmForwardListener;
+import smart.action.alarm.AlarmLevelListener;
 import smart.action.alarm.AlarmListListener;
 import smart.action.alarm.AlarmOpInfoListener;
 import smart.action.attention.AddAttentionListener;
@@ -49,6 +50,7 @@ import smart.action.message.MessageTopInfoListener;
 import smart.action.resource.CPUUsageListener;
 import smart.action.resource.DataBaseListener;
 import smart.action.resource.DeleteEquipmentListener;
+import smart.action.resource.DiskFreeListener;
 import smart.action.resource.EquipmentAlarmListener;
 import smart.action.resource.EquipmentBasicListener;
 import smart.action.resource.EquipmentConfigLitener;
@@ -344,7 +346,12 @@ public class SmartCellet extends Cellet {
 		neptcl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, neptcl);
 
-		// 获取主机设备的CPU/内存/文件系统/接口的kpi信息，PING延时信息
+		// 获取设备告警
+		EquipmentAlarmListener eal = new EquipmentAlarmListener(this);
+		eal.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTALARM, eal);
+
+		// 获取主机设备的CPU/内存/文件系统/diskFree/接口的kpi信息，PING延时信息
 		CPUUsageListener hcpuul = new CPUUsageListener(this);
 		hcpuul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hcpuul);
@@ -352,6 +359,10 @@ public class SmartCellet extends Cellet {
 		MemoryUsageListener hmemul = new MemoryUsageListener(this);
 		hmemul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hmemul);
+
+		DiskFreeListener dfl = new DiskFreeListener(this);
+		dfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, dfl);
 
 		FileSystemUsageListener hfilesul = new FileSystemUsageListener(this);
 		hfilesul.setHttpClient(this.httpClient);
@@ -392,11 +403,16 @@ public class SmartCellet extends Cellet {
 		InterfaceKpiListener ifk = new InterfaceKpiListener(this);
 		ifk.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.INTERFACEKPI, ifk);
-		
-		//测试--获取主机ping延迟
+
+		// 测试--获取主机ping延迟
 		PingDelayListener pdl = new PingDelayListener(this);
 		pdl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PINGDELAY, pdl);
+		
+		// 测试--获取主机disk延迟
+		DiskFreeListener hdfl = new DiskFreeListener(this);
+		hdfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DISKFREE, hdfl);
 
 		// 获取设备基本信息
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(
@@ -415,12 +431,6 @@ public class SmartCellet extends Cellet {
 				this);
 		equipmentDelete.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DELETEEQUIPMENT, equipmentDelete);
-
-		// 获取设备告警
-		EquipmentAlarmListener eqptAlarmListener = new EquipmentAlarmListener(
-				this);
-		eqptAlarmListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTALARM, eqptAlarmListener);
 
 		// 改变设备监控状态
 		EquipmentMonitorStateListener eqptChangeMonitorStatusListener = new EquipmentMonitorStateListener(
@@ -498,6 +508,11 @@ public class SmartCellet extends Cellet {
 				this);
 		alarmExperience.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDETAIL, alarmExperience);
+
+		// 告警级别统计
+		AlarmLevelListener alarmLevel = new AlarmLevelListener(this);
+		alarmLevel.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.ALARMLEVEL, alarmLevel);
 
 		// 获取告警影响范围
 		// AlarmCoverageListener alarmCoverage = new
