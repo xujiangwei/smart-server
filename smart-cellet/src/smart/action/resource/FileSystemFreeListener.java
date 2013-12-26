@@ -29,9 +29,9 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class DiskFreeListener extends AbstractListener {
+public class FileSystemFreeListener extends AbstractListener {
 
-	public DiskFreeListener(Cellet cellet) {
+	public FileSystemFreeListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -46,23 +46,20 @@ public class DiskFreeListener extends AbstractListener {
 		JSONObject json = null;
 		long moId = 0;
 		int rangeInHour = 0;
-		// int currentIndex = 0;
-		// int pageSize = 10;
+
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getInt("moId");
 			rangeInHour = json.getInt("rangeInHour");
-			// currentIndex = json.getInt("currentIndex");
-			// pageSize = json.getInt("pageSize");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
-
-		HostConfig cpuConfig = new MonitorSystemHostConfig();
-		HostConfigContext context = new HostConfigContext(cpuConfig);
+		// URL
+		HostConfig fileSysConfig = new MonitorSystemHostConfig();
+		HostConfigContext context = new HostConfigContext(fileSysConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.DISKKPI).append("/").append(moId).append("/")
-				.append("fFreeSize/?rangeInHour=").append(rangeInHour);
+				.append(API.FILESYSTEMKPI).append("/").append(moId)
+				.append("/fFileFree/?rangeInHour=").append(rangeInHour);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -72,6 +69,7 @@ public class DiskFreeListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("moId", moId);
+		capsule.append("rangeInHour", rangeInHour);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -92,9 +90,9 @@ public class DiskFreeListener extends AbstractListener {
 		Properties params = new Properties();
 		JSONObject data = null;
 		switch (response.getStatus()) {
-
 		case HttpStatus.OK_200:
 			byte[] bytes = response.getContent();
+
 			if (null != bytes) {
 
 				// 获取从Web服务器返回的数据
@@ -102,66 +100,72 @@ public class DiskFreeListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					System.out.println("diskFree 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
-						// if (!"".equals(data.get("data"))
-						// && data.get("data") != null) {
-						JSONArray ja = data.getJSONArray("dataList");
+						System.out.println("filesys 源数据：      " + data);
+						if (!"".equals(data.get("dataList"))
+								&& data.get("dataList") != null) {
+							JSONArray ja = data.getJSONArray("dataList");
+							DateFormat df = new SimpleDateFormat(
+									"yyyy-MM-dd HH:mm:ss");
 
-						DateFormat df = new SimpleDateFormat(
-								"yyyy-MM-dd HH:mm:ss");
-						JSONArray jaData = new JSONArray();
+							JSONArray jaData = new JSONArray();
+							for (int i = 0; i < ja.length(); i++) {
+								JSONObject jsonData = ja.getJSONObject(i);
+								JSONArray ja1 = jsonData.getJSONArray("data");
+								// long filesysid=jsonData.getLong("mosn");
 
-						for (int i = 0; i < ja.length(); i++) {
-							JSONObject jo = new JSONObject();
-							JSONObject joDisk = ja.getJSONObject(i);
-							JSONArray jaFreeList = joDisk.getJSONArray("data");
-							for (int j = 0; j < jaFreeList.length(); j++) {
-								JSONArray jaFree = jaFreeList.getJSONArray(j);
-								for (int k = 0; k < jaFree.length(); k++) {
-
-									if (null == jaFree.get(0)
-											|| "".equals(jaFree.get(0))
-											|| "null".equals(jaFree.get(0))
-											|| (jaFree.get(0)).equals(null)) {
-										jo.put("free", 0);
-									} else {
-										jo.put("free",
-												Long.parseLong((String) jaFree
-														.get(0)));
-									}
-									jo.put("collectTime",
-											df.parse((String) jaFree.get(1))
-													.getTime());
-									jaData.put(jo);
+								JSONArray jsonData1 = ja1.getJSONArray(ja1
+										.length() - 1);
+								if (null == jsonData1.get(0)
+										|| "".equals(jsonData1.get(0))
+										|| "null".equals(jsonData1.get(0))
+										|| (jsonData1.get(0)).equals(null)) {
+									jsonData.put("freeSize", 0);
+								} else {
+									jsonData.put("freeSize", Long
+											.parseLong((String) jsonData1
+													.get(0)));
 								}
+								jsonData.put("collectTime",
+										df.parse((String) jsonData1.get(1))
+												.getTime());
+								// ja2.put(jo);
+
+								// double usage=Double.valueOf((String)
+								// jsonData1.get(0));
+								// long timestamp=df.parse((String)
+								// jsonData1.get(1))
+								// .getTime();
+								//
+								// HostManager hm=HostManager.getInstance();
+								// hm.addFileSystemUsages(filesysid, usage,
+								// timestamp);
+
+								jsonData.remove("data");
+								jsonData.put("mosn", Long.parseLong(jsonData
+										.getString("mosn")));
+								jsonData.put("kpi", Long.parseLong(jsonData
+										.getString("kpi")));
+								String s = jsonData.getString("moPath");
+								jsonData.put("name", s.split("> ")[1]);
+
+								jaData.put(jsonData);
 							}
 
-							jo.put("kpi",
-									Long.parseLong(joDisk.getString("kpi")));
-							jo.put("mosn",
-									Long.parseLong(joDisk.getString("mosn")));
-//							jo.put("", value);
-							
+							data.remove("dataList");
+							data.put("dataList", jaData);
+							data.put("moId", moId);
+							data.put("status", 300);
+							data.put("errorInfo", "");
 						}
-
-						data.remove("dataList");
-						data.put("data", ja);
-						data.put("status", 300);
-						data.put("errorInfo", "");
-
-						// } else {
-						// data.remove("data");
-						// data.put("status", 602);
-						// data.put("config", "");
-						// data.put("errorInfo", "未获取到主机配置数据");
-						// }
 					} else {
-						data.put("status", 623);
-						data.put("errorInfo", "未获取到相关kpi数据");
+						data.remove("dataList");
+						data.put("status", 621);
+						data.put("dataList", "");
+						data.put("errorInfo", "未获取到文件系统kpi数据");
 					}
 
-					System.out.println("diskFree：      " + data);
+					System.out.println("freeData：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -172,13 +176,14 @@ public class DiskFreeListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.DISKFREE, params);
+				this.response(Action.FILESYSTEMFREE, params);
 			} else {
-				this.reportHTTPError(Action.DISKFREE);
+				this.reportHTTPError(Action.FILESYSTEMFREE);
 			}
 			break;
 		default:
-			Logger.w(DiskFreeListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(FileSystemFreeListener.class,
+					"返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
@@ -191,7 +196,7 @@ public class DiskFreeListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.DISKFREE, params);
+			this.response(Action.FILESYSTEMFREE, params);
 			break;
 		}
 	}

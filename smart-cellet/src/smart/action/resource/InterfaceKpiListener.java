@@ -53,7 +53,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 		long moId = 0;
 		int rangeInHour = 0;
 		int currentIndex = 0;
-		int pageSize = 1;
+		int pageSize = 2;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			moId = json.getLong("moId");
@@ -69,7 +69,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.INTERFACEKPI).append("/").append(moId)
-				.append("/fInOctets,fOutOctets,fInRate,fOutRate?rangeInHour=")
+				.append("/fInBwUsage,fOutBwUsage,fInRate,fOutRate?rangeInHour=")
 				.append(rangeInHour);
 
 		// 创建请求
@@ -98,7 +98,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					// System.out.println("ifKpi 源数据：      " + data);
+					 System.out.println("ifKpi 源数据：      " + data);
 					if ("success".equals(data.get("status"))
 							&& (!"".equals(data.get("dataList"))
 									&& data.get("dataList") != null
@@ -164,7 +164,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 									}
 
 									joAll.remove("data");
-									joAll.put("usageData", jsDa);
+									joAll.put("data", jsDa);
 									// String mosn1 = joAll.getString("mosn");
 									// long mosn = Long.parseLong(mosn1);
 									// joAll.put("mosn", mosn);
@@ -180,7 +180,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 						}
 
 						data.remove("dataList");
-						data.put("data", jaSub);
+						data.put("dataList", jaSub);
 						data.put("moId", moId);
 						data.put("status", 300);
 						data.put("errorInfo", "");

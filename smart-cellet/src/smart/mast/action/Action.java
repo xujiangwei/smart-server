@@ -71,7 +71,10 @@ public final class Action {
 	public final static String CPUUSAGE = "requestCPUUsage";
 	public final static String MEMORYUSAGE = "requestMemoryUsage";
 	public final static String FILESYSTEMUSAGE = "requestFileSysUsage";
-	public final static String DISKFREE="requestDiskFree";
+	public final static String FILESYSTEMFREE = "requestFileSysFree";
+	public final static String FILESYSTEMUSED = "requestFileSysUsed";
+	public final static String DISKFREE = "requestDiskFree";
+	public final static String DISKUSED = "requestDiskUsed";
 	public final static String PINGDELAY = "requestPingDelay";
 	public final static String INTERFACEFLOW = "requestIfflow";
 	public final static String INTERFACEKPI = "requestIfKpi";

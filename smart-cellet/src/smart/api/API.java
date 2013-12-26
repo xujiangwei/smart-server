@@ -64,7 +64,8 @@ public final class API {
 	public final static String CPU = "restws/data/perf/mo/998";
 	public final static String MEMORY = "restws/data/perf/mo/998";
 	public final static String FILESYSTEM = "restws/data/perf/mo/998";
-	public final static String DISKFREE="restws/data/perf/mo/998";
+	public final static String FILESYSTEMKPI = "restws/data/perf/mo/998";
+	public final static String DISKKPI="restws/data/perf/mo/998";
 	public final static String PING = "restws/data/perf/type/998/FPING/fAvgRestTime";
 	public final static String INTERFACEINFLOW = "restws/data/perf/mo/998";
 	public final static String INTERFACEOUTFLOW = "restws/data/perf/mo/998";

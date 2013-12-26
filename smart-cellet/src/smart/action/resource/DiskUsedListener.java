@@ -29,9 +29,9 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class DiskFreeListener extends AbstractListener {
+public class DiskUsedListener extends AbstractListener {
 
-	public DiskFreeListener(Cellet cellet) {
+	public DiskUsedListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -62,7 +62,7 @@ public class DiskFreeListener extends AbstractListener {
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.DISKKPI).append("/").append(moId).append("/")
-				.append("fFreeSize/?rangeInHour=").append(rangeInHour);
+				.append("fUsedSize/?rangeInHour=").append(rangeInHour);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -102,7 +102,7 @@ public class DiskFreeListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					System.out.println("diskFree 源数据：" + data);
+					System.out.println("diskUsed 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
 						// if (!"".equals(data.get("data"))
 						// && data.get("data") != null) {
@@ -124,10 +124,10 @@ public class DiskFreeListener extends AbstractListener {
 											|| "".equals(jaFree.get(0))
 											|| "null".equals(jaFree.get(0))
 											|| (jaFree.get(0)).equals(null)) {
-										jo.put("free", 0);
+										jo.put("used", 0);
 									} else {
-										jo.put("free",
-												Long.parseLong((String) jaFree
+										jo.put("used", Long
+												.parseLong((String) jaFree
 														.get(0)));
 									}
 									jo.put("collectTime",
@@ -141,8 +141,7 @@ public class DiskFreeListener extends AbstractListener {
 									Long.parseLong(joDisk.getString("kpi")));
 							jo.put("mosn",
 									Long.parseLong(joDisk.getString("mosn")));
-//							jo.put("", value);
-							
+
 						}
 
 						data.remove("dataList");
@@ -157,11 +156,11 @@ public class DiskFreeListener extends AbstractListener {
 						// data.put("errorInfo", "未获取到主机配置数据");
 						// }
 					} else {
-						data.put("status", 623);
+						data.put("status", 624);
 						data.put("errorInfo", "未获取到相关kpi数据");
 					}
 
-					System.out.println("diskFree：      " + data);
+					System.out.println("diskUsed ：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -172,13 +171,13 @@ public class DiskFreeListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.DISKFREE, params);
+				this.response(Action.DISKUSED, params);
 			} else {
-				this.reportHTTPError(Action.DISKFREE);
+				this.reportHTTPError(Action.DISKUSED);
 			}
 			break;
 		default:
-			Logger.w(DiskFreeListener.class, "返回响应码:" + response.getStatus());
+			Logger.w(DiskUsedListener.class, "返回响应码:" + response.getStatus());
 
 			try {
 				data = new JSONObject();
@@ -191,7 +190,7 @@ public class DiskFreeListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.DISKFREE, params);
+			this.response(Action.DISKUSED, params);
 			break;
 		}
 	}

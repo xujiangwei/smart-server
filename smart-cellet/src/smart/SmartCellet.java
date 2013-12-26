@@ -51,6 +51,7 @@ import smart.action.resource.CPUUsageListener;
 import smart.action.resource.DataBaseListener;
 import smart.action.resource.DeleteEquipmentListener;
 import smart.action.resource.DiskFreeListener;
+import smart.action.resource.DiskUsedListener;
 import smart.action.resource.EquipmentAlarmListener;
 import smart.action.resource.EquipmentBasicListener;
 import smart.action.resource.EquipmentConfigLitener;
@@ -58,7 +59,9 @@ import smart.action.resource.EquipmentHealthStatusListener;
 import smart.action.resource.EquipmentListListener;
 import smart.action.resource.EquipmentMonitorStateListener;
 import smart.action.resource.EquipmentTopoListener;
+import smart.action.resource.FileSystemFreeListener;
 import smart.action.resource.FileSystemUsageListener;
+import smart.action.resource.FileSystemUsedListener;
 import smart.action.resource.HostConfigListener;
 import smart.action.resource.InterfInFlowListener;
 import smart.action.resource.InterfOutFlowListener;
@@ -360,10 +363,24 @@ public class SmartCellet extends Cellet {
 		hmemul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hmemul);
 
-		DiskFreeListener dfl = new DiskFreeListener(this);
-		dfl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.HOSTKPI, dfl);
+		//磁盘已用和未用大小
+		DiskUsedListener hdul = new DiskUsedListener(this);
+		hdul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hdul);
+		
+		DiskFreeListener hdfl = new DiskFreeListener(this);
+		hdfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hdfl);
 
+		//文件系统已使用和未使用大小
+		FileSystemUsedListener hful = new FileSystemUsedListener(this);
+		hful.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hful);
+
+		FileSystemFreeListener hffl = new FileSystemFreeListener(this);
+		hffl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, hffl);
+		
 		FileSystemUsageListener hfilesul = new FileSystemUsageListener(this);
 		hfilesul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hfilesul);
@@ -408,11 +425,24 @@ public class SmartCellet extends Cellet {
 		PingDelayListener pdl = new PingDelayListener(this);
 		pdl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.PINGDELAY, pdl);
-		
-		// 测试--获取主机disk延迟
-		DiskFreeListener hdfl = new DiskFreeListener(this);
-		hdfl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DISKFREE, hdfl);
+
+		// 测试--获取主机disk已用和未用
+		DiskFreeListener dfl = new DiskFreeListener(this);
+		dfl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DISKFREE, dfl);
+
+		DiskUsedListener dul = new DiskUsedListener(this);
+		dul.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DISKUSED, dul);
+
+		// 测试--获取Linux主机 文件系统 已用和未用
+		FileSystemUsedListener ful = new FileSystemUsedListener(this);
+		ful.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.FILESYSTEMUSED, ful);
+
+		FileSystemFreeListener ffl = new FileSystemFreeListener(this);
+		ffl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.FILESYSTEMFREE, ffl);
 
 		// 获取设备基本信息
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(
