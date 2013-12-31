@@ -99,10 +99,11 @@ public class DiskFreeListener extends AbstractListener {
 
 				// 获取从Web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-
+				System.out.println("content   "+content);
+				String cont = "{'dataList':[{'moPath':'LENOVO 磁盘(D:)','kpiName':'空闲空间','data':[['83','2013-12-25 10:50:00']],'mosn':'998000244','kpi':'40001'},{'moPath':'LENOVO磁盘(E:)','kpiName':'空闲空间','data':[['44','2013-12-25 10:50:00']],'mosn':'998000245','kpi':'40001'},{'moPath':'LENOVO磁盘(C:)','kpiName':'空闲空间','data':[['1','2013-12-25 10:50:00']],'mosn':'998000243','kpi':'40001'}],'status':'success'}";
 				try {
-					data = new JSONObject(content);
-					System.out.println("diskFree 源数据：" + data);
+					data = new JSONObject(cont);
+//					System.out.println("diskFree 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
 						// if (!"".equals(data.get("data"))
 						// && data.get("data") != null) {
@@ -119,34 +120,35 @@ public class DiskFreeListener extends AbstractListener {
 							for (int j = 0; j < jaFreeList.length(); j++) {
 								JSONArray jaFree = jaFreeList.getJSONArray(j);
 								for (int k = 0; k < jaFree.length(); k++) {
-
 									if (null == jaFree.get(0)
 											|| "".equals(jaFree.get(0))
 											|| "null".equals(jaFree.get(0))
 											|| (jaFree.get(0)).equals(null)) {
 										jo.put("free", 0);
 									} else {
-										jo.put("free",
-												Long.parseLong((String) jaFree
+										jo.put("free", Long
+												.parseLong((String) jaFree
 														.get(0)));
 									}
 									jo.put("collectTime",
 											df.parse((String) jaFree.get(1))
 													.getTime());
-									jaData.put(jo);
+
 								}
 							}
 
+							jo.put("moPath", joDisk.getString("moPath"));
+							jo.put("kpiName", joDisk.getString("kpiName"));
 							jo.put("kpi",
 									Long.parseLong(joDisk.getString("kpi")));
 							jo.put("mosn",
 									Long.parseLong(joDisk.getString("mosn")));
-//							jo.put("", value);
-							
+
+							jaData.put(jo);
 						}
 
 						data.remove("dataList");
-						data.put("data", ja);
+						data.put("data", jaData);
 						data.put("status", 300);
 						data.put("errorInfo", "");
 

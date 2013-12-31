@@ -99,10 +99,11 @@ public class DiskUsedListener extends AbstractListener {
 
 				// 获取从Web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-
+				System.out.println("content   " + content);
+				String cont = "{'dataList':[{'moPath':'LENOVO磁盘(D:)','kpiName':'使用空间','data':[['56','2013-12-25 10:50:00']],'mosn':'998000244','kpi':'40002'},{'moPath':'LENOVO磁盘(E:)','kpiName':'使用空间','data':[['95','2013-12-25 10:50:00']],'mosn':'998000245','kpi':'40002'},{'moPath':'LENOVO磁盘(C:)','kpiName':'使用空间','data':[['18','2013-12-25 10:50:00']],'mosn':'998000243','kpi':'40002'}],'status':'success'}";
 				try {
-					data = new JSONObject(content);
-					System.out.println("diskUsed 源数据：" + data);
+					data = new JSONObject(cont);
+//					System.out.println("diskUsed 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
 						// if (!"".equals(data.get("data"))
 						// && data.get("data") != null) {
@@ -115,37 +116,39 @@ public class DiskUsedListener extends AbstractListener {
 						for (int i = 0; i < ja.length(); i++) {
 							JSONObject jo = new JSONObject();
 							JSONObject joDisk = ja.getJSONObject(i);
-							JSONArray jaFreeList = joDisk.getJSONArray("data");
-							for (int j = 0; j < jaFreeList.length(); j++) {
-								JSONArray jaFree = jaFreeList.getJSONArray(j);
-								for (int k = 0; k < jaFree.length(); k++) {
+							JSONArray jaUsedList = joDisk.getJSONArray("data");
+							for (int j = 0; j < jaUsedList.length(); j++) {
+								JSONArray jaUsed = jaUsedList.getJSONArray(j);
+								for (int k = 0; k < jaUsed.length(); k++) {
 
-									if (null == jaFree.get(0)
-											|| "".equals(jaFree.get(0))
-											|| "null".equals(jaFree.get(0))
-											|| (jaFree.get(0)).equals(null)) {
+									if (null == jaUsed.get(0)
+											|| "".equals(jaUsed.get(0))
+											|| "null".equals(jaUsed.get(0))
+											|| (jaUsed.get(0)).equals(null)) {
 										jo.put("used", 0);
 									} else {
 										jo.put("used", Long
-												.parseLong((String) jaFree
+												.parseLong((String) jaUsed
 														.get(0)));
 									}
 									jo.put("collectTime",
-											df.parse((String) jaFree.get(1))
+											df.parse((String) jaUsed.get(1))
 													.getTime());
-									jaData.put(jo);
 								}
 							}
 
+							jo.put("moPath", joDisk.getString("moPath"));
+							jo.put("kpiName", joDisk.getString("kpiName"));
 							jo.put("kpi",
 									Long.parseLong(joDisk.getString("kpi")));
 							jo.put("mosn",
 									Long.parseLong(joDisk.getString("mosn")));
 
+							jaData.put(jo);
 						}
 
 						data.remove("dataList");
-						data.put("data", ja);
+						data.put("data", jaData);
 						data.put("status", 300);
 						data.put("errorInfo", "");
 

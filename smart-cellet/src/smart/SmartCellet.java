@@ -67,6 +67,7 @@ import smart.action.resource.InterfInFlowListener;
 import smart.action.resource.InterfOutFlowListener;
 import smart.action.resource.InterfaceKpiListener;
 import smart.action.resource.MemoryUsageListener;
+import smart.action.resource.NetEqptBoardListener;
 import smart.action.resource.NetEquipmentConfigListener;
 import smart.action.resource.PingDelayListener;
 import smart.action.resource.SendSnapshotListener;
@@ -363,16 +364,16 @@ public class SmartCellet extends Cellet {
 		hmemul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hmemul);
 
-		//磁盘已用和未用大小
+		// 磁盘已用和未用大小
 		DiskUsedListener hdul = new DiskUsedListener(this);
 		hdul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hdul);
-		
+
 		DiskFreeListener hdfl = new DiskFreeListener(this);
 		hdfl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hdfl);
 
-		//文件系统已使用和未使用大小
+		// 文件系统已使用和未使用大小
 		FileSystemUsedListener hful = new FileSystemUsedListener(this);
 		hful.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hful);
@@ -380,7 +381,7 @@ public class SmartCellet extends Cellet {
 		FileSystemFreeListener hffl = new FileSystemFreeListener(this);
 		hffl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hffl);
-		
+
 		FileSystemUsageListener hfilesul = new FileSystemUsageListener(this);
 		hfilesul.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hfilesul);
@@ -405,6 +406,10 @@ public class SmartCellet extends Cellet {
 		InterfaceKpiListener nifkl = new InterfaceKpiListener(this);
 		nifkl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQPTKPI, nifkl);
+
+		NetEqptBoardListener nbl = new NetEqptBoardListener(this);
+		nbl.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.BOARDUSAGE, nbl);
 
 		// 测试--获取网络接口的入流速
 		InterfInFlowListener nfl = new InterfInFlowListener(this);

@@ -78,6 +78,7 @@ public final class Action {
 	public final static String PINGDELAY = "requestPingDelay";
 	public final static String INTERFACEFLOW = "requestIfflow";
 	public final static String INTERFACEKPI = "requestIfKpi";
+	public final static String BOARDUSAGE ="requestBoardUsage";
 
 	public final static String EQUIPMENTBASIC = "requestEquipmentBasic";
 	public final static String EQUIPMENTHEALTHSTATUS = "requestEquipmentHealthStatus";

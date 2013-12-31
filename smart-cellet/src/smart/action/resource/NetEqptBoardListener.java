@@ -7,12 +7,6 @@ import java.text.SimpleDateFormat;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
-import net.cellcloud.common.Logger;
-import net.cellcloud.core.Cellet;
-import net.cellcloud.talk.dialect.ActionDialect;
-import net.cellcloud.util.ObjectProperty;
-import net.cellcloud.util.Properties;
-
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.client.util.DeferredContentProvider;
@@ -22,6 +16,11 @@ import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import net.cellcloud.common.Logger;
+import net.cellcloud.core.Cellet;
+import net.cellcloud.talk.dialect.ActionDialect;
+import net.cellcloud.util.ObjectProperty;
+import net.cellcloud.util.Properties;
 import smart.action.AbstractListener;
 import smart.api.API;
 import smart.api.RequestContentCapsule;
@@ -30,9 +29,9 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
-public class CPUUsageListener extends AbstractListener {
+public class NetEqptBoardListener extends AbstractListener {
 
-	public CPUUsageListener(Cellet cellet) {
+	public NetEqptBoardListener(Cellet cellet) {
 		super(cellet);
 	}
 
@@ -56,14 +55,15 @@ public class CPUUsageListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
-		System.out.println("参数1: " + moId + "  参数2： " + rangeInHour);
 		// URL
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.CPU).append("/").append(moId)
-				.append("/fTotalCpu/?rangeInHour=").append(rangeInHour);
+				.append("/fCPUUtil?rangeInHour=").append(rangeInHour)
+				.append("&moType=Board");
 
+		// /998000037/fCPUUtil?rangeInHour=24&moType=Board
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
@@ -117,10 +117,6 @@ public class CPUUsageListener extends AbstractListener {
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
 
-								// long cpuid = jsonData.getLong("mosn");
-								// long timestamp = 0;
-								// double usedPercent = 0;
-
 								for (int j = 0; j < ja1.length(); j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
 									JSONObject jo = new JSONObject();
@@ -140,17 +136,6 @@ public class CPUUsageListener extends AbstractListener {
 													.getTime());
 									ja2.put(jo);
 
-									// usedPercent = Double
-									// .valueOf((String) jsonData1.get(0));
-									//
-									// timestamp = df.parse(
-									// (String) jsonData1.get(1))
-									// .getTime();
-
-									// HostManager hm=HostManager.getInstance();
-									// hm.addCPUPrecsById(cpuid, usedPercent,
-									// timestamp);
-
 								}
 
 								jsonData.remove("data");
@@ -161,7 +146,6 @@ public class CPUUsageListener extends AbstractListener {
 										.getString("kpi")));
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
-
 							}
 
 							data.remove("dataList");
@@ -177,7 +161,7 @@ public class CPUUsageListener extends AbstractListener {
 						data.put("errorInfo", "未获取到CPU kpi数据");
 					}
 
-					System.out.println("cpuUsageData：      " + data);
+					System.out.println("boardUsage：      " + data);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", data));
 				} catch (JSONException e) {
@@ -188,9 +172,9 @@ public class CPUUsageListener extends AbstractListener {
 
 				// 响应动作，即向客户端发送ActionDialect
 				// 参数tracker是一次动作的追踪标识符
-				this.response(Action.CPUUSAGE, params);
+				this.response(Action.BOARDUSAGE, params);
 			} else {
-				this.reportHTTPError(Action.CPUUSAGE);
+				this.reportHTTPError(Action.BOARDUSAGE);
 			}
 			break;
 		default:
@@ -207,8 +191,9 @@ public class CPUUsageListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.CPUUSAGE, params);
+			this.response(Action.BOARDUSAGE, params);
 			break;
 		}
 	}
+
 }
