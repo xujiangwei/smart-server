@@ -60,7 +60,8 @@ public class DataBaseListener extends AbstractListener {
 		HostConfig  config=new MonitorSystemHostConfig();
 		HostConfigContext context=new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.DATABASE)
-				.append("/").append(equipmentId).append("/fUsedUtil?rangeInHour=").append(rangeInHour);
+				.append("/").append(equipmentId).append("/fUsedUtil?rangeInHour=").append(rangeInHour)
+				.append("&orderBy=321&topN=10");
 		
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -94,17 +95,11 @@ public class DataBaseListener extends AbstractListener {
 							DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 							JSONObject jo = new JSONObject();
 							JSONArray jay = new JSONArray();
+							
 							for (int i = 0; i < ja.length(); i++) {
 								JSONObject job = ja.getJSONObject(i);
 								JSONArray ja1 = job.getJSONArray("data");
-//								JSONArray ja2 = new JSONArray();
-//									for (int j = 0; j < ja1.length(); j++) {
-//										JSONObject jt = new JSONObject();
-//										jt.put("usage", Float.valueOf(ja1.getJSONArray(j).getString(0)));
-////										jt.put("collectTime", df.parse(ja1.getJSONArray(j)
-////												.getString(1)).getTime());
-//										ja2.put(jt);
-//									}
+								
 								JSONObject jt = new JSONObject();
 								jt.put("usage", Float.valueOf(ja1.getJSONArray(0).getString(0)));
 								jt.put("collectTime", df.parse(ja1.getJSONArray(0)
