@@ -67,8 +67,11 @@ public final class InterfaceKpiListener extends AbstractListener {
 		// URL
 		HostConfig config = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
-		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.INTERFACEKPI).append("/").append(moId)
+		StringBuilder url = new StringBuilder(context.getAPIHost())
+				.append("/")
+				.append(API.INTERFACEKPI)
+				.append("/")
+				.append(moId)
 				.append("/fInBwUsage,fOutBwUsage,fInRate,fOutRate?rangeInHour=")
 				.append(rangeInHour);
 
@@ -98,7 +101,7 @@ public final class InterfaceKpiListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					 System.out.println("ifKpi 源数据：      " + data);
+					System.out.println("ifKpi 源数据：      " + data);
 					if ("success".equals(data.get("status"))
 							&& (!"".equals(data.get("dataList"))
 									&& data.get("dataList") != null
@@ -152,13 +155,27 @@ public final class InterfaceKpiListener extends AbstractListener {
 									}
 									for (int k = 0; k < l; k++) {
 										JSONObject joKpi = new JSONObject();
-										joKpi.put("value", Float.valueOf(jsData
-												.getJSONArray(k).getString(0)));
+
+										if (null == jsData.get(0)
+												|| "".equals(jsData.get(0))
+												|| "0".equals(jsData.get(0))
+												|| "0.0".equals(jsData.get(0))
+												|| "null".equals(jsData.get(0))
+												|| (jsData.get(0)).equals(null)) {
+											joKpi.put("value", 0);
+										} else {
+											joKpi.put("value", Float
+													.valueOf((String) jsData
+															.getJSONArray(k)
+															.get(0)));
+										}
+
 										joKpi.put(
 												"collectTime",
 												df.parse(
-														jsData.getJSONArray(k)
-																.getString(1))
+														(String) jsData
+																.getJSONArray(k)
+																.get(1))
 														.getTime());
 										jsDa.put(joKpi);
 									}

@@ -59,7 +59,7 @@ public class NetEqptBoardListener extends AbstractListener {
 		HostConfig cpuConfig = new MonitorSystemHostConfig();
 		HostConfigContext context = new HostConfigContext(cpuConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
-				.append(API.CPU).append("/").append(moId)
+				.append(API.BOARD).append("/").append(moId)
 				.append("/fCPUUtil?rangeInHour=").append(rangeInHour)
 				.append("&moType=Board");
 
@@ -104,7 +104,7 @@ public class NetEqptBoardListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-					System.out.println("cpuUsage 源数据：      " + data);
+					System.out.println("board 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
@@ -158,7 +158,7 @@ public class NetEqptBoardListener extends AbstractListener {
 						data.remove("dataList");
 						data.put("status", 611);
 						data.put("dataList", "");
-						data.put("errorInfo", "未获取到CPU kpi数据");
+						data.put("errorInfo", "未获取到board usage 数据");
 					}
 
 					System.out.println("boardUsage：      " + data);

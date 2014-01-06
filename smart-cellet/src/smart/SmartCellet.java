@@ -350,11 +350,6 @@ public class SmartCellet extends Cellet {
 		neptcl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQUIPMENTCONFIG, neptcl);
 
-		// 获取设备告警
-		EquipmentAlarmListener eal = new EquipmentAlarmListener(this);
-		eal.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTALARM, eal);
-
 		// 获取主机设备的CPU/内存/文件系统/diskFree/接口的kpi信息，PING延时信息
 		CPUUsageListener hcpuul = new CPUUsageListener(this);
 		hcpuul.setHttpClient(this.httpClient);
@@ -393,6 +388,10 @@ public class SmartCellet extends Cellet {
 		InterfaceKpiListener hifkl = new InterfaceKpiListener(this);
 		hifkl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hifkl);
+		
+		EquipmentAlarmListener heal = new EquipmentAlarmListener(this);
+		heal.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.HOSTKPI, heal);
 
 		// 获取网络设备的CPU/内存/接口的kpi信息
 		CPUUsageListener ncpuul = new CPUUsageListener(this);
@@ -409,8 +408,19 @@ public class SmartCellet extends Cellet {
 
 		NetEqptBoardListener nbl = new NetEqptBoardListener(this);
 		nbl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.BOARDUSAGE, nbl);
+		dispatcher.addListener(Action.NETEQPTKPI, nbl);
+		
+		EquipmentAlarmListener neal = new EquipmentAlarmListener(this);
+		neal.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.NETEQPTKPI, neal);
+		
 
+		/*********************测试监听*************************/
+		// 测试--获取设备告警
+		EquipmentAlarmListener eal = new EquipmentAlarmListener(this);
+		eal.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.EQUIPMENTALARMS, eal);
+		
 		// 测试--获取网络接口的入流速
 		InterfInFlowListener nfl = new InterfInFlowListener(this);
 		nfl.setHttpClient(this.httpClient);
@@ -443,11 +453,11 @@ public class SmartCellet extends Cellet {
 		// 测试--获取Linux主机 文件系统 已用和未用
 		FileSystemUsedListener ful = new FileSystemUsedListener(this);
 		ful.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.FILESYSTEMUSED, ful);
+		dispatcher.addListener(Action.FILESYSTEMKPI, ful);
 
 		FileSystemFreeListener ffl = new FileSystemFreeListener(this);
 		ffl.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.FILESYSTEMFREE, ffl);
+		dispatcher.addListener(Action.FILESYSTEMKPI, ffl);
 
 		// 获取设备基本信息
 		EquipmentBasicListener eqptBasicListener = new EquipmentBasicListener(

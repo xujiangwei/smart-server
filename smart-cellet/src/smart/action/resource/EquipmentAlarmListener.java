@@ -4,9 +4,6 @@ import java.nio.charset.Charset;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
-import java.util.Date;
-import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -20,7 +17,6 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -75,12 +71,12 @@ public final class EquipmentAlarmListener extends AbstractListener {
 		StringBuilder url = null;
 		if (pageSize != 0 && currentIndex != 0) {
 			url = new StringBuilder(context.getAPIHost()).append("/")
-					.append(API.EQUIPMENTALARM).append(moId)
+					.append(API.EQUIPMENTALARMS).append(moId)
 					.append("&pageSize=").append(pageSize)
 					.append("&currentIndex=").append(currentIndex);
 		} else {
 			url = new StringBuilder(context.getAPIHost()).append("/")
-					.append(API.EQUIPMENTALARM).append(moId);
+					.append(API.EQUIPMENTALARMS).append(moId);
 		}
 
 		// 创建请求
@@ -118,68 +114,39 @@ public final class EquipmentAlarmListener extends AbstractListener {
 				String content = new String(bytes, Charset.forName("UTF-8"));
 				try {
 					data = new JSONObject(content);
-					// System.out.println("eqptAlarm 源数据      " + data);
-					if ("成功".equals(data.get("result"))) {
-						JSONArray ja = data.getJSONArray("almlist");
-						JSONArray jar = new JSONArray();
-						List<String> list = Arrays.asList("almId", "moId",
-								"rootMoId", "parentMoId", "typeCode",
-								"almCause", "isSuppressed", "severity",
-								"extraInfo", "almStatus", "trend", "occurTime",
-								"lastTime", "count", "detail", "originalInfo",
-								"confirmTime", "confirmUserId", "confirmUser",
-								"moIp", "moName", "causeAlias", "location");
-						for (int i = 0; i < ja.length(); i++) {
-							JSONObject job = new JSONObject();
+					System.out.println("eqptAlarm 源数据      " + data);
+					if ("success".equals(data.get("status"))) {
+						if (!"".equals(data.get("stat"))
+								&& null != data.get("stat")) {
+							DateFormat df = new SimpleDateFormat(
+									"yyyy-MM-dd HH:mm:ss");
 
-							for (int j = 0; j < ja.getJSONArray(i).length(); j++) {
-								for (int k = 0; k < list.size(); k++) {
-									if (k == j) {
-										String key = list.get(k);
-										String value = ja.getJSONArray(i)
-												.get(j).toString();
-										if ("almId".equals(key)
-												|| "moId".equals(key)
-												|| ("confirmUserId".equals(key) && (!""
-														.equals(value)))) {
-											job.put(key, Long.valueOf(value));
-										} else if ("occurTime".equals(key)
-												|| "lastTime".equals(key)
-												|| ("confirmTime".equals(key) && !""
-														.equals(value))) {
-											DateFormat df = new SimpleDateFormat(
-													"yyyy-MM-dd HH:mm:ss");
-											Date date = null;
-											date = df.parse(value);
-											job.put(key, date.getTime());
-										} else if ("count".equals(key)
-												|| "severity".equals(key)) {
-											job.put(key,
-													Integer.parseInt(value));
-										} else if (("confirmUserId".equals(key) || "confirmTime"
-												.equals(key))
-												&& "".equals(value)) {
-											job.put(key, 0);
-										} else {
-											job.put(key, value);
-										}
-									}
-								}
+							JSONObject stat = data.getJSONObject("stat");
+							stat.put("statTime",
+									df.parse(stat.getString("statTime"))
+											.getTime());
+							JSONObject statData = stat
+									.getJSONObject("statData");
+
+							statData.put("moId", statData.get("MOSN"));
+							statData.remove("MOSN");
+							statData.put("moType", Long.parseLong(statData
+									.getString("moType")));
+							statData.put("rMOType", Long.parseLong(statData
+									.getString("rMOType")));
+							if (statData.has("occurTime")) {
+								statData.put(
+										"occurTime",
+										df.parse(
+												statData.getString("occurTime"))
+												.getTime());
 							}
-							jar.put(job);
-						}
 
-						data.remove("result");
-						data.remove("almlist");
-						data.put("almList", jar);
-						data.put("status", 300);
-						data.put("errorInfo", "");
+						}
 					} else {
-						data.remove("result");
-						data.remove("almlist");
-						data.put("almList", "");
+						data.put("stat", "");
 						data.put("status", 616);
-						data.put("errorInfo", "找不到符合条件的相关告警列表");
+						data.put("errorInfo", "没有告警统计数据");
 					}
 
 					// 设置参数
@@ -187,7 +154,7 @@ public final class EquipmentAlarmListener extends AbstractListener {
 					System.out.println("eqptAlarm   " + data);
 					// 响应动作，即向客户端发送ActionDialect
 					// 参数tracker是一次动作的追踪标识，这里可以使用访问标记token
-					this.response(Action.ALARMLIST, params);
+					this.response(Action.EQUIPMENTALARMS, params);
 
 				} catch (JSONException e) {
 					e.printStackTrace();
@@ -195,7 +162,7 @@ public final class EquipmentAlarmListener extends AbstractListener {
 					e.printStackTrace();
 				}
 			} else {
-				this.reportHTTPError(Action.EQUIPMENTALARM);
+				this.reportHTTPError(Action.EQUIPMENTALARMS);
 			}
 			break;
 		default:
@@ -212,7 +179,7 @@ public final class EquipmentAlarmListener extends AbstractListener {
 			params.addProperty(new ObjectProperty("data", data));
 
 			// 响应动作，即向客户端发送 ActionDialect
-			this.response(Action.EQUIPMENTALARM, params);
+			this.response(Action.EQUIPMENTALARMS, params);
 			break;
 		}
 	}

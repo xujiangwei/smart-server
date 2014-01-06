@@ -66,11 +66,12 @@ public final class Action {
 	public final static String EQUIPMENTKPI = "requestEquipmentkpi";
 	public final static String HOSTKPI = "requestHostKpi";
 	public final static String NETEQPTKPI = "requestNetEqptKpi";
-	public final static String EQUIPMENTALARM = "requestEquipmentAlarms";
+	public final static String EQUIPMENTALARMS = "requestEqptAlmStat";
 
 	public final static String CPUUSAGE = "requestCPUUsage";
 	public final static String MEMORYUSAGE = "requestMemoryUsage";
 	public final static String FILESYSTEMUSAGE = "requestFileSysUsage";
+	public final static String FILESYSTEMKPI = "requestFileSysKpi";
 	public final static String FILESYSTEMFREE = "requestFileSysFree";
 	public final static String FILESYSTEMUSED = "requestFileSysUsed";
 	public final static String DISKFREE = "requestDiskFree";
