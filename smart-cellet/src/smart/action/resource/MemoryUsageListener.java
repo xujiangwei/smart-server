@@ -30,6 +30,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 内存利用率监听器
+ * 
+ * @author Lianghai Li
+ */
 public class MemoryUsageListener extends AbstractListener {
 
 	public MemoryUsageListener(Cellet cellet) {
@@ -103,7 +108,7 @@ public class MemoryUsageListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-//					System.out.println("memUsage 源数据：      " + data);
+					// System.out.println("memUsage 源数据：      " + data);
 					if ("success".equals(data.get("status"))) {
 
 						if (!"".equals(data.get("dataList"))

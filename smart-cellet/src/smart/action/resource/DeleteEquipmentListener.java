@@ -26,7 +26,10 @@ import smart.mast.action.Action;
 
 /**
  * 删除设备监听器
+ * 
+ * @author Lianghai Li
  */
+
 public final class DeleteEquipmentListener extends AbstractListener {
 
 	public DeleteEquipmentListener(Cellet cellet) {

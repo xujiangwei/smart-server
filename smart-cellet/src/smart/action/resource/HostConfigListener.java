@@ -28,9 +28,9 @@ import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
- * ] 主机配置信息监听器
+ * 主机配置信息监听器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class HostConfigListener extends AbstractListener {
 
@@ -105,7 +105,7 @@ public class HostConfigListener extends AbstractListener {
 
 				try {
 					data = new JSONObject(content);
-//					System.out.println("hostCfg 源数据：" + data);
+					// System.out.println("hostCfg 源数据：" + data);
 					// if ("success".equals(data.get("status"))) {
 					if (!"".equals(data.get("data"))
 							&& data.get("data") != null) {

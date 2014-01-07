@@ -27,6 +27,7 @@ import smart.mast.action.Action;
 /**
  * 获取信息列表监听
  * 
+ * @author Lianghai Li
  */
 public final class MessageListListener extends AbstractListener {
 
@@ -108,8 +109,8 @@ public final class MessageListListener extends AbstractListener {
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
-				
-				System.out.println("messageList  "+data);
+
+				System.out.println("messageList  " + data);
 				// 响应动作，即想客户端发送ActionDialect
 				// 参数tracker 是一次动作的追踪表示。
 				this.response(Action.MESSAGELIST, params);

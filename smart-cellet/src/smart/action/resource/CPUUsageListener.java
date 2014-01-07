@@ -30,6 +30,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * CPU利用率监听器
+ * 
+ * @author Lianghai Li
+ */
 public class CPUUsageListener extends AbstractListener {
 
 	public CPUUsageListener(Cellet cellet) {

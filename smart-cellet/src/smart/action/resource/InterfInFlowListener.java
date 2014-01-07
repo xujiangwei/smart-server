@@ -33,7 +33,7 @@ import smart.mast.action.Action;
 /**
  * 网络接口入流速监听器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class InterfInFlowListener extends AbstractListener {
 

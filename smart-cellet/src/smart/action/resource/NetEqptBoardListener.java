@@ -29,6 +29,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 网络设备board利用率监听器
+ * 
+ * @author Lianghai Li
+ */
 public class NetEqptBoardListener extends AbstractListener {
 
 	public NetEqptBoardListener(Cellet cellet) {

@@ -27,6 +27,7 @@ import smart.mast.action.Action;
 /**
  * 添加联系人监听器
  * 
+ * @author Lianghai Li
  */
 public final class ContactsListener extends AbstractListener {
 

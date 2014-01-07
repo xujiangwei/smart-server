@@ -29,6 +29,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 文件系统未用监听器
+ * 
+ * @author Lianghai Li
+ */
 public class FileSystemFreeListener extends AbstractListener {
 
 	public FileSystemFreeListener(Cellet cellet) {

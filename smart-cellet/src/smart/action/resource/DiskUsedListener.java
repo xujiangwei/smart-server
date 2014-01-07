@@ -29,6 +29,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 磁盘已用大小监听器
+ * 
+ * @author Lianghai Li
+ */
 public class DiskUsedListener extends AbstractListener {
 
 	public DiskUsedListener(Cellet cellet) {
@@ -103,7 +108,7 @@ public class DiskUsedListener extends AbstractListener {
 				String cont = "{'dataList':[{'moPath':'LENOVO磁盘(D:)','kpiName':'使用空间','data':[['56','2013-12-25 10:50:00']],'mosn':'998000244','kpi':'40002'},{'moPath':'LENOVO磁盘(E:)','kpiName':'使用空间','data':[['95','2013-12-25 10:50:00']],'mosn':'998000245','kpi':'40002'},{'moPath':'LENOVO磁盘(C:)','kpiName':'使用空间','data':[['18','2013-12-25 10:50:00']],'mosn':'998000243','kpi':'40002'}],'status':'success'}";
 				try {
 					data = new JSONObject(cont);
-//					System.out.println("diskUsed 源数据：" + data);
+					// System.out.println("diskUsed 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
 						// if (!"".equals(data.get("data"))
 						// && data.get("data") != null) {

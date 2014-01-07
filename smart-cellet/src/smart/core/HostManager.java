@@ -5,6 +5,8 @@ import smart.dao.impl.HostDaoImpl;
 
 /**
  * 主机管理器
+ * 
+ * @author Lianghai Li
  */
 public class HostManager {
 	private static final HostManager instance = new HostManager();

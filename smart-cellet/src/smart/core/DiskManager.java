@@ -6,7 +6,7 @@ import smart.dao.impl.DiskDaoImpl;
 /**
  * 磁盘管理器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class DiskManager {
 	private static final DiskManager instance = new DiskManager();

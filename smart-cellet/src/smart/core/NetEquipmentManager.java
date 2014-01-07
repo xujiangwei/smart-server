@@ -6,7 +6,7 @@ import smart.dao.impl.NetEquipmentDaoImpl;
 /**
  * 网络设备管理器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class NetEquipmentManager {
 	private static final NetEquipmentManager instance = new NetEquipmentManager();

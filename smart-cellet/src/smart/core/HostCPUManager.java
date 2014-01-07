@@ -6,7 +6,7 @@ import smart.dao.impl.HostCPUDaoImpl;
 /**
  * 主机CPU管理器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class HostCPUManager {
 	private static final HostCPUManager instance = new HostCPUManager();

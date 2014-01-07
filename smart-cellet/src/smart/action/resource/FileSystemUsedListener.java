@@ -29,6 +29,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 文件系统使用率监听器
+ * 
+ * @author Lianghai Li
+ */
 public class FileSystemUsedListener extends AbstractListener {
 
 	public FileSystemUsedListener(Cellet cellet) {

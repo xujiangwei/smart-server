@@ -29,6 +29,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 磁盘未用大小监听器
+ * 
+ * @author Lianghai Li
+ */
 public class DiskFreeListener extends AbstractListener {
 
 	public DiskFreeListener(Cellet cellet) {
@@ -99,11 +104,11 @@ public class DiskFreeListener extends AbstractListener {
 
 				// 获取从Web服务器返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-				System.out.println("content   "+content);
+				System.out.println("content   " + content);
 				String cont = "{'dataList':[{'moPath':'LENOVO 磁盘(D:)','kpiName':'空闲空间','data':[['83','2013-12-25 10:50:00']],'mosn':'998000244','kpi':'40001'},{'moPath':'LENOVO磁盘(E:)','kpiName':'空闲空间','data':[['44','2013-12-25 10:50:00']],'mosn':'998000245','kpi':'40001'},{'moPath':'LENOVO磁盘(C:)','kpiName':'空闲空间','data':[['1','2013-12-25 10:50:00']],'mosn':'998000243','kpi':'40001'}],'status':'success'}";
 				try {
 					data = new JSONObject(cont);
-//					System.out.println("diskFree 源数据：" + data);
+					// System.out.println("diskFree 源数据：" + data);
 					if ("success".equals(data.get("status"))) {
 						// if (!"".equals(data.get("data"))
 						// && data.get("data") != null) {

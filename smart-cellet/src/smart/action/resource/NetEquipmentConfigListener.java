@@ -30,7 +30,7 @@ import smart.mast.action.Action;
 /**
  * 网络设备配置信息监听器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class NetEquipmentConfigListener extends AbstractListener {
 

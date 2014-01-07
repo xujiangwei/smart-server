@@ -6,7 +6,7 @@ import smart.dao.impl.InterfaceDaoImpl;
 /**
  * 接口管理器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class InterfaceManager {
 	private static final InterfaceManager instance = new InterfaceManager();

@@ -30,6 +30,11 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 文件系统已用监听器
+ * 
+ * @author Lianghai Li
+ */
 public class FileSystemUsageListener extends AbstractListener {
 
 	public FileSystemUsageListener(Cellet cellet) {
@@ -102,33 +107,33 @@ public class FileSystemUsageListener extends AbstractListener {
 				try {
 					data = new JSONObject(content);
 					if ("success".equals(data.get("status"))) {
-//						System.out.println("filesys 源数据：      " + data);
+						// System.out.println("filesys 源数据：      " + data);
 						if (!"".equals(data.get("dataList"))
 								&& data.get("dataList") != null) {
 							JSONArray ja = data.getJSONArray("dataList");
 							DateFormat df = new SimpleDateFormat(
 									"yyyy-MM-dd HH:mm:ss");
-							
-//							System.out.println("length   "+ja.length());
-							int l=0;
-							if(ja.length()>3){
-								l=3;
-							}else{
-								l=ja.length();
+
+							// System.out.println("length   "+ja.length());
+							int l = 0;
+							if (ja.length() > 3) {
+								l = 3;
+							} else {
+								l = ja.length();
 							}
-							
-							JSONArray jaData=new JSONArray();
+
+							JSONArray jaData = new JSONArray();
 							for (int i = 0; i < l; i++) {
 								JSONObject jsonData = ja.getJSONObject(i);
 								JSONArray ja1 = jsonData.getJSONArray("data");
 								JSONArray ja2 = new JSONArray();
-//								long filesysid=jsonData.getLong("mosn");
-								
-								int m=0;
-								if(ja1.length()>40){
-									m=40;
-								}else{
-									m=ja1.length();
+								// long filesysid=jsonData.getLong("mosn");
+
+								int m = 0;
+								if (ja1.length() > 40) {
+									m = 40;
+								} else {
+									m = ja1.length();
 								}
 								for (int j = 0; j < m; j++) {
 									JSONArray jsonData1 = ja1.getJSONArray(j);
@@ -148,14 +153,17 @@ public class FileSystemUsageListener extends AbstractListener {
 											df.parse((String) jsonData1.get(1))
 													.getTime());
 									ja2.put(jo);
-									
-//									double usage=Double.valueOf((String) jsonData1.get(0));
-//									long timestamp=df.parse((String) jsonData1.get(1))
-//											.getTime();
-//									
-//									HostManager hm=HostManager.getInstance();
-//									hm.addFileSystemUsages(filesysid, usage, timestamp);
-								
+
+									// double usage=Double.valueOf((String)
+									// jsonData1.get(0));
+									// long timestamp=df.parse((String)
+									// jsonData1.get(1))
+									// .getTime();
+									//
+									// HostManager hm=HostManager.getInstance();
+									// hm.addFileSystemUsages(filesysid, usage,
+									// timestamp);
+
 								}
 
 								jsonData.remove("data");
@@ -166,7 +174,7 @@ public class FileSystemUsageListener extends AbstractListener {
 										.getString("kpi")));
 								String s = jsonData.getString("moPath");
 								jsonData.put("name", s.split("> ")[1]);
-								
+
 								jaData.put(jsonData);
 							}
 

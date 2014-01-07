@@ -28,7 +28,9 @@ import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
 /**
- * 获取设备告警监听器
+ * 设备告警统计监听器
+ * 
+ * @author Lianghai Li
  */
 public final class EquipmentAlarmListener extends AbstractListener {
 

@@ -27,6 +27,7 @@ import smart.mast.action.Action;
 /**
  * 消息详细内容监听器
  * 
+ * @author Lianghai Li
  */
 public final class MessageDetailListener extends AbstractListener {
 

@@ -6,7 +6,7 @@ import smart.dao.impl.FilesystemDaoImpl;
 /**
  * 文件系统管理器
  * 
- * @author Administrator
+ * @author Lianghai Li
  */
 public class FilesystemManager {
 	private static final FilesystemManager instance = new FilesystemManager();

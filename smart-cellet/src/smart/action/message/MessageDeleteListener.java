@@ -27,8 +27,9 @@ import smart.api.host.ServiceDeskHostConfig;
 import smart.mast.action.Action;
 
 /**
- * 删除消息监听
+ * 删除消息监听器
  * 
+ * @author Lianghai Li
  */
 public final class MessageDeleteListener extends AbstractListener {
 
