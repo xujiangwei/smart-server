@@ -23,9 +23,10 @@ import smart.api.API;
 import smart.api.RequestContentCapsule;
 import smart.mast.action.Action;
 
-/**
- * 
+/** 
  * 查看告警影响范围
+ * 
+ * @author yanbo
  */
 public final class AlarmCoverageListener extends AbstractListener {
 

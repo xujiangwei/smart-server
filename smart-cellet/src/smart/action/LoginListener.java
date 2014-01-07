@@ -28,6 +28,8 @@ import smart.mast.action.Action;
 
 /**
  * 登录监听器。
+ * 
+ * @author yanbo
  */
 public final class LoginListener extends AbstractListener {
 

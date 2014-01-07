@@ -26,6 +26,12 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 主机cpu的topN
+ * 
+ * @author yanbo
+ *
+ */
 public class HostCpuListener extends AbstractListener {
 
 	public HostCpuListener(Cellet cellet) {

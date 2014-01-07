@@ -33,7 +33,7 @@ import smart.mast.action.Action;
 /**
  * 轮询获取变动的告警列表
  * 
- * @author Administrator
+ * @author yanbo
  * 
  */
 public class AlarmChangeListListener extends AbstractListener {

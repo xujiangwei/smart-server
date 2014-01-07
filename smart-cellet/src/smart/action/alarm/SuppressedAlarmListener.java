@@ -25,6 +25,8 @@ import smart.mast.action.Action;
 
 /**
  * 查看压制的告警监听器
+ * 
+ * @author yanbo
  */
 public final class SuppressedAlarmListener extends AbstractListener {
 

@@ -16,6 +16,8 @@ import smart.mast.action.Action;
 
 /**
  * 时间监听器
+ * 
+ * @author yanbo
  */
 public final class CurrentTimeListener extends AbstractListener {
 

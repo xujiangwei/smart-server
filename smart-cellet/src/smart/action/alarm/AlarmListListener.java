@@ -33,6 +33,8 @@ import smart.mast.action.Action;
 
 /**
  * 告警列表监听
+ * 
+ * @author yanbo
  */
 public final class AlarmListListener extends AbstractListener {
 

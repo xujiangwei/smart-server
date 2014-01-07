@@ -1,5 +1,11 @@
 package smart.api.host;
 
+/**
+ * 告警的主机配置信息
+ * 
+ * @author Administrator
+ *
+ */
 public class AlarmHostConfig implements HostConfig {
 
 	private String host = "http://10.10.152.26:7981";

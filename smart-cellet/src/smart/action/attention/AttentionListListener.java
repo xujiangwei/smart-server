@@ -19,6 +19,8 @@ import smart.util.DButil;
 
 /**
  * 获取关注列表监听
+ * 
+ * @author yanbo
  */
 public final class AttentionListListener extends AbstractListener {
 

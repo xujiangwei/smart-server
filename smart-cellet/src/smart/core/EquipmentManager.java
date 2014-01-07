@@ -9,6 +9,8 @@ import smart.dao.impl.EquipmentDaoImpl;
 
 /**
  * 设备管理器
+ * 
+ * @author yanbo
  */
 public class EquipmentManager {
 

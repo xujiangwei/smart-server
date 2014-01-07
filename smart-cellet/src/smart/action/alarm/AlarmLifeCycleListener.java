@@ -25,6 +25,8 @@ import smart.mast.action.Action;
 
 /**
  * 查看告警生命周期监听
+ * 
+ * @author yanbo
  */
 public final class AlarmLifeCycleListener extends AbstractListener {
 

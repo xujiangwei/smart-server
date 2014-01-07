@@ -16,6 +16,8 @@ import smart.util.DButil;
 
 /**
  * 取消关注监听器
+ * 
+ * @author yanbo
  */
 public final class CancelAttentionListener extends AbstractListener {
 

@@ -12,6 +12,8 @@ import smart.mast.action.Action;
 
 /**
  * 注销
+ * 
+ * @author yanbo
  */
 public final class LogoutListener extends AbstractListener {
 

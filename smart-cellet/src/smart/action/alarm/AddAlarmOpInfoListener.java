@@ -28,6 +28,8 @@ import smart.mast.action.Action;
 
 /**
  * 添加处理意见监听
+ * 
+ * @author yanbo
  */
 public final class AddAlarmOpInfoListener extends AbstractListener {
 

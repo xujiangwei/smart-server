@@ -8,6 +8,12 @@ import smart.bean.Attention;
 import smart.dao.AttentionDao;
 import smart.dao.impl.AttentionDaoImpl;
 
+/**
+ * 关注管理器
+ * 
+ * @author yanbo
+ *
+ */
 public class AttentionManager {
 
 	// 关注单例

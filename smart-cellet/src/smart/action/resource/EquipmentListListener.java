@@ -29,6 +29,8 @@ import smart.mast.action.Action;
 
 /**
  * 设备列表监听
+ * 
+ * @author yanbo
  */
 public class EquipmentListListener extends AbstractListener {
 

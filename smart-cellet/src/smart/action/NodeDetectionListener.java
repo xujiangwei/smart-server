@@ -16,6 +16,8 @@ import smart.mast.action.Action;
 
 /**
  * 节点监测监听器
+ * 
+ * @author yanbo
  */
 public final class NodeDetectionListener extends AbstractListener {
 

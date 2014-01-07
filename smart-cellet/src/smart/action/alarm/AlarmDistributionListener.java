@@ -25,6 +25,8 @@ import smart.mast.action.Action;
 
 /**
  * 查看告警分布监听器
+ * 
+ * @author yanbo
  */
 public final class AlarmDistributionListener extends AbstractListener {
 

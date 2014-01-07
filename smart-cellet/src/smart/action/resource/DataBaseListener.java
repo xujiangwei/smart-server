@@ -30,6 +30,8 @@ import smart.mast.action.Action;
 
 /**
  * 获取数据库详情监听
+ * 
+ * @author yanbo
  */
 public class DataBaseListener extends AbstractListener {
 

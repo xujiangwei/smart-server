@@ -10,9 +10,10 @@ import org.json.JSONObject;
 
 import smart.mast.action.Action;
 
-
 /**
  * 服务器连接检测
+ * 
+ * @author yanbo
  */
 public class ConnectionCheckListener extends AbstractListener {
 

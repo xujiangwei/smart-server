@@ -25,6 +25,8 @@ import smart.mast.action.Action;
 
 /**
  * 告警转发监听
+ * 
+ * @author yanbo
  */
 public final class AlarmForwardListener extends AbstractListener {
 

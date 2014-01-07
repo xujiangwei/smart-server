@@ -9,6 +9,8 @@ import smart.entity.Entity;
 
 /**
  * 树节点遍历
+ * 
+ * @author yanbo
  */
 public class NodeTraverse {
 

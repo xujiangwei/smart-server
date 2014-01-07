@@ -10,6 +10,8 @@ import smart.dao.impl.AlarmDaoImpl;
 
 /**
  * 告警管理器
+ * 
+ * @author yanbo
  */
 public class AlarmManager {
 

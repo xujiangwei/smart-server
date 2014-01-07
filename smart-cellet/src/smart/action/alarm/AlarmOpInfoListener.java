@@ -32,6 +32,8 @@ import smart.mast.action.Action;
 
 /**
  * 查看告警处理意见监听
+ * 
+ * @author yanbo
  */
 public final class AlarmOpInfoListener extends AbstractListener {
 
