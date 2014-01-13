@@ -28,6 +28,10 @@ import smart.api.host.HostConfigContext;
 import smart.api.host.MonitorSystemHostConfig;
 import smart.mast.action.Action;
 
+/**
+ * 主机内存的topN
+ * @author Lianghai Li
+ */
 public class HostMemTopListener extends AbstractListener {
 
 	public HostMemTopListener(Cellet cellet) {

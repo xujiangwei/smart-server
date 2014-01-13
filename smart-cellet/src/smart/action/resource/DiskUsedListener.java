@@ -153,7 +153,8 @@ public class DiskUsedListener extends AbstractListener {
 						}
 
 						data.remove("dataList");
-						data.put("data", jaData);
+						data.put("dataList", jaData);
+						data.put("moId", moId);
 						data.put("status", 300);
 						data.put("errorInfo", "");
 

@@ -145,9 +145,13 @@ public final class EquipmentAlarmListener extends AbstractListener {
 							}
 
 						}
+						data.put("status", 300);
+						data.put("moId", moId);
+						data.put("errorInfo", "");
 					} else {
 						data.put("stat", "");
 						data.put("status", 616);
+						data.put("moId", moId);
 						data.put("errorInfo", "没有告警统计数据");
 					}
 
