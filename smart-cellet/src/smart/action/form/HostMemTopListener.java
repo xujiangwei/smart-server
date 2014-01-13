@@ -8,18 +8,16 @@ import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
-//import org.json.JSONException;
-//import org.json.JSONObject;
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONML;
+import org.json.JSONObject;
 
 import net.cellcloud.common.Logger;
 import net.cellcloud.core.Cellet;
 import net.cellcloud.talk.dialect.ActionDialect;
 import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
-import net.sf.json.JSONArray;
-import net.sf.json.JSONException;
-import net.sf.json.JSONObject;
-import net.sf.json.xml.XMLSerializer;
 import smart.action.AbstractListener;
 import smart.action.LoginListener;
 import smart.api.API;
@@ -30,6 +28,7 @@ import smart.mast.action.Action;
 
 /**
  * 主机内存的topN
+ * 
  * @author Lianghai Li
  */
 public class HostMemTopListener extends AbstractListener {
@@ -77,50 +76,96 @@ public class HostMemTopListener extends AbstractListener {
 
 				// 获取从 Web 服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-				JSONObject json = (JSONObject) new XMLSerializer()
-						.read(content);
-				JSONObject job = json.getJSONObject("graphs").getJSONObject(
-						"graph");
-				JSONObject newJson = new JSONObject();
-				newJson.put("alias", job.getString("@gid"));
-				newJson.put("title", job.getString("@title"));
-				JSONArray ja = job.getJSONArray("value");
-				JSONArray newArray = new JSONArray();
-				for (int i = 0; i < ja.size(); i++) {
-					JSONObject obj = ja.getJSONObject(i);
-					obj.put("moId", Long.valueOf(obj.getString("@xid")));
-					obj.put("description", obj.getString("@description"));
-					obj.put("url", obj.get("@url"));
-					obj.put("ip", obj.get("@ip"));
-					obj.put("color", obj.get("@color"));
-					obj.put("usage", Float.valueOf(obj.getString("#text")));
+				JSONObject json = null;
+				try {
+					json = JSONML.toJSONObject(content);
+					JSONArray jsay = json.getJSONArray("childNodes");
+					JSONArray dataJsid = new JSONArray();
+					JSONArray dataJsif = new JSONArray();
+					JSONObject dataJoif = new JSONObject();
+					if (jsay.length() > 0) {
+						for (int i = 0; i < jsay.length(); i++) {
+							if ("series".equals(jsay.getJSONObject(i).get(
+									"tagName"))) {
 
-					JSONArray jay = json.getJSONArray("series");
-					for (int j = 0; j < jay.size(); j++) {
-						JSONObject jot = jay.getJSONObject(j);
-						if (jot.getString("@xid").equals(obj.getString("@xid"))) {
-							obj.put("moName", jot.getString("#text"));
+								JSONArray jsid = jsay.getJSONObject(i)
+										.getJSONArray("childNodes");
+
+								for (int j = 0; j < jsid.length(); j++) {
+									JSONObject dataJoid = new JSONObject();
+									JSONObject jsob = jsid.getJSONObject(j);
+									dataJoid.put("moId", jsob.get("xid"));
+									dataJoid.put("moName",
+											jsob.getJSONArray("childNodes")
+													.get(0));
+
+									dataJsid.put(dataJoid);
+								}
+
+							}
+
+							if ("graphs".equals(jsay.getJSONObject(i).get(
+									"tagName"))) {
+								JSONArray jsif = jsay.getJSONObject(i)
+										.getJSONArray("childNodes");
+
+								for (int j = 0; j < jsif.length(); j++) {
+									JSONObject joif = jsif.getJSONObject(j);
+									dataJoif.put("title", joif.get("title"));
+									dataJoif.put("alais", joif.get("gid"));
+
+									JSONArray jsifAy = joif
+											.getJSONArray("childNodes");
+									for (int k = 0; k < jsifAy.length(); k++) {
+										JSONObject dataJo = new JSONObject();
+										JSONObject jode = jsifAy
+												.getJSONObject(k);
+										dataJo.put("color", jode.get("color"));
+										dataJo.put("description",
+												jode.get("description"));
+										dataJo.put("moId", jode.get("xid"));
+										dataJo.put("url", jode.get("url"));
+										dataJo.put("ip", jode.get("ip"));
+										dataJo.put("usage",
+												jode.getJSONArray("childNodes")
+														.get(0));
+
+										for (int l = 0; l < dataJsid.length(); l++) {
+											JSONObject jo = dataJsid
+													.getJSONObject(l);
+											if (jo.get("moId").equals(
+													dataJo.get("moId"))) {
+												dataJo.put("moName",
+														jo.get("moName"));
+											}
+										}
+
+										dataJsif.put(dataJo);
+									}
+									dataJoif.put("list", dataJsif);
+									if (dataJsif.length()>0) {
+										dataJoif.put("status", 300);
+										dataJoif.put("errorInfo", "");
+									} else {
+										dataJoif.put("status", 711);
+										dataJoif.put("errorInfo",
+												"未获取到主机内存topN数据");
+									}
+								}
+							}
 						}
 					}
+					System.out.println("memtopN：" + dataJoif);
 
-					obj.remove("@xid");
-					obj.remove("@description");
-					obj.remove("@url");
-					obj.remove("@ip");
-					obj.remove("@color");
-					obj.remove("#text");
-					newArray.add(obj);
+					// 设置参数
+					params.addProperty(new ObjectProperty("data", dataJoif));
+
+					// 响应动作，即向客户端发送 ActionDialect
+					// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
+					this.response(Action.HOSTTOPMEM, params);
+				} catch (JSONException e) {
+					e.printStackTrace();
 				}
-				newJson.put("list", newArray);
-				newJson.put("status", 300);
-				System.out.println("原生数据：" + newJson);
-
-				// 设置参数
-				params.addProperty(new ObjectProperty("data", newJson));
-
-				// 响应动作，即向客户端发送 ActionDialect
-				// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
-				this.response(Action.HOSTTOPMEM, params);
 			} else {
 				this.reportHTTPError(Action.HOSTTOPMEM);
 			}
