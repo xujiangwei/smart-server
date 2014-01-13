@@ -334,6 +334,11 @@ public class SmartCellet extends Cellet {
 		DataBaseListener db = new DataBaseListener(this);
 		db.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DATABASE, db);
+		
+		// 获取数据库告警
+		EquipmentAlarmListener eptAlarm = new EquipmentAlarmListener(this);
+		eptAlarm.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.DATABASE, eptAlarm);
 
 		// 获取设备配置信息
 		EquipmentConfigLitener ecl = new EquipmentConfigLitener(this);
