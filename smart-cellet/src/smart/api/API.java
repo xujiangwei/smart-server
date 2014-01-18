@@ -93,6 +93,7 @@ public final class API {
 	public final static String URGENTLIST = "incidentm/getUrgentListForBp.html";
 	public final static String SERVICELEVELLIST = "incidentm/getServiceLevelByBpId.html";
 	public final static String CLOSECODELIST = "incidentm/getBpCloseCodesByBp.html";
+	public final static String TASKACTORLIST = "incidentm/listNextTaskActor.html";
 
 	public final static String PROBLEMLIST = "problemm/listTodos.html";
 	public final static String PROBLEMDETAIL = "problemm/loadById.html";

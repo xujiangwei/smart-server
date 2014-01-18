@@ -118,6 +118,7 @@ public final class Action {
 	public static final String URGENTLIST = "requestUrgentList";
 	public static final String SERVICELEVELLIST = "requestServiceLevelList";
 	public static final String CLOSECODELIST = "requestCloseCodeList";
+	public static final String TASKACTORLIST = "requestNextTaskActorList";
 
 	public static final String PROBLEMLIST = "requestProblemList";
 	public static final String PROBLEMDETAIL = "requestProblemDetail";

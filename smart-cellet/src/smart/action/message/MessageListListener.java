@@ -64,7 +64,7 @@ public final class MessageListListener extends AbstractListener {
 			e1.printStackTrace();
 		}
 
-		url.append("&currentIndex=").append(currentIndex);
+		url.append("?currentIndex=").append(currentIndex);
 		url.append("&pageSize=").append(pageSize);
 
 		Request request = this.getHttpClient().newRequest(url.toString());
