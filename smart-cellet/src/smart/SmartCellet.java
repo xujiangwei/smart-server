@@ -77,6 +77,7 @@ import smart.action.task.IncidentCategoryListListener;
 import smart.action.task.IncidentDetailListener;
 import smart.action.task.IncidentListListener;
 import smart.action.task.IncidentProcessListener;
+import smart.action.task.IncidentTaskActorListListener;
 import smart.action.task.InspectionCiSaveListener;
 import smart.action.task.InspectionDetailListener;
 import smart.action.task.InspectionItemListener;
@@ -651,6 +652,12 @@ public class SmartCellet extends Cellet {
 				this);
 		closeCodeList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
+		
+		//故障任务参与人
+		IncidentTaskActorListListener taskActorList = new IncidentTaskActorListListener(
+				this);
+		taskActorList.setHttpClient(this.httpClient);
+		dispatcher.addListener(Action.TASKACTORLIST, taskActorList);
 
 		/************** 问题任务 *************/
 		ProblemListListener problemList = new ProblemListListener(this);
