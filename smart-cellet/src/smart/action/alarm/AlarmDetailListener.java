@@ -65,7 +65,6 @@ public final class AlarmDetailListener extends AbstractListener {
 		}
 
 		Properties params = new Properties();
-		if (token != null && !"".equals(token)) {
 
 			// URL
 			HostConfig config = new MonitorSystemHostConfig();
@@ -204,15 +203,5 @@ public final class AlarmDetailListener extends AbstractListener {
 				this.response(token, Action.ALARMDETAIL, params);
 				break;
 			}
-		} else {
-			JSONObject jo = new JSONObject();
-			try {
-				jo.put("status", 800);
-			} catch (JSONException e) {
-				e.printStackTrace();
-			}
-			params.addProperty(new ObjectProperty("data", jo));
-			this.response(Action.ALARMDETAIL, params);
-		}
 	}
 }

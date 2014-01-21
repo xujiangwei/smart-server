@@ -162,7 +162,7 @@ public class HostCpuListener extends AbstractListener {
 
 					// 响应动作，即向客户端发送 ActionDialect
 					// 参数 tracker 是一次动作的追踪标识，这里可以直接使用用户名。
-					this.response(Action.HOSTTOPMEM, params);
+					this.response(Action.HOSTTOPCPU, params);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
