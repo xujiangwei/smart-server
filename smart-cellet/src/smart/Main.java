@@ -24,7 +24,7 @@ public final class Main {
 			try {
 				Nucleus nucleus = new Nucleus(config);
 				// 注册 Cellet
-				nucleus.registerCellet(new MobileServer());
+				nucleus.registerCellet(new ServiceDeskServer());
 			} catch (SingletonException e) {
 				e.printStackTrace();
 				return;
