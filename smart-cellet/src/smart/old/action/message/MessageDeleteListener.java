@@ -61,7 +61,7 @@ public final class MessageDeleteListener extends AbstractListener {
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.MESSAGEDELETE);
-		url.append("?&deleteIds=").append(deleteIds);
+		url.append("?deleteIds=").append(deleteIds);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());

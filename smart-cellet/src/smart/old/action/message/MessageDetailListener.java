@@ -63,11 +63,12 @@ public final class MessageDetailListener extends AbstractListener {
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.MESSAGEDETAIL);
 
-		url.append("&messageId=").append(messageId);
+		url.append("?messageId=").append(messageId);
 
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 
+		System.out.println("url  "+url);
 		// 发送请求
 		ContentResponse response = null;
 		try {

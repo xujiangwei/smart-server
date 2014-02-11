@@ -78,6 +78,9 @@ public class NetEquipmentConfigListener extends AbstractListener {
 		dcp.close();
 		request.content(dcp);
 
+		System.out.println("url  "+url);
+		
+		
 		// 发送请求
 		ContentResponse response = null;
 

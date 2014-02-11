@@ -20,7 +20,6 @@ import smart.old.action.alarm.AlarmChangeListListener;
 import smart.old.action.alarm.AlarmDealListener;
 import smart.old.action.alarm.AlarmDetailListener;
 import smart.old.action.alarm.AlarmExperienceListener;
-import smart.old.action.alarm.AlarmForwardListener;
 import smart.old.action.alarm.AlarmLevelListener;
 import smart.old.action.alarm.AlarmListListener;
 import smart.old.action.alarm.AlarmOpInfoListener;
@@ -34,31 +33,18 @@ import smart.old.action.ci.CiListListener;
 import smart.old.action.form.HostCpuListener;
 import smart.old.action.form.HostMemTopListener;
 import smart.old.action.message.ContactsListener;
-import smart.old.action.message.MessageCustomTagListener;
 import smart.old.action.message.MessageDeleteListener;
 import smart.old.action.message.MessageDetailListener;
-import smart.old.action.message.MessageFileUploadListener;
 import smart.old.action.message.MessageListListener;
-import smart.old.action.message.MessageMarkListener;
-import smart.old.action.message.MessageMoveListener;
 import smart.old.action.message.MessageSendListener;
-import smart.old.action.message.MessageTagAddListener;
-import smart.old.action.message.MessageTagDeleteListener;
-import smart.old.action.message.MessageTagDisplayListener;
-import smart.old.action.message.MessageTagModifyListener;
-import smart.old.action.message.MessageTopInfoListener;
 import smart.old.action.resource.CPUUsageListener;
 import smart.old.action.resource.DataBaseListener;
-import smart.old.action.resource.DeleteEquipmentListener;
 import smart.old.action.resource.DiskFreeListener;
 import smart.old.action.resource.DiskUsedListener;
 import smart.old.action.resource.EquipmentAlarmListener;
 import smart.old.action.resource.EquipmentBasicListener;
 import smart.old.action.resource.EquipmentConfigLitener;
-import smart.old.action.resource.EquipmentHealthStatusListener;
 import smart.old.action.resource.EquipmentListListener;
-import smart.old.action.resource.EquipmentMonitorStateListener;
-import smart.old.action.resource.EquipmentTopoListener;
 import smart.old.action.resource.FileSystemFreeListener;
 import smart.old.action.resource.FileSystemUsageListener;
 import smart.old.action.resource.FileSystemUsedListener;
@@ -70,7 +56,6 @@ import smart.old.action.resource.MemoryUsageListener;
 import smart.old.action.resource.NetEqptBoardListener;
 import smart.old.action.resource.NetEquipmentConfigListener;
 import smart.old.action.resource.PingDelayListener;
-import smart.old.action.resource.SendSnapshotListener;
 import smart.old.action.task.BpCloseCodeListListener;
 import smart.old.action.task.BpiListListener;
 import smart.old.action.task.IncidentCategoryListListener;
@@ -252,68 +237,10 @@ public class SmartCellet extends Cellet {
 		MessageDeleteListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGEDELETE, MessageDeleteListener);
 
-		// 转移消息
-		MessageMoveListener MessageMoveListener = new MessageMoveListener(this);
-		MessageMoveListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGEMOVE, MessageMoveListener);
-
-		// 标记消息
-		MessageMarkListener MessageMarkListener = new MessageMarkListener(this);
-		;
-		MessageMarkListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGEMARK, MessageMarkListener);
-
 		// 发送消息
 		MessageSendListener messageSendListener = new MessageSendListener(this);
 		messageSendListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.MESSAGESEND, messageSendListener);
-
-		// 消息置顶
-		MessageTopInfoListener messageTopInfoListener = new MessageTopInfoListener(
-				this);
-		messageTopInfoListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETOPINFO, messageTopInfoListener);
-
-		// 添加消息标签
-		MessageTagAddListener messageTagAddListener = new MessageTagAddListener(
-				this);
-		messageTagAddListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGADD, messageTagAddListener);
-
-		// 删除消息标签
-		MessageTagDeleteListener messageTagDeleteListener = new MessageTagDeleteListener(
-				this);
-		messageTagDeleteListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGDELETE,
-				messageTagDeleteListener);
-
-		// 修改消息标签
-		MessageTagModifyListener messageTagModifyListener = new MessageTagModifyListener(
-				this);
-		messageTagModifyListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGMODIFY,
-				messageTagModifyListener);
-
-		// 设置消息标签为显示或隐藏状态
-		MessageTagDisplayListener messageTagDisplayListener = new MessageTagDisplayListener(
-				this);
-		messageTagDisplayListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGETAGDISPLAY,
-				messageTagDisplayListener);
-
-		// 获取所有自定义标签
-		MessageCustomTagListener messageCustomTagListener = new MessageCustomTagListener(
-				this);
-		messageCustomTagListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGECUSTOMTAGS,
-				messageCustomTagListener);
-
-		// 上传附件
-		MessageFileUploadListener messageFileUploadListener = new MessageFileUploadListener(
-				this);
-		messageFileUploadListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.MESSAGEFILEUPLOAD,
-				messageFileUploadListener);
 
 		/*************** 仪表板 **************/
 		// 获取主机负载综合
@@ -335,7 +262,7 @@ public class SmartCellet extends Cellet {
 		DataBaseListener db = new DataBaseListener(this);
 		db.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.DATABASE, db);
-		
+
 		// 获取数据库告警
 		EquipmentAlarmListener eptAlarm = new EquipmentAlarmListener(this);
 		eptAlarm.setHttpClient(this.httpClient);
@@ -394,7 +321,7 @@ public class SmartCellet extends Cellet {
 		InterfaceKpiListener hifkl = new InterfaceKpiListener(this);
 		hifkl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, hifkl);
-		
+
 		EquipmentAlarmListener heal = new EquipmentAlarmListener(this);
 		heal.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.HOSTKPI, heal);
@@ -415,18 +342,17 @@ public class SmartCellet extends Cellet {
 		NetEqptBoardListener nbl = new NetEqptBoardListener(this);
 		nbl.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQPTKPI, nbl);
-		
+
 		EquipmentAlarmListener neal = new EquipmentAlarmListener(this);
 		neal.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.NETEQPTKPI, neal);
-		
 
-		/*********************测试监听*************************/
+		/********************* 测试监听 *************************/
 		// 测试--获取设备告警
 		EquipmentAlarmListener eal = new EquipmentAlarmListener(this);
 		eal.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTALARMS, eal);
-		
+
 		// 测试--获取网络接口的入流速
 		InterfInFlowListener nfl = new InterfInFlowListener(this);
 		nfl.setHttpClient(this.httpClient);
@@ -471,35 +397,6 @@ public class SmartCellet extends Cellet {
 		eqptBasicListener.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.EQUIPMENTBASIC, eqptBasicListener);
 
-		// 获取设备健康状态
-		EquipmentHealthStatusListener healthStatus = new EquipmentHealthStatusListener(
-				this);
-		healthStatus.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTHEALTHSTATUS, healthStatus);
-
-		// 删除设备
-		DeleteEquipmentListener equipmentDelete = new DeleteEquipmentListener(
-				this);
-		equipmentDelete.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.DELETEEQUIPMENT, equipmentDelete);
-
-		// 改变设备监控状态
-		EquipmentMonitorStateListener eqptChangeMonitorStatusListener = new EquipmentMonitorStateListener(
-				this);
-		eqptChangeMonitorStatusListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTMONITORSTATE,
-				eqptChangeMonitorStatusListener);
-
-		// 发送快照
-		SendSnapshotListener sendSnapshot = new SendSnapshotListener(this);
-		sendSnapshot.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.SENDSNAPSHOT, sendSnapshot);
-
-		// 获取设备拓扑
-		EquipmentTopoListener eqptTopoListener = new EquipmentTopoListener(this);
-		eqptTopoListener.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.EQUIPMENTTOPO, eqptTopoListener);
-
 		// 注销
 		LogoutListener logout = new LogoutListener(this);
 		logout.setHttpClient(this.httpClient);
@@ -523,11 +420,6 @@ public class SmartCellet extends Cellet {
 		AlarmDetailListener basicInfo = new AlarmDetailListener(this);
 		basicInfo.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.ALARMDEAL, basicInfo);
-
-		// 告警转发
-		AlarmForwardListener alarmForward = new AlarmForwardListener(this);
-		alarmForward.setHttpClient(this.httpClient);
-		dispatcher.addListener(Action.ALARMFORWARD, alarmForward);
 
 		// 添加告警处理信息
 		AddAlarmOpInfoListener dealInfo = new AddAlarmOpInfoListener(this);
@@ -652,8 +544,8 @@ public class SmartCellet extends Cellet {
 				this);
 		closeCodeList.setHttpClient(this.httpClient);
 		dispatcher.addListener(Action.CLOSECODELIST, closeCodeList);
-		
-		//故障任务参与人
+
+		// 故障任务参与人
 		IncidentTaskActorListListener taskActorList = new IncidentTaskActorListListener(
 				this);
 		taskActorList.setHttpClient(this.httpClient);

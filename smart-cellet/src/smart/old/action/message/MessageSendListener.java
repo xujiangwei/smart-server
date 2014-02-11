@@ -47,35 +47,43 @@ public final class MessageSendListener extends AbstractListener {
 
 		// 获取参数
 		JSONObject json = null;
-		String title = null;
-		String sender = null;
-		String recieverIds = null;
-		String time = null;
-		String contents = null;
+		// String title = null;
+		// String sender = null;
+		// String recieverIds = null;
+		// String time = null;
+		// String contents = null;
+
+		String address = null;
+		String fullPath = null;
+		String authCode = null;
+
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
-			title = json.getString("title");
-			sender = json.getString("sender");
-			recieverIds = json.getString("recieverIds");
-			time = json.getString("time");
-			contents = json.getString("contents");
+			// title = json.getString("title");
+			// sender = json.getString("sender");
+			// recieverIds = json.getString("recieverIds");
+			// time = json.getString("time");
+			// contents = json.getString("contents");
+
+			address = json.getString("address");
+			fullPath = json.getString("fullPath");
+			authCode = json.getString("authCode");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
 
-		System.out.println(recieverIds);
-		System.out.println("title    " + title);
-		System.out.println("time    " + time);
-		System.out.println("contents    " + contents);
 		// URL
 		HostConfig config = new ServiceDeskHostConfig();
 		HostConfigContext context = new HostConfigContext(config);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.MESSAGESEND);
 
-		url.append("&title=").append(title).append("&sender=").append(sender)
-				.append("&content=").append(contents).append("&recieverIds=")
-				.append(recieverIds);
+		// url.append("&title=").append(title).append("&sender=").append(sender)
+		// .append("&content=").append(contents).append("&recieverIds=")
+		// .append(recieverIds);
+		url.append("?address=").append(address).append("?fullPath=")
+				.append(fullPath).append("?authCode=").append(authCode);
+
 		System.out.println("url   " + url);
 
 		// 创建请求
@@ -87,11 +95,16 @@ public final class MessageSendListener extends AbstractListener {
 		DeferredContentProvider dcp = new DeferredContentProvider();
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("title", title);
-		capsule.append("recieverIds", recieverIds);
-		capsule.append("sender", sender);
-		capsule.append("content", contents);
-		capsule.append("time", time);
+		// capsule.append("title", title);
+		// capsule.append("recieverIds", recieverIds);
+		// capsule.append("sender", sender);
+		// capsule.append("content", contents);
+		// capsule.append("time", time);
+
+		capsule.append("address", address);
+		capsule.append("fullPath", fullPath);
+		capsule.append("authCode", authCode);
+
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
