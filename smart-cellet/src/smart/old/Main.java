@@ -15,7 +15,7 @@ public final class Main {
 		config.talk.block = 131072;
 
 		try {
-			Nucleus nucleus = new Nucleus(config);
+			Nucleus nucleus = Nucleus.createInstance(config);
 			// 注册 SmartCellet
 			nucleus.registerCellet(new SmartCellet());
 		} catch (SingletonException e) {

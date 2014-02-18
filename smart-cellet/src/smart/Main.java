@@ -22,9 +22,10 @@ public final class Main {
 			config.talk.block = 131072;
 
 			try {
-				Nucleus nucleus = new Nucleus(config);
+				Nucleus nucleus = Nucleus.createInstance(config);
 				// 注册 Cellet
 				nucleus.registerCellet(new ServiceDeskServer());
+				nucleus.registerCellet(new MonitoringServer());
 			} catch (SingletonException e) {
 				e.printStackTrace();
 				return;
