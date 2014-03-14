@@ -127,7 +127,9 @@ public final class LoginListener extends AbstractListener {
 //							}
 //						}
 					}
-					System.out.println("返回的登录信息：" + jo);
+					//仅供开发阶段测试使用，运行阶段请删除
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info("返回的登录信息：" + jo);
 					// 设置参数
 					params.addProperty(new StringProperty("username", username));
 					params.addProperty(new ObjectProperty("data", jo));

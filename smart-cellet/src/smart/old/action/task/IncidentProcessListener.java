@@ -76,6 +76,7 @@ public final class IncidentProcessListener extends AbstractListener {
 		String resolution=null;
 		String closeCode=null;
 		String jbpmTransition=null;
+		String token=null;
 		
 		try {
 			 json = new JSONObject(action.getParamAsString("data"));
@@ -102,6 +103,7 @@ public final class IncidentProcessListener extends AbstractListener {
 			 resolution=json.getString("resolution");
 			 closeCode=json.getString("closeCode");
 			 jbpmTransition=json.getString("jbpmTransition");
+			 token=json.getString("token");
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -109,11 +111,11 @@ public final class IncidentProcessListener extends AbstractListener {
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("故障处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
 		
 		DeferredContentProvider dcp = new DeferredContentProvider();
 		RequestContentCapsule capsule = new RequestContentCapsule();
+		
 		capsule.append("bpiId", bpiId);
 		capsule.append("summary", summary);
 		capsule.append("description", description);
@@ -135,6 +137,7 @@ public final class IncidentProcessListener extends AbstractListener {
 		capsule.append("resolution", resolution);
 		capsule.append("closeCode", closeCode);
 		capsule.append("jbpmTransition", jbpmTransition);
+		capsule.append("token", token);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
