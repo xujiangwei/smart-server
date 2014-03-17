@@ -49,12 +49,14 @@ public class InspectionCiSaveListener extends AbstractListener {
 		JSONObject json = null;
 		String inspectionCiId=null;
 		JSONArray report=null;
+		String  token=null;
 		
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			inspectionCiId=json.getString("inspectionCiId");
 			report=json.getJSONArray("report");
+			token=json.getString("token");
 		
 	
 		} catch (JSONException e) {
@@ -65,7 +67,6 @@ public class InspectionCiSaveListener extends AbstractListener {
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("巡检项处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
 		url = null;
 		
@@ -73,6 +74,7 @@ public class InspectionCiSaveListener extends AbstractListener {
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("inspectionCiId", inspectionCiId);
 		capsule.append("report", report);
+		capsule.append("token", token);
 		System.out.println(capsule.toBuffer().toString());
 		dcp.offer(capsule.toBuffer());
 		dcp.close();

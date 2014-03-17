@@ -6,6 +6,7 @@ import java.util.concurrent.TimeoutException;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
+import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -18,6 +19,7 @@ import net.cellcloud.util.ObjectProperty;
 import net.cellcloud.util.Properties;
 import smart.old.action.AbstractListener;
 import smart.old.api.API;
+import smart.old.api.RequestContentCapsule;
 import smart.old.api.host.HostConfig;
 import smart.old.api.host.HostConfigContext;
 import smart.old.api.host.ServiceDeskHostConfig;
@@ -37,15 +39,35 @@ public class InspectionListListener extends AbstractListener {
 		// 因为 onAction 方法是由 Cell Cloud 的 action dialect 进行回调的，
 		// 该方法独享一个线程，因此可以在此线程里进行阻塞式的调用。
 		// 因此，可以用同步方式请求 HTTP API 。
-
 		// URL
 		HostConfig  serviceDeskConfig=new ServiceDeskHostConfig();
 		HostConfigContext context=new HostConfigContext(serviceDeskConfig);
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.INSPECTIONTASKLIST);
-		System.out.println("获取巡检任务列表的URL:" + url.toString());
+		
+		JSONObject json = null;
+		String  token=null;
+		String start=null;
+		String limit=null;
+		
+		try {
+			 json = new JSONObject(action.getParamAsString("data"));
+			 token=json.getString("token");
+			 start=json.getString("currentIndex");
+			 limit=json.getString("pagesize");
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		request.method(HttpMethod.GET);
+		request.method(HttpMethod.GET);	DeferredContentProvider dcp = new DeferredContentProvider();
+		RequestContentCapsule capsule = new RequestContentCapsule();
+		capsule.append("start", start);
+		capsule.append("limit", limit);
+		capsule.append("token", token);
+		dcp.offer(capsule.toBuffer());
+		dcp.close();
+		request.content(dcp);
+		
 		Properties params = new Properties();
 		// 发送请求
 		ContentResponse response = null;
@@ -71,7 +93,9 @@ public class InspectionListListener extends AbstractListener {
 
 				try {
 					jo = new JSONObject(content);
-					System.out.println("巡检任务列表数据为:" + jo);
+					//仅供开发阶段测试使用，运行阶段请删除
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info("待巡检任务列表：" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
