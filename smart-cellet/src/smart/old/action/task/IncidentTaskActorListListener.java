@@ -50,11 +50,13 @@ public final class IncidentTaskActorListListener extends AbstractListener {
 		JSONObject json = null;
 		String bpiId=null;
 		String jbpmTransition=null;
+		String token=null;
 		
 		try {
 			 json = new JSONObject(action.getParamAsString("data"));
 			 bpiId=json.getString("bpiId");
 			 jbpmTransition=json.getString("jbpmTransition");
+			 token=json.getString("token");
 			
 		} catch (JSONException e) {
 			e.printStackTrace();
@@ -62,13 +64,13 @@ public final class IncidentTaskActorListListener extends AbstractListener {
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("故障处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
 		
 		DeferredContentProvider dcp = new DeferredContentProvider();
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("bpiId", bpiId);
 		capsule.append("jbpmTransition", jbpmTransition);
+		capsule.append("token", token);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -98,11 +100,10 @@ public final class IncidentTaskActorListListener extends AbstractListener {
 			if (null != bytes) {
 				// 获取从 Web 服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-				System.out.println("工单保存："+content);
 				try {
 					jo = new JSONObject(content);
-					System.out.println("响应工单保存数据的返回值为：:" + jo);
-
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info("获取节点下一步处理人：:" + jo);
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 

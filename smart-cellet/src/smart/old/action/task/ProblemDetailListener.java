@@ -44,15 +44,16 @@ public class ProblemDetailListener   extends AbstractListener{
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/").append(API.PROBLEMDETAIL);
 		JSONObject json = null;
 		String bpiId = null;
+		String token=null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			bpiId = json.getString("bpiId");
+			token=json.getString("token");
 		} catch (JSONException e2) {
 			e2.printStackTrace();
 		}
 		url.append("?bpiId=").append(bpiId);
-
-		System.out.println("获取问题任务明细的URL："+url.toString());
+		url.append("&token=").append(token);
 
 		// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
@@ -83,7 +84,10 @@ public class ProblemDetailListener   extends AbstractListener{
 				
 				try {
 					jo = new JSONObject(content);
-					System.out.println(" 问题任务详细数据是:"+jo);
+					//仅供开发阶段测试使用
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info(" 问题任务明细：" + jo);
+
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
 					// 响应动作，即向客户端发送 ActionDialect

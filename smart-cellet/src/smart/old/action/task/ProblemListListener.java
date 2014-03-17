@@ -49,11 +49,14 @@ public class ProblemListListener  extends AbstractListener{
 		String start=null;
 		String limit=null;
 		String filterId=null;
+		String token=null;
 		try {
 			 json = new JSONObject(action.getParamAsString("data"));
 			 start=json.getString("currentIndex");
 			 limit=json.getString("pagesize");
 			 filterId=json.getString("filterId");
+			 token=json.getString("token");
+			 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
@@ -66,6 +69,7 @@ public class ProblemListListener  extends AbstractListener{
 		capsule.append("start", start);
 		capsule.append("limit", limit);
 		capsule.append("filterId", filterId);
+		capsule.append("token", token);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -95,7 +99,9 @@ public class ProblemListListener  extends AbstractListener{
 
 				try {
 					jo = new JSONObject(content);
-					System.out.println("问题列表数据为:" + jo);
+					//仅供开发阶段测试使用，运行阶段请删除
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info(" 问题任务列表：" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));

@@ -62,6 +62,7 @@ public class ProblemProcessListener extends AbstractListener{
 		String resolution=null;
 		String closeCode=null;
 		String jbpmTransition=null;
+		String token=null;
 		
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
@@ -78,13 +79,13 @@ public class ProblemProcessListener extends AbstractListener{
 			reason = json.getString("reason");
 			resolution = json.getString("resolution");
 			jbpmTransition=json.getString("jbpmTransition");
+			token=json.getString("token");
 
 		} catch (JSONException e) {
 			e.printStackTrace();
 		} 
 			// 创建请求
 		Request request = this.getHttpClient().newRequest(url.toString());
-		System.out.println("问题工单处理提交的URL："+url.toString());
 		request.method(HttpMethod.GET);
 		
 		DeferredContentProvider dcp = new DeferredContentProvider();
@@ -101,6 +102,7 @@ public class ProblemProcessListener extends AbstractListener{
 		capsule.append("resolution", resolution);
 		capsule.append("closeCode", closeCode);
 		capsule.append("jbpmTransition", jbpmTransition);
+		capsule.append("token", token);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
@@ -130,10 +132,11 @@ public class ProblemProcessListener extends AbstractListener{
 			if (null != bytes) {
 				// 获取从 Web 服务器上返回的数据
 				String content = new String(bytes, Charset.forName("UTF-8"));
-				System.out.println("工单保存："+content);
 				try {
 					jo = new JSONObject(content);
-					System.out.println("响应问题工单保存数据的返回值为：:" + jo);
+					//仅供开发阶段测试使用
+					java.util.logging.Logger logger=java.util.logging.Logger.getLogger("smart-cellet");
+					logger.info(" 保存任务工单返回结果：" + jo);
 
 					// 设置参数
 					params.addProperty(new ObjectProperty("data", jo));
