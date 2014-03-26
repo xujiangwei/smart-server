@@ -56,6 +56,7 @@ public final class MessageSendListener extends AbstractListener {
 		String address = null;
 		String fullPath = null;
 		String authCode = null;
+		String token = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
@@ -68,6 +69,7 @@ public final class MessageSendListener extends AbstractListener {
 			address = json.getString("address");
 			fullPath = json.getString("fullPath");
 			authCode = json.getString("authCode");
+			token = json.getString("token");
 		} catch (JSONException e1) {
 			e1.printStackTrace();
 		}
@@ -104,6 +106,7 @@ public final class MessageSendListener extends AbstractListener {
 		capsule.append("address", address);
 		capsule.append("fullPath", fullPath);
 		capsule.append("authCode", authCode);
+		capsule.append("token", token);
 
 		dcp.offer(capsule.toBuffer());
 		dcp.close();

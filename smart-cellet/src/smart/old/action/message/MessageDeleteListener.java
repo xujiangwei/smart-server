@@ -48,10 +48,11 @@ public final class MessageDeleteListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		String deleteIds = null;
+		String token = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			deleteIds = json.getString("deleteIds");
-			System.out.println("deleteIds     " + deleteIds);
+			token = json.getString("token");
 		} catch (JSONException jsone) {
 			jsone.printStackTrace();
 		}
@@ -73,6 +74,7 @@ public final class MessageDeleteListener extends AbstractListener {
 
 		RequestContentCapsule capsule = new RequestContentCapsule();
 		capsule.append("deleteIds", deleteIds);
+		capsule.append("token", token);
 		dcp.offer(capsule.toBuffer());
 		dcp.close();
 		request.content(dcp);
