@@ -70,17 +70,11 @@ public final class MessageListListener extends AbstractListener {
 
 		url.append("?currentIndex=").append(currentIndex);
 		url.append("&pageSize=").append(pageSize);
+		url.append("&token=").append(token);
 
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 
-		DeferredContentProvider dcp = new DeferredContentProvider();
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("token", token);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
-		
 		// 发送请求
 		ContentResponse response = null;
 		try {
