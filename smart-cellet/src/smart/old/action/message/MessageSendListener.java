@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import smart.old.action.AbstractListener;
 import smart.old.api.API;
-import smart.old.api.RequestContentCapsule;
 import smart.old.api.host.HostConfig;
 import smart.old.api.host.HostConfigContext;
 import smart.old.api.host.ServiceDeskHostConfig;
@@ -80,11 +78,9 @@ public final class MessageSendListener extends AbstractListener {
 		StringBuilder url = new StringBuilder(context.getAPIHost()).append("/")
 				.append(API.MESSAGESEND);
 
-		// url.append("&title=").append(title).append("&sender=").append(sender)
-		// .append("&content=").append(contents).append("&recieverIds=")
-		// .append(recieverIds);
-		url.append("?address=").append(address).append("?fullPath=")
-				.append(fullPath).append("?authCode=").append(authCode);
+		url.append("?address=").append(address).append("&fullPath=")
+				.append(fullPath).append("&authCode=").append(authCode)
+				.append("&token=").append(token);
 
 		System.out.println("url   " + url);
 
@@ -92,25 +88,6 @@ public final class MessageSendListener extends AbstractListener {
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);
 		url = null;
-
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
-
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		// capsule.append("title", title);
-		// capsule.append("recieverIds", recieverIds);
-		// capsule.append("sender", sender);
-		// capsule.append("content", contents);
-		// capsule.append("time", time);
-
-		capsule.append("address", address);
-		capsule.append("fullPath", fullPath);
-		capsule.append("authCode", authCode);
-		capsule.append("token", token);
-
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
 
 		// 发送请求
 		ContentResponse response = null;

@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import smart.old.action.AbstractListener;
 import smart.old.api.API;
-import smart.old.api.RequestContentCapsule;
 import smart.old.api.host.HostConfig;
 import smart.old.api.host.HostConfigContext;
 import smart.old.api.host.ServiceDeskHostConfig;
@@ -48,11 +46,9 @@ public final class MessageDeleteListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		String deleteIds = null;
-		String token = null;
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			deleteIds = json.getString("deleteIds");
-			token = json.getString("token");
 		} catch (JSONException jsone) {
 			jsone.printStackTrace();
 		}
@@ -68,16 +64,6 @@ public final class MessageDeleteListener extends AbstractListener {
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.POST);
 		url = null;
-
-		// 填写数据内容
-		DeferredContentProvider dcp = new DeferredContentProvider();
-
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("deleteIds", deleteIds);
-		capsule.append("token", token);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
 
 		// 发送请求
 		ContentResponse response = null;

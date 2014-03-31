@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import smart.old.action.AbstractListener;
 import smart.old.api.API;
-import smart.old.api.RequestContentCapsule;
 import smart.old.api.host.HostConfig;
 import smart.old.api.host.HostConfigContext;
 import smart.old.api.host.ServiceDeskHostConfig;
