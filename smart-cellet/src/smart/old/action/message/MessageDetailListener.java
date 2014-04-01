@@ -12,7 +12,6 @@ import net.cellcloud.util.Properties;
 
 import org.eclipse.jetty.client.api.ContentResponse;
 import org.eclipse.jetty.client.api.Request;
-import org.eclipse.jetty.client.util.DeferredContentProvider;
 import org.eclipse.jetty.http.HttpMethod;
 import org.eclipse.jetty.http.HttpStatus;
 import org.json.JSONException;
@@ -20,7 +19,6 @@ import org.json.JSONObject;
 
 import smart.old.action.AbstractListener;
 import smart.old.api.API;
-import smart.old.api.RequestContentCapsule;
 import smart.old.api.host.HostConfig;
 import smart.old.api.host.HostConfigContext;
 import smart.old.api.host.ServiceDeskHostConfig;
@@ -48,14 +46,12 @@ public final class MessageDetailListener extends AbstractListener {
 		// 获取参数
 		JSONObject json = null;
 		String messageId = null;
-		String token = null;
 
 		try {
 			json = new JSONObject(action.getParamAsString("data"));
 			System.out.println("params  " + json);
 			Logger.i(this.getClass(), json.toString());
 			messageId = json.getString("messageId");
-			token = json.getString("token");
 
 		} catch (JSONException e1) {
 			e1.printStackTrace();
@@ -72,15 +68,6 @@ public final class MessageDetailListener extends AbstractListener {
 		Request request = this.getHttpClient().newRequest(url.toString());
 		request.method(HttpMethod.GET);
 
-		DeferredContentProvider dcp = new DeferredContentProvider();
-		RequestContentCapsule capsule = new RequestContentCapsule();
-		capsule.append("token", token);
-		dcp.offer(capsule.toBuffer());
-		dcp.close();
-		request.content(dcp);
-		
-		System.out.println("url  "+url);
-		
 		// 发送请求
 		ContentResponse response = null;
 		try {
