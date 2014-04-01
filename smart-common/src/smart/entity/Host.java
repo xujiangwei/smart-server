@@ -1,5 +1,11 @@
 package smart.entity;
 
+/**
+ * 主机实体。
+ * 
+ * @author Jiangwei Xu
+ *
+ */
 public class Host extends AbstractEntity {
 
 	private String description;

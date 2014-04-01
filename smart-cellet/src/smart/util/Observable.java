@@ -40,9 +40,13 @@ public class Observable {
 		}
 	}
 
+	/**
+	 * 
+	 * @author Jiangwei Xu
+	 *
+	 */
 	protected class InnerObservable extends java.util.Observable {
 		protected InnerObservable() {
-			
 		}
 
 		public void notifyAllObservers(Object arg) {
