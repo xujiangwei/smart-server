@@ -1,9 +1,9 @@
 package smart.action;
 
-public final class ActionConst {
+public final class ActionConsts {
 
 	public final static String LOGIN = "/user/login";
 
-	private ActionConst() {
+	private ActionConsts() {
 	}
 }
