@@ -1,5 +1,6 @@
 package smart.action;
 
+import java.nio.charset.Charset;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeoutException;
 
@@ -37,14 +38,18 @@ public final class SignInListener extends ActionListener {
 			JSONObject json = new JSONObject(dialect.getParamAsString("data"));
 			username = json.getString("username");
 			password = json.getString("password");
+			System.out.println("UM: "+username +"  PD: "+password);
 		} catch (JSONException e) {
 			Logger.log(this.getClass(), e, LogLevel.ERROR);
 		}
 
 		// 组装 URL
 		StringBuilder url = new StringBuilder();
-		url.append("http://").append(this.getServerAddress()).append(":").append(this.getServerPort());
-
+		url.append("http://").append(this.getServerAddress()).append(":").append(this.getServerPort())
+		.append("/monitoring-system/userOne/login");
+		
+		System.out.println("URL: "+url.toString());
+		
 		try {
 			// 组织发给服务器的数据
 			JSONObject body = new JSONObject();
@@ -62,10 +67,16 @@ public final class SignInListener extends ActionListener {
 			switch (response.getStatus()) {
 			case HttpStatus.OK_200:
 				// TODO 组织返回数据
-				JSONObject data = new JSONObject();
+				byte[] bytes = response.getContent();
+				JSONObject dataOne = null;
+				if (null != bytes) {
+					// 获取从 Web 服务器上返回的数据
+					String content = new String(bytes, Charset.forName("UTF-8"));
+					dataOne = new JSONObject(content);
+				}
 				ActionDialect ret = new ActionDialect();
 				ret.setAction(this.getAction());
-				ret.appendParam("data", data.toString());
+				ret.appendParam("data", dataOne.toString());
 				// 返回数据给客户端
 				this.respondRemote(ret);
 				break;
